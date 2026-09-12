@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ Masterclass & Complete Course Documentation</title>
+  <meta name="description" content="Interactive C++ full course roadmap, 60 video timestamps (Bro Code 6h), LearnCpp lessons, C++ Primer 5th Edition references, flashcards, quizzes, and pro developer tools.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <!-- App Header & Navigation Bar -->
+  <header class="app-nav">
+    <div class="brand-section" onclick="App.navigate('doc', 1)">
+      <div class="brand-badge">C++20</div>
+      <div class="brand-titles">
+        <h1 id="header-title">C++ Masterclass</h1>
+        <p id="header-subtitle">Interactive Course & Complete Documentation</p>
+      </div>
+    </div>
+
+    <!-- Center Search Bar -->
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" class="search-input" placeholder="Search 75+ topics, syntax, algorithms... (Press /)" autocomplete="off">
+      <span class="search-shortcut">/</span>
+    </div>
+
+    <!-- Right Controls: View Switcher, Flashcards, Cheatsheet, EN / FR Selector -->
+    <div class="nav-actions">
+      <div class="view-toggle-group">
+        <button class="view-btn active" id="view-doc-btn" title="Documentation View">
+          <span>📖</span> Doc View
+        </button>
+        <button class="view-btn" id="view-roadmap-btn" title="Checklist Roadmap View">
+          <span>📋</span> Checklist
+        </button>
+        <button class="view-btn" id="view-flashcards-btn" title="Flashcards Mode">
+          <span>🗂️</span> Flashcards
+        </button>
+      </div>
+
+      <button class="btn-secondary" id="grand-exam-nav-btn" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">
+        <span>🎓</span> Grand Master Quiz
+      </button>
+
+      <button class="btn-secondary" id="cheatsheet-btn">
+        <span>⚡</span> Cheatsheet
+      </button>
+
+      <!-- Language Selector (Strictly EN & FR) -->
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Meter & Quick Tools Strip -->
+  <section class="progress-strip">
+    <div class="progress-info">
+      <span class="progress-label" id="progress-label">Overall Progress:</span>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <span class="progress-percentage" id="progress-percentage">0%</span>
+    </div>
+
+    <div class="progress-meta">
+      <div class="stat-pill">
+        <span class="indicator" style="background: var(--accent-green);"></span>
+        <span id="stat-completed">0 Mastered</span>
+      </div>
+      <div class="stat-pill">
+        <span class="indicator" style="background: var(--accent-amber);"></span>
+        <span id="stat-progress">0 In Progress</span>
+      </div>
+
+      <button class="btn-secondary" id="reset-btn" style="padding: 4px 10px; font-size: 0.75rem;">Reset to 0%</button>
+      <button class="btn-secondary" id="export-btn" style="padding: 4px 10px; font-size: 0.75rem;">Export JSON</button>
+      <button class="btn-secondary" id="import-btn" style="padding: 4px 10px; font-size: 0.75rem;">Import JSON</button>
+      <input type="file" id="import-file-input" accept=".json" style="display: none;">
+    </div>
+  </section>
+
+  <!-- Main Content Viewport -->
+  <main class="app-body" id="main-content">
+    <!-- Rendered via app.js -->
+  </main>
+
+  <!-- Quick Reference Cheatsheet Modal -->
+  <div class="modal-backdrop" id="cheatsheet-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>⚡ C++ Quick Reference & Cheatsheet</h3>
+        <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <h4 style="color: var(--accent-blue); margin-bottom: 8px;">1. Recommended Modern Compilation Flags (GCC / Clang)</h4>
+          <pre style="background: #090d16; padding: 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.85rem; color: #4ade80;">g++ -std=c++20 -Wall -Wextra -Wpedantic -Wconversion -fsanitize=address,undefined -O2 main.cpp -o app</pre>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px;">
+            Enables standard C++20, all warnings, strict pedantic checks, address & undefined behavior sanitizers, and optimization level 2.
+          </p>
+        </div>
+
+        <div>
+          <h4 style="color: var(--accent-blue); margin-bottom: 8px;">2. STL Containers Big-O Complexity Reference</h4>
+          <table class="cheatsheet-table">
+            <thead>
+              <tr>
+                <th>Container</th>
+                <th>Random Access</th>
+                <th>Insert / Erase (Back)</th>
+                <th>Insert / Erase (Front/Middle)</th>
+                <th>Underlying Structure</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>std::vector</code></td>
+                <td>O(1)</td>
+                <td>O(1) amortized</td>
+                <td>O(N)</td>
+                <td>Contiguous Heap Array</td>
+              </tr>
+              <tr>
+                <td><code>std::deque</code></td>
+                <td>O(1)</td>
+                <td>O(1)</td>
+                <td>O(1) front/back, O(N) middle</td>
+                <td>Chunked memory blocks</td>
+              </tr>
+              <tr>
+                <td><code>std::list</code></td>
+                <td>O(N)</td>
+                <td>O(1)</td>
+                <td>O(1) if iterator known</td>
+                <td>Doubly-linked list</td>
+              </tr>
+              <tr>
+                <td><code>std::map / std::set</code></td>
+                <td>O(log N) search</td>
+                <td>O(log N)</td>
+                <td>O(log N)</td>
+                <td>Red-Black Tree (Ordered)</td>
+              </tr>
+              <tr>
+                <td><code>std::unordered_map</code></td>
+                <td>O(1) avg search</td>
+                <td>O(1) avg</td>
+                <td>O(1) avg</td>
+                <td>Hash Table</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h4 style="color: var(--accent-blue); margin-bottom: 8px;">3. Memory & Modern C++ Golden Rules</h4>
+          <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 20px; line-height: 1.6;">
+            <li><strong>Prefer Stack over Heap:</strong> Stack allocations are instant, cache-friendly, and automatically freed.</li>
+            <li><strong>Rule of Zero / Five:</strong> If you define a custom destructor, copy/move constructor or assignment, define all five (or prefer smart pointers so you need none).</li>
+            <li><strong>Smart Pointers:</strong> Use <code>std::unique_ptr</code> by default. Only use <code>std::shared_ptr</code> when ownership is genuinely shared.</li>
+            <li><strong>Pass by Const Reference:</strong> Pass non-primitive objects as <code>const Type&amp;</code> or <code>std::string_view</code> to eliminate copies.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Big Section: Module Master Quiz Modal -->
+  <div class="modal-backdrop" id="module-quiz-modal">
+    <div class="modal-container" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 id="module-quiz-modal-title">🏆 Module Mastery Quiz</h3>
+        <button class="modal-close-btn" id="close-module-quiz-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="module-quiz-modal-body">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Grand Master Exam (Very Big Quiz of Everything) Modal -->
+  <div class="modal-backdrop" id="grand-exam-modal">
+    <div class="modal-container" style="max-width: 760px;">
+      <div class="modal-header">
+        <h3 id="grand-exam-modal-title">🎓 C++ Grand Master Exam</h3>
+        <button class="modal-close-btn" id="close-grand-exam-btn">&times;</button>
+      </div>
+      <div class="modal-body" id="grand-exam-modal-body">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="quiz_flashcards_data.js"></script>
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
