@@ -15,7 +15,7 @@ An interactive, high-performance, bilingual web portal designed to take develope
 ### 🌐 1. Fully Bilingual (English & Français)
 - **Instant Toggle**: Switch between **English (EN)** and **Français (FR)** with one click without page reloads.
 - **Hash-Based Routing**: Native deep-linking for all views and languages (e.g. `#/en/doc/1`, `#/fr/doc/1`, `#/fr/flashcards`, `#/en/roadmap`).
-- **100% Localized Curriculum**: All 35 curriculum lessons, 42 active-recall flashcards, 35 lesson check quizzes, and 45 Grand Master Exam questions are thoroughly localized.
+- **100% Localized Curriculum**: All 46 curriculum lessons, 52 active-recall flashcards, 46 lesson check quizzes, 7 module master quizzes, and 57 Grand Master Exam questions are thoroughly localized.
 
 ---
 
@@ -102,8 +102,8 @@ Every lesson is color-coded and organized into dedicated educational tracks:
 ├── index.html               # Main single-page application entry point
 ├── style.css                # Custom modern dark-mode design system & 3D animations
 ├── app.js                   # Application state manager, router, and UI renderer
-├── data.js                  # 35 structured curriculum lessons with verified URLs
-├── quiz_flashcards_data.js  # 42 flashcards, 45 Grand Exam questions & 35 lesson quizzes
+├── data.js                  # 46 structured curriculum lessons with verified URLs across 7 modules
+├── quiz_flashcards_data.js  # 52 flashcards, 57 Grand Exam questions, 46 lesson quizzes & 7 module master quizzes
 ├── i18n.js                  # English & French localization dictionaries
 └── README.md                # Project documentation
 ```
