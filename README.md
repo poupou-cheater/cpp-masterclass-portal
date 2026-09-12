@@ -1,4 +1,5 @@
 # 🚀 C++ Masterclass & Interactive Documentation Portal
+# *fully coded by ai*
 
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20%20%2F%20Modern-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
 [![Languages](https://img.shields.io/badge/Language-English%20%7C%20Fran%C3%A7ais-blue?style=for-the-badge)](https://github.com)
