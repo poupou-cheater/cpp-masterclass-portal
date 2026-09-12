@@ -1,5 +1,69 @@
 // C++ Masterclass Portal - Core Application Logic & Router
 
+// Centralized Mistakes Tracker for Relearning & Targeted Retests
+const MistakesTracker = {
+  storageKey: 'cpp_course_mistakes_bank',
+
+  getMistakes() {
+    try {
+      const data = localStorage.getItem(this.storageKey);
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      return [];
+    }
+  },
+
+  saveMistakes(list) {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(list));
+    } catch (e) {}
+  },
+
+  addMistake(question) {
+    if (!question) return;
+    const list = this.getMistakes();
+    const qTextEn = question.question ? (question.question.en || question.question) : '';
+    const exists = list.some(item => {
+      if (item.id && question.id && item.id === question.id) return true;
+      if (item.qTextEn && qTextEn && item.qTextEn === qTextEn) return true;
+      return false;
+    });
+    if (!exists) {
+      list.push({
+        id: question.id || ('m_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)),
+        qTextEn: qTextEn,
+        subject: question.subject || 'Core',
+        question: question.question,
+        options: question.options,
+        explanation: question.explanation
+      });
+      this.saveMistakes(list);
+    }
+  },
+
+  removeMistake(question) {
+    if (!question) return;
+    let list = this.getMistakes();
+    const qTextEn = question.question ? (question.question.en || question.question) : '';
+    list = list.filter(item => {
+      if (item.id && question.id && item.id === question.id) return false;
+      if (item.qTextEn && qTextEn && item.qTextEn === qTextEn) return false;
+      return true;
+    });
+    this.saveMistakes(list);
+  },
+
+  clearAll() {
+    try {
+      localStorage.removeItem(this.storageKey);
+    } catch (e) {}
+  },
+
+  getCount() {
+    return this.getMistakes().length;
+  }
+};
+
 const App = {
   currentView: 'doc', // 'doc', 'roadmap', 'flashcards'
   activeLessonId: 1,
@@ -19,13 +83,17 @@ const App = {
   quizCurrentStep: 0,
   quizSelectedAnswers: {},
   quizSubmitted: false,
+  moduleReviewFilter: 'mistakes', // 'all', 'mistakes', 'correct'
 
   // Grand Master Exam state (Quiz of Everything)
   grandExamActive: false,
   grandExamQuestions: [],
+  grandExamOriginalPool: [],
   grandExamStep: 0,
   grandExamAnswers: {},
   grandExamSubmitted: false,
+  grandExamIsRetest: false,
+  grandExamReviewFilter: 'mistakes', // 'all', 'mistakes', 'correct'
 
   // Flattened lesson list
   getAllLessons() {
@@ -325,6 +393,32 @@ const App = {
 
     const grandExamNavBtn = document.getElementById('grand-exam-nav-btn');
     if (grandExamNavBtn) grandExamNavBtn.innerHTML = `<span>🎓</span> ${I18N.t('grandExamBtn')}`;
+
+    this.updateMistakesNavButton();
+  },
+
+  updateMistakesNavButton() {
+    const btn = document.getElementById('mistakes-bank-nav-btn');
+    const textEl = document.getElementById('mistakes-bank-nav-text');
+    if (!btn) return;
+    const count = MistakesTracker.getCount();
+    if (count > 0) {
+      btn.style.display = 'inline-flex';
+      if (textEl) textEl.textContent = `${I18N.t('mistakesBankNav')} (${count})`;
+    } else {
+      btn.style.display = 'none';
+    }
+  },
+
+  startMistakesBankQuiz() {
+    const list = MistakesTracker.getMistakes();
+    if (!list || list.length === 0) {
+      this.showToast(I18N.t('mistakesBankEmpty'), "ℹ️");
+      return;
+    }
+    this.startGrandExamMistakesRetest(list);
+    const modal = document.getElementById('grand-exam-modal');
+    if (modal) modal.classList.add('open');
   },
 
   updateLanguageButtons() {
@@ -489,8 +583,8 @@ const App = {
         const oText = opt.text[lang] || opt.text['en'];
         optsHtml += `
           <button class="quiz-opt-btn" data-correct="${opt.correct}" data-opt-index="${oIdx}">
-            <span>⚪</span>
-            <span>${oText}</span>
+            <span class="opt-bullet">⚪</span>
+            <span class="quiz-opt-text">${escapeHtml(oText)}</span>
           </button>
         `;
       });
@@ -646,28 +740,97 @@ const App = {
       });
     }
 
-    // Little Section: Quick Quiz option selection
+    // Little Section: Quick Quiz option selection with mistake review & retry
     const optButtons = document.querySelectorAll('#lesson-quiz-options .quiz-opt-btn');
     const feedbackBox = document.getElementById('lesson-quiz-feedback');
+    const currentLessonQuiz = (typeof LESSON_QUIZZES !== 'undefined') ? LESSON_QUIZZES[currentLesson.id] : null;
+
     optButtons.forEach(btn => {
       btn.addEventListener('click', () => {
+        if (btn.classList.contains('disabled')) return;
+
         optButtons.forEach(b => {
-          b.classList.remove('selected', 'correct', 'incorrect');
-          b.querySelector('span').textContent = '⚪';
+          b.classList.remove('selected', 'correct', 'incorrect', 'correct-reveal');
+          const bullet = b.querySelector('.opt-bullet') || b.querySelector('span');
+          if (bullet) bullet.textContent = '⚪';
+          b.classList.add('disabled');
         });
         btn.classList.add('selected');
 
         const isCorrect = btn.getAttribute('data-correct') === 'true';
+        const userBullet = btn.querySelector('.opt-bullet') || btn.querySelector('span');
+        const userText = btn.querySelector('.quiz-opt-text')?.textContent || btn.textContent.trim();
+        const expText = feedbackBox.getAttribute('data-exp') || '';
+
+        // Find the correct button
+        const correctBtn = document.querySelector('#lesson-quiz-options .quiz-opt-btn[data-correct="true"]');
+        const correctText = correctBtn ? (correctBtn.querySelector('.quiz-opt-text')?.textContent || correctBtn.textContent.trim()) : '';
+
         if (isCorrect) {
           btn.classList.add('correct');
-          btn.querySelector('span').textContent = '✅';
+          if (userBullet) userBullet.textContent = '✅';
           feedbackBox.className = 'quiz-feedback show success';
-          feedbackBox.innerHTML = `<strong>${I18N.t('quizCorrect')}</strong><br>${feedbackBox.getAttribute('data-exp')}`;
+          feedbackBox.innerHTML = `
+            <div style="font-weight: 700; color: #4ade80; font-size: 0.95rem; margin-bottom: 6px;">
+              ✅ ${I18N.t('quizCorrect')}
+            </div>
+            <div class="fb-explanation">
+              <strong>${I18N.t('explanationLabel')}</strong> ${escapeHtml(expText)}
+            </div>
+          `;
+          if (currentLessonQuiz) MistakesTracker.removeMistake(currentLessonQuiz);
+          this.updateMistakesNavButton();
         } else {
           btn.classList.add('incorrect');
-          btn.querySelector('span').textContent = '❌';
+          if (userBullet) userBullet.textContent = '❌';
+
+          // Reveal the correct option clearly
+          if (correctBtn) {
+            correctBtn.classList.add('correct-reveal');
+            const corBullet = correctBtn.querySelector('.opt-bullet') || correctBtn.querySelector('span');
+            if (corBullet) corBullet.textContent = '✅';
+          }
+
           feedbackBox.className = 'quiz-feedback show error';
-          feedbackBox.innerHTML = `<strong>${I18N.t('quizIncorrect')}</strong><br>${feedbackBox.getAttribute('data-exp')}`;
+          feedbackBox.innerHTML = `
+            <div style="font-weight: 700; color: #f87171; font-size: 0.95rem; margin-bottom: 6px;">
+              ❌ ${I18N.t('quizIncorrect')}
+            </div>
+            <div class="fb-comparison">
+              <div class="fb-item">
+                <span class="fb-badge fb-badge-wrong">${I18N.t('yourChoice')}</span>
+                <span style="color: #fca5a5;">${escapeHtml(userText)}</span>
+              </div>
+              <div class="fb-item">
+                <span class="fb-badge fb-badge-correct">${I18N.t('correctChoice')}</span>
+                <span style="color: #4ade80; font-weight: 700;">${escapeHtml(correctText)}</span>
+              </div>
+            </div>
+            <div class="fb-explanation">
+              <strong>${I18N.t('explanationLabel')}</strong> ${escapeHtml(expText)}
+            </div>
+            <div>
+              <button class="btn-retry-lesson-quiz" id="retry-lesson-quiz-btn">
+                <span>🔄</span> ${I18N.t('tryAgainBtn')}
+              </button>
+            </div>
+          `;
+
+          if (currentLessonQuiz) MistakesTracker.addMistake(currentLessonQuiz);
+          this.updateMistakesNavButton();
+
+          const retryBtn = document.getElementById('retry-lesson-quiz-btn');
+          if (retryBtn) {
+            retryBtn.addEventListener('click', () => {
+              optButtons.forEach(b => {
+                b.classList.remove('selected', 'correct', 'incorrect', 'correct-reveal', 'disabled');
+                const bullet = b.querySelector('.opt-bullet') || b.querySelector('span');
+                if (bullet) bullet.textContent = '⚪';
+              });
+              feedbackBox.className = 'quiz-feedback';
+              feedbackBox.innerHTML = '';
+            });
+          }
         }
       });
     });
@@ -689,6 +852,9 @@ const App = {
     // Randomize question order and options
     const rawQuestions = MODULE_QUIZZES[moduleId].questions;
     this.activeModuleQuiz = {
+      moduleId: moduleId,
+      originalModuleId: moduleId,
+      isRetest: false,
       title: MODULE_QUIZZES[moduleId].title,
       questions: shuffleArray(rawQuestions).map(q => ({
         ...q,
@@ -699,12 +865,37 @@ const App = {
     this.quizCurrentStep = 0;
     this.quizSelectedAnswers = {};
     this.quizSubmitted = false;
+    this.moduleReviewFilter = 'mistakes';
 
     const modal = document.getElementById('module-quiz-modal');
     if (modal) {
       this.renderModuleQuizModal();
       modal.classList.add('open');
     }
+  },
+
+  startModuleMistakesRetest(mistakesList) {
+    if (!mistakesList || mistakesList.length === 0) return;
+
+    this.activeModuleQuiz = {
+      moduleId: this.activeModuleQuiz.moduleId,
+      originalModuleId: this.activeModuleQuiz.originalModuleId || this.activeModuleQuiz.moduleId,
+      isRetest: true,
+      title: {
+        en: `🎯 Retest Mode: Missed Questions (${mistakesList.length})`,
+        fr: `🎯 Mode Rattrapage : Questions Manquées (${mistakesList.length})`
+      },
+      questions: shuffleArray(mistakesList).map(q => ({
+        ...q,
+        options: shuffleArray(q.options)
+      }))
+    };
+
+    this.quizCurrentStep = 0;
+    this.quizSelectedAnswers = {};
+    this.quizSubmitted = false;
+    this.moduleReviewFilter = 'mistakes';
+    this.renderModuleQuizModal();
   },
 
   renderModuleQuizModal() {
@@ -716,40 +907,185 @@ const App = {
     modalTitle.textContent = this.activeModuleQuiz.title[lang] || this.activeModuleQuiz.title['en'];
 
     if (this.quizSubmitted) {
-      let correctCount = 0;
-      this.activeModuleQuiz.questions.forEach((q, qIdx) => {
+      const results = this.activeModuleQuiz.questions.map((q, qIdx) => {
         const selectedOptIdx = this.quizSelectedAnswers[qIdx];
-        if (selectedOptIdx !== undefined && q.options[selectedOptIdx].correct) {
-          correctCount++;
-        }
+        const correctOptIdx = q.options.findIndex(o => o.correct);
+        const isCorrect = (selectedOptIdx !== undefined && selectedOptIdx === correctOptIdx);
+        return {
+          q,
+          qIdx,
+          selectedOptIdx,
+          correctOptIdx,
+          isCorrect
+        };
       });
 
-      const total = this.activeModuleQuiz.questions.length;
+      const correctResults = results.filter(r => r.isCorrect);
+      const incorrectResults = results.filter(r => !r.isCorrect);
+      const correctCount = correctResults.length;
+      const wrongCount = incorrectResults.length;
+      const total = results.length;
       const scorePct = Math.round((correctCount / total) * 100);
 
+      // Track mistakes in centralized bank
+      incorrectResults.forEach(r => MistakesTracker.addMistake(r.q));
+      if (this.activeModuleQuiz.isRetest) {
+        correctResults.forEach(r => MistakesTracker.removeMistake(r.q));
+      }
+      this.updateMistakesNavButton();
+
+      if (this.moduleReviewFilter === 'mistakes' && wrongCount === 0) {
+        this.moduleReviewFilter = 'all';
+      }
+
+      const filteredResults = results.filter(r => {
+        if (this.moduleReviewFilter === 'mistakes') return !r.isCorrect;
+        if (this.moduleReviewFilter === 'correct') return r.isCorrect;
+        return true;
+      });
+
+      const isPerfect = (wrongCount === 0);
+      const isRetestResolved = (this.activeModuleQuiz.isRetest && isPerfect);
+
       modalBody.innerHTML = `
-        <div style="text-align: center; padding: 24px;">
-          <div style="font-size: 3rem; margin-bottom: 12px;">🏆</div>
-          <h3 style="color: var(--accent-blue); font-size: 1.4rem;">${I18N.t('quizCompleted')}</h3>
-          <p style="font-size: 1.1rem; margin: 12px 0;">${I18N.t('quizScore')} <strong>${correctCount} / ${total} (${scorePct}%)</strong></p>
-          <button class="btn-secondary" id="retake-module-quiz-btn" style="margin-top: 16px; padding: 8px 18px;">
-            ${I18N.t('retakeQuiz')}
-          </button>
+        <div style="padding: 10px 4px;">
+          <!-- Score Summary Header -->
+          <div style="text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 3rem; margin-bottom: 6px;">${isPerfect ? '🏆' : '📚'}</div>
+            <h3 style="color: ${isPerfect ? 'var(--accent-green)' : 'var(--accent-blue)'}; font-size: 1.4rem;">
+              ${isRetestResolved ? I18N.t('customRetestSuccess') : I18N.t('quizCompleted')}
+            </h3>
+            <p style="font-size: 1.15rem; margin: 8px 0;">
+              ${I18N.t('quizScore')} <strong>${correctCount} / ${total} (${scorePct}%)</strong>
+            </p>
+            ${isPerfect ? `
+              <div style="color: #4ade80; font-weight: 600; font-size: 0.95rem; margin-top: 4px;">
+                ${I18N.t('noMistakesMessage')}
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Top Action Buttons -->
+          <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+            ${wrongCount > 0 ? `
+              <button class="btn-retest-mistakes" id="retest-mod-mistakes-btn">
+                <span>🎯</span> ${I18N.t('practiceMistakesBtn', { count: wrongCount })}
+              </button>
+            ` : ''}
+            <button class="btn-secondary" id="retake-full-mod-quiz-btn" style="padding: 8px 18px; font-weight: 600;">
+              ${I18N.t('retakeAllBtn')}
+            </button>
+          </div>
+
+          <!-- Relearn & Detailed Breakdown Section -->
+          <div class="relearn-section">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h4 style="color: #38bdf8; font-size: 1.05rem; margin-bottom: 2px;">
+                  ${I18N.t('relearnHeader')}
+                </h4>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">
+                  ${I18N.t('relearnSub')}
+                </p>
+              </div>
+
+              <!-- Filter Pills -->
+              <div class="relearn-filter-bar">
+                <button class="relearn-filter-btn ${this.moduleReviewFilter === 'all' ? 'active' : ''}" data-mod-filter="all">
+                  ${I18N.t('mistakesFilterAll', { count: total })}
+                </button>
+                ${wrongCount > 0 ? `
+                  <button class="relearn-filter-btn filter-wrong ${this.moduleReviewFilter === 'mistakes' ? 'active' : ''}" data-mod-filter="mistakes">
+                    ${I18N.t('mistakesFilterWrong', { count: wrongCount })}
+                  </button>
+                ` : ''}
+                <button class="relearn-filter-btn filter-correct ${this.moduleReviewFilter === 'correct' ? 'active' : ''}" data-mod-filter="correct">
+                  ${I18N.t('mistakesFilterCorrect', { count: correctCount })}
+                </button>
+              </div>
+            </div>
+
+            <!-- Review Cards List -->
+            <div class="review-list">
+              ${filteredResults.map(r => {
+                const qText = r.q.question[lang] || r.q.question['en'];
+                const userText = (r.selectedOptIdx !== undefined && r.q.options[r.selectedOptIdx])
+                  ? (r.q.options[r.selectedOptIdx].text[lang] || r.q.options[r.selectedOptIdx].text['en'])
+                  : (lang === 'fr' ? "(Non répondu)" : "(Skipped)");
+                const correctOpt = r.q.options[r.correctOptIdx];
+                const correctText = correctOpt ? (correctOpt.text[lang] || correctOpt.text['en']) : '';
+                const expText = r.q.explanation ? (r.q.explanation[lang] || r.q.explanation['en']) : '';
+
+                return `
+                  <div class="review-card ${r.isCorrect ? 'correct' : 'wrong'}">
+                    <div class="review-card-header">
+                      <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Question #${r.qIdx + 1}</span>
+                      <span class="review-badge ${r.isCorrect ? 'correct' : 'wrong'}">
+                        ${r.isCorrect ? '✅ ' + I18N.t('passedBadge') : '❌ ' + (lang === 'fr' ? 'Erreur' : 'Mistake')}
+                      </span>
+                    </div>
+                    <div class="review-card-title">${escapeHtml(qText)}</div>
+
+                    <div class="review-answer-row ${r.isCorrect ? 'user-correct' : 'user-wrong'}">
+                      <span style="font-weight: 600; min-width: 110px;">${I18N.t('yourChoice')}</span>
+                      <span>${escapeHtml(userText)} ${r.isCorrect ? '✅' : '❌'}</span>
+                    </div>
+
+                    ${!r.isCorrect ? `
+                      <div class="review-answer-row good-answer">
+                        <span style="font-weight: 700; min-width: 110px; color: #38bdf8;">${I18N.t('correctChoice')}</span>
+                        <span style="font-weight: 700; color: #86efac;">${escapeHtml(correctText)} ✅</span>
+                      </div>
+                    ` : ''}
+
+                    ${expText ? `
+                      <div class="review-explanation">
+                        <strong>${I18N.t('explanationLabel')}</strong> ${escapeHtml(expText)}
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Bottom Action Buttons -->
+            <div style="display: flex; justify-content: center; gap: 12px; margin-top: 24px; flex-wrap: wrap;">
+              ${wrongCount > 0 ? `
+                <button class="btn-retest-mistakes" id="bottom-retest-mod-mistakes-btn">
+                  <span>🎯</span> ${I18N.t('practiceMistakesBtn', { count: wrongCount })}
+                </button>
+              ` : ''}
+              <button class="btn-secondary" id="bottom-retake-full-mod-quiz-btn" style="padding: 8px 18px; font-weight: 600;">
+                ${I18N.t('retakeAllBtn')}
+              </button>
+            </div>
+          </div>
         </div>
       `;
 
-      const retakeBtn = document.getElementById('retake-module-quiz-btn');
-      if (retakeBtn) {
-        retakeBtn.addEventListener('click', () => {
-          this.quizCurrentStep = 0;
-          this.quizSelectedAnswers = {};
-          this.quizSubmitted = false;
+      // Event Listeners for Review Screen
+      const retestBtn = document.getElementById('retest-mod-mistakes-btn');
+      const bRetestBtn = document.getElementById('bottom-retest-mod-mistakes-btn');
+      const onRetest = () => this.startModuleMistakesRetest(incorrectResults.map(r => r.q));
+      if (retestBtn) retestBtn.addEventListener('click', onRetest);
+      if (bRetestBtn) bRetestBtn.addEventListener('click', onRetest);
+
+      const retakeBtn = document.getElementById('retake-full-mod-quiz-btn');
+      const bRetakeBtn = document.getElementById('bottom-retake-full-mod-quiz-btn');
+      const onRetake = () => this.openModuleMasterQuiz(this.activeModuleQuiz.originalModuleId || this.activeModuleQuiz.moduleId);
+      if (retakeBtn) retakeBtn.addEventListener('click', onRetake);
+      if (bRetakeBtn) bRetakeBtn.addEventListener('click', onRetake);
+
+      document.querySelectorAll('[data-mod-filter]').forEach(fBtn => {
+        fBtn.addEventListener('click', () => {
+          this.moduleReviewFilter = fBtn.getAttribute('data-mod-filter');
           this.renderModuleQuizModal();
         });
-      }
+      });
       return;
     }
 
+    // Render Question Screen
     const q = this.activeModuleQuiz.questions[this.quizCurrentStep];
     const total = this.activeModuleQuiz.questions.length;
     const qText = q.question[lang] || q.question['en'];
@@ -761,15 +1097,24 @@ const App = {
       optsHtml += `
         <button class="quiz-opt-btn ${isSelected ? 'selected' : ''}" data-opt-idx="${oIdx}">
           <span>${isSelected ? '🔵' : '⚪'}</span>
-          <span>${oText}</span>
+          <span>${escapeHtml(oText)}</span>
         </button>
       `;
     });
 
+    const isRetest = this.activeModuleQuiz.isRetest;
+
     modalBody.innerHTML = `
       <div>
+        ${isRetest ? `
+          <div class="retest-banner">
+            <span>${I18N.t('customRetestMode', { count: total })}</span>
+            <span style="font-size: 0.72rem; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; color: #fff;">Targeted Retest</span>
+          </div>
+        ` : ''}
+
         <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Question ${this.quizCurrentStep + 1} of ${total}</div>
-        <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 16px;">${qText}</h4>
+        <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 16px; line-height: 1.4;">${escapeHtml(qText)}</h4>
         <div class="quiz-options" id="mod-quiz-options">
           ${optsHtml}
         </div>
@@ -778,7 +1123,7 @@ const App = {
           ${this.quizCurrentStep < total - 1 ? `
             <button class="btn-secondary" id="next-mod-q-btn">Next →</button>
           ` : `
-            <button class="btn-secondary" style="background: var(--accent-green); color: #000; font-weight: 700;" id="submit-mod-q-btn">Submit Quiz</button>
+            <button class="btn-secondary" style="background: var(--accent-green); color: #000; font-weight: 700; padding: 8px 18px;" id="submit-mod-q-btn">Submit Quiz</button>
           `}
         </div>
       </div>
@@ -811,6 +1156,7 @@ const App = {
       pool = pool.slice(0, Math.min(parseInt(length, 10), pool.length));
     }
 
+    this.grandExamOriginalPool = pool;
     this.grandExamQuestions = pool.map(q => ({
       ...q,
       options: shuffleArray(q.options)
@@ -819,6 +1165,8 @@ const App = {
     this.grandExamStep = 0;
     this.grandExamAnswers = {};
     this.grandExamSubmitted = false;
+    this.grandExamIsRetest = false;
+    this.grandExamReviewFilter = 'mistakes';
 
     const modal = document.getElementById('grand-exam-modal');
     if (modal) {
@@ -827,72 +1175,210 @@ const App = {
     }
   },
 
+  startGrandExamMistakesRetest(mistakesList) {
+    if (!mistakesList || mistakesList.length === 0) return;
+
+    this.grandExamQuestions = shuffleArray(mistakesList).map(q => ({
+      ...q,
+      options: shuffleArray(q.options)
+    }));
+    this.grandExamStep = 0;
+    this.grandExamAnswers = {};
+    this.grandExamSubmitted = false;
+    this.grandExamIsRetest = true;
+    this.grandExamReviewFilter = 'mistakes';
+    this.renderGrandExamModal();
+  },
+
   renderGrandExamModal() {
     const modalBody = document.getElementById('grand-exam-modal-body');
     const modalTitle = document.getElementById('grand-exam-modal-title');
     if (!modalBody) return;
 
     const lang = I18N.currentLang;
-    modalTitle.textContent = I18N.t('grandExamTitle');
+    modalTitle.textContent = this.grandExamIsRetest
+      ? (lang === 'fr' ? '🎯 Test Ciblé : Rattrapage des Erreurs' : '🎯 Targeted Retest: Missed Questions')
+      : I18N.t('grandExamTitle');
 
     if (this.grandExamSubmitted) {
-      // Final Score and Comprehensive Review
-      let correctCount = 0;
-      let reviewHtml = '';
-
-      this.grandExamQuestions.forEach((q, idx) => {
+      // Evaluate results
+      const results = this.grandExamQuestions.map((q, idx) => {
         const selectedIdx = this.grandExamAnswers[idx];
-        const isCorrect = selectedIdx !== undefined && q.options[selectedIdx].correct;
-        if (isCorrect) correctCount++;
-
-        const userText = selectedIdx !== undefined ? (q.options[selectedIdx].text[lang] || q.options[selectedIdx].text['en']) : "(Skipped)";
-        const correctOpt = q.options.find(o => o.correct);
-        const correctText = correctOpt ? (correctOpt.text[lang] || correctOpt.text['en']) : '';
-        const expText = q.explanation[lang] || q.explanation['en'];
-
-        reviewHtml += `
-          <div style="background: var(--bg-card); border-left: 4px solid ${isCorrect ? 'var(--accent-green)' : 'var(--accent-red)'}; padding: 12px 16px; border-radius: 6px; margin-bottom: 12px;">
-            <div style="font-weight: 700; font-size: 0.9rem; color: #fff; margin-bottom: 4px;">#${idx + 1}. ${q.question[lang] || q.question['en']}</div>
-            <div style="font-size: 0.8rem; color: ${isCorrect ? '#4ade80' : '#f87171'};">
-              Your answer: ${userText} ${isCorrect ? '✅' : '❌'}
-            </div>
-            ${!isCorrect ? `<div style="font-size: 0.8rem; color: #38bdf8; margin-top: 2px;">Correct answer: ${correctText}</div>` : ''}
-            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; font-style: italic;">${expText}</div>
-          </div>
-        `;
+        const correctOptIdx = q.options.findIndex(o => o.correct);
+        const isCorrect = (selectedIdx !== undefined && selectedIdx === correctOptIdx);
+        return {
+          q,
+          idx,
+          selectedIdx,
+          correctOptIdx,
+          isCorrect
+        };
       });
 
-      const total = this.grandExamQuestions.length;
+      const correctResults = results.filter(r => r.isCorrect);
+      const incorrectResults = results.filter(r => !r.isCorrect);
+      const correctCount = correctResults.length;
+      const wrongCount = incorrectResults.length;
+      const total = results.length;
       const scorePct = Math.round((correctCount / total) * 100);
       const passed = scorePct >= 70;
 
+      // Track in centralized mistakes bank
+      incorrectResults.forEach(r => MistakesTracker.addMistake(r.q));
+      if (this.grandExamIsRetest) {
+        correctResults.forEach(r => MistakesTracker.removeMistake(r.q));
+      }
+      this.updateMistakesNavButton();
+
+      if (this.grandExamReviewFilter === 'mistakes' && wrongCount === 0) {
+        this.grandExamReviewFilter = 'all';
+      }
+
+      const filteredResults = results.filter(r => {
+        if (this.grandExamReviewFilter === 'mistakes') return !r.isCorrect;
+        if (this.grandExamReviewFilter === 'correct') return r.isCorrect;
+        return true;
+      });
+
+      const isPerfect = (wrongCount === 0);
+
       modalBody.innerHTML = `
-        <div style="padding: 16px;">
-          <div style="text-align: center; margin-bottom: 24px;">
-            <div style="font-size: 3.5rem;">${passed ? '🎖️' : '📚'}</div>
-            <h3 style="font-size: 1.5rem; color: ${passed ? 'var(--accent-green)' : 'var(--accent-amber)'}; margin-top: 8px;">
-              ${passed ? I18N.t('examPassed') : I18N.t('examFailed')}
+        <div style="padding: 10px 4px;">
+          <!-- Score Summary Header -->
+          <div style="text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 3.5rem; margin-bottom: 6px;">${isPerfect ? '🎖️' : (passed ? '🎉' : '📚')}</div>
+            <h3 style="font-size: 1.45rem; color: ${passed ? 'var(--accent-green)' : 'var(--accent-amber)'}; margin-top: 4px;">
+              ${this.grandExamIsRetest && isPerfect ? I18N.t('customRetestSuccess') : (passed ? I18N.t('examPassed') : I18N.t('examFailed'))}
             </h3>
             <p style="font-size: 1.2rem; margin-top: 8px;">
               ${I18N.t('quizScore')} <strong>${correctCount} / ${total} (${scorePct}%)</strong>
             </p>
+            ${isPerfect ? `
+              <div style="color: #4ade80; font-weight: 600; font-size: 0.95rem; margin-top: 4px;">
+                ${I18N.t('noMistakesMessage')}
+              </div>
+            ` : ''}
           </div>
 
-          <h4 style="font-size: 1rem; color: var(--accent-blue); margin-bottom: 12px;">${I18N.t('reviewAnswers')}:</h4>
-          <div style="max-height: 400px; overflow-y: auto; padding-right: 6px;">
-            ${reviewHtml}
-          </div>
-
-          <div style="text-align: center; margin-top: 20px;">
-            <button class="btn-secondary" id="restart-grand-exam-btn" style="padding: 8px 20px; font-weight: 700;">
-              ${I18N.t('retakeQuiz')}
+          <!-- Top Action Buttons -->
+          <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+            ${wrongCount > 0 ? `
+              <button class="btn-retest-mistakes" id="retest-grand-mistakes-btn">
+                <span>🎯</span> ${I18N.t('practiceMistakesBtn', { count: wrongCount })}
+              </button>
+            ` : ''}
+            <button class="btn-secondary" id="restart-grand-exam-btn" style="padding: 8px 18px; font-weight: 600;">
+              ${I18N.t('retakeAllBtn')}
             </button>
+          </div>
+
+          <!-- Relearn & Detailed Breakdown Section -->
+          <div class="relearn-section">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h4 style="color: #38bdf8; font-size: 1.05rem; margin-bottom: 2px;">
+                  ${I18N.t('relearnHeader')}
+                </h4>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">
+                  ${I18N.t('relearnSub')}
+                </p>
+              </div>
+
+              <!-- Filter Pills -->
+              <div class="relearn-filter-bar">
+                <button class="relearn-filter-btn ${this.grandExamReviewFilter === 'all' ? 'active' : ''}" data-grand-filter="all">
+                  ${I18N.t('mistakesFilterAll', { count: total })}
+                </button>
+                ${wrongCount > 0 ? `
+                  <button class="relearn-filter-btn filter-wrong ${this.grandExamReviewFilter === 'mistakes' ? 'active' : ''}" data-grand-filter="mistakes">
+                    ${I18N.t('mistakesFilterWrong', { count: wrongCount })}
+                  </button>
+                ` : ''}
+                <button class="relearn-filter-btn filter-correct ${this.grandExamReviewFilter === 'correct' ? 'active' : ''}" data-grand-filter="correct">
+                  ${I18N.t('mistakesFilterCorrect', { count: correctCount })}
+                </button>
+              </div>
+            </div>
+
+            <!-- Review Cards List -->
+            <div class="review-list">
+              ${filteredResults.map(r => {
+                const qText = r.q.question[lang] || r.q.question['en'];
+                const userText = (r.selectedIdx !== undefined && r.q.options[r.selectedIdx])
+                  ? (r.q.options[r.selectedIdx].text[lang] || r.q.options[r.selectedIdx].text['en'])
+                  : (lang === 'fr' ? "(Non répondu)" : "(Skipped)");
+                const correctOpt = r.q.options[r.correctOptIdx];
+                const correctText = correctOpt ? (correctOpt.text[lang] || correctOpt.text['en']) : '';
+                const expText = r.q.explanation ? (r.q.explanation[lang] || r.q.explanation['en']) : '';
+
+                return `
+                  <div class="review-card ${r.isCorrect ? 'correct' : 'wrong'}">
+                    <div class="review-card-header">
+                      <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">
+                        #${r.idx + 1} &bull; <span style="color: var(--accent-purple);">${r.q.subject || 'Core'}</span>
+                      </span>
+                      <span class="review-badge ${r.isCorrect ? 'correct' : 'wrong'}">
+                        ${r.isCorrect ? '✅ ' + I18N.t('passedBadge') : '❌ ' + (lang === 'fr' ? 'Erreur' : 'Mistake')}
+                      </span>
+                    </div>
+                    <div class="review-card-title">${escapeHtml(qText)}</div>
+
+                    <div class="review-answer-row ${r.isCorrect ? 'user-correct' : 'user-wrong'}">
+                      <span style="font-weight: 600; min-width: 110px;">${I18N.t('yourChoice')}</span>
+                      <span>${escapeHtml(userText)} ${r.isCorrect ? '✅' : '❌'}</span>
+                    </div>
+
+                    ${!r.isCorrect ? `
+                      <div class="review-answer-row good-answer">
+                        <span style="font-weight: 700; min-width: 110px; color: #38bdf8;">${I18N.t('correctChoice')}</span>
+                        <span style="font-weight: 700; color: #86efac;">${escapeHtml(correctText)} ✅</span>
+                      </div>
+                    ` : ''}
+
+                    ${expText ? `
+                      <div class="review-explanation">
+                        <strong>${I18N.t('explanationLabel')}</strong> ${escapeHtml(expText)}
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Bottom Action Buttons -->
+            <div style="display: flex; justify-content: center; gap: 12px; margin-top: 24px; flex-wrap: wrap;">
+              ${wrongCount > 0 ? `
+                <button class="btn-retest-mistakes" id="bottom-retest-grand-mistakes-btn">
+                  <span>🎯</span> ${I18N.t('practiceMistakesBtn', { count: wrongCount })}
+                </button>
+              ` : ''}
+              <button class="btn-secondary" id="bottom-restart-grand-exam-btn" style="padding: 8px 18px; font-weight: 600;">
+                ${I18N.t('retakeAllBtn')}
+              </button>
+            </div>
           </div>
         </div>
       `;
 
+      // Event listeners
+      const retestBtn = document.getElementById('retest-grand-mistakes-btn');
+      const bRetestBtn = document.getElementById('bottom-retest-grand-mistakes-btn');
+      const onRetest = () => this.startGrandExamMistakesRetest(incorrectResults.map(r => r.q));
+      if (retestBtn) retestBtn.addEventListener('click', onRetest);
+      if (bRetestBtn) bRetestBtn.addEventListener('click', onRetest);
+
       const restartBtn = document.getElementById('restart-grand-exam-btn');
-      if (restartBtn) restartBtn.addEventListener('click', () => this.startGrandExam(25));
+      const bRestartBtn = document.getElementById('bottom-restart-grand-exam-btn');
+      const onRestart = () => this.startGrandExam(25);
+      if (restartBtn) restartBtn.addEventListener('click', onRestart);
+      if (bRestartBtn) bRestartBtn.addEventListener('click', onRestart);
+
+      document.querySelectorAll('[data-grand-filter]').forEach(fBtn => {
+        fBtn.addEventListener('click', () => {
+          this.grandExamReviewFilter = fBtn.getAttribute('data-grand-filter');
+          this.renderGrandExamModal();
+        });
+      });
       return;
     }
 
@@ -908,7 +1394,7 @@ const App = {
       optsHtml += `
         <button class="quiz-opt-btn ${isSelected ? 'selected' : ''}" data-opt-idx="${oIdx}">
           <span>${isSelected ? '🔵' : '⚪'}</span>
-          <span>${oText}</span>
+          <span>${escapeHtml(oText)}</span>
         </button>
       `;
     });
@@ -917,6 +1403,13 @@ const App = {
 
     modalBody.innerHTML = `
       <div>
+        ${this.grandExamIsRetest ? `
+          <div class="retest-banner">
+            <span>${I18N.t('customRetestMode', { count: total })}</span>
+            <span style="font-size: 0.72rem; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; color: #fff;">Grand Master Retest</span>
+          </div>
+        ` : ''}
+
         <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
           <span>Category: <strong style="color: var(--accent-purple);">${q.subject || 'Core'}</strong></span>
           <span>Question ${this.grandExamStep + 1} of ${total} (${progressPct}%)</span>
@@ -925,7 +1418,7 @@ const App = {
           <div style="height: 100%; width: ${progressPct}%; background: var(--accent-blue);"></div>
         </div>
 
-        <h4 style="font-size: 1.15rem; color: #fff; margin-bottom: 18px; line-height: 1.4;">${qText}</h4>
+        <h4 style="font-size: 1.15rem; color: #fff; margin-bottom: 18px; line-height: 1.4;">${escapeHtml(qText)}</h4>
         <div class="quiz-options" id="grand-exam-options">
           ${optsHtml}
         </div>
@@ -1451,7 +1944,14 @@ const App = {
 
     this.initModals();
     this.initProgressActions();
+
+    const mistakesBtn = document.getElementById('mistakes-bank-nav-btn');
+    if (mistakesBtn) {
+      mistakesBtn.addEventListener('click', () => this.startMistakesBankQuiz());
+    }
+
     this.handleRouting();
+    this.updateMistakesNavButton();
   }
 };
 
