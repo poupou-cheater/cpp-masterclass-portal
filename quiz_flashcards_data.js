@@ -564,6 +564,136 @@ const FLASHCARDS_DATA = [
       fr: "Un interblocage survient lorsque deux threads s'attendent mutuellement sur des verrous. std::scoped_lock verrouille plusieurs mutex simultanément avec un algorithme anti-deadlock."
     },
     codeSnippet: `std::scoped_lock lock(mutexA, mutexB); // Deadlock-free multi-lock!`
+  },
+  {
+    id: 43,
+    category: "Pro Dev",
+    front: {
+      en: "Why is std::jthread (C++20) safer than std::thread?",
+      fr: "Pourquoi std::jthread (C++20) est-il plus sûr que std::thread ?"
+    },
+    back: {
+      en: "std::jthread automatically joins in its destructor on scope exit, preventing std::terminate() crashes. It also natively supports cooperative cancellation via std::stop_token.",
+      fr: "std::jthread s'auto-joint dans son destructeur en sortie de portée, évitant les crashs std::terminate(). Il intègre aussi l'arrêt coopératif via std::stop_token."
+    },
+    codeSnippet: `// Safe: auto-joins on destruction\nstd::jthread t([](std::stop_token st) {\n    while (!st.stop_requested()) { /* work */ }\n});`
+  },
+  {
+    id: 44,
+    category: "Pro Dev",
+    front: {
+      en: "What is the difference between std::lock_guard and std::unique_lock?",
+      fr: "Quelle est la différence entre std::lock_guard et std::unique_lock ?"
+    },
+    back: {
+      en: "std::lock_guard is a strict, lightweight RAII wrapper that only locks on construction and unlocks on destruction. std::unique_lock is movable and supports deferred locking, timed locking, and condition variables.",
+      fr: "std::lock_guard est un verrou RAII strict et léger (verrouille à la création, libère à la destruction). std::unique_lock est déplaçable, supporte le verrouillage différé et est requis par std::condition_variable."
+    },
+    codeSnippet: `std::unique_lock<std::mutex> lock(mtx, std::defer_lock);\n// Lock later:\nlock.lock();`
+  },
+  {
+    id: 45,
+    category: "Pro Dev",
+    front: {
+      en: "What is a Spurious Wakeup and how do you prevent it with std::condition_variable?",
+      fr: "Qu'est-ce qu'un réveil spontané (Spurious Wakeup) et comment l'éviter avec std::condition_variable ?"
+    },
+    back: {
+      en: "An OS thread waiting on a condition variable can wake up without any signal sent. Always pass a predicate lambda to cv.wait(lock, []{ return condition; }); to re-check the condition in a loop.",
+      fr: "Un thread en attente peut être réveillé sans notification du système. On doit toujours passer un prédicat lambda à cv.wait(lock, []{ return condition; }); pour vérifier la condition en boucle."
+    },
+    codeSnippet: `std::unique_lock<std::mutex> lock(mtx);\ncv.wait(lock, [&]{ return !queue.empty(); }); // Safe predicate!`
+  },
+  {
+    id: 46,
+    category: "Pro Dev",
+    front: {
+      en: "What is the difference between std::launch::async and std::launch::deferred in std::async?",
+      fr: "Quelle est la différence entre std::launch::async et std::launch::deferred dans std::async ?"
+    },
+    back: {
+      en: "std::launch::async guarantees execution on a separate physical background thread. std::launch::deferred delays execution until .get() or .wait() is called, running synchronously on the calling thread.",
+      fr: "std::launch::async garantit l'exécution sur un thread séparé en arrière-plan. std::launch::deferred diffère l'exécution jusqu'à l'appel de .get(), s'exécutant sur le thread appelant."
+    },
+    codeSnippet: `auto f1 = std::async(std::launch::async, task);    // New thread!\nauto f2 = std::async(std::launch::deferred, task); // Lazy synchronous`
+  },
+  {
+    id: 47,
+    category: "Pro Dev",
+    front: {
+      en: "What is False Sharing and how do you prevent it in high-performance multithreading?",
+      fr: "Qu'est-ce que le False Sharing et comment l'éliminer en multithreading haute performance ?"
+    },
+    back: {
+      en: "False sharing occurs when independent threads modify distinct variables that share the same 64-byte CPU cache line, causing constant cache invalidations. Prevent it with alignas(64).",
+      fr: "Le faux partage survient quand des threads modifient des variables distinctes situées sur la même ligne de cache (64 octets), invalidant inutilement le cache. On l'évite avec alignas(64)."
+    },
+    codeSnippet: `struct alignas(64) ThreadData {\n    std::atomic<int> counter{0}; // Isolated in its own 64-byte cache line!\n};`
+  },
+  {
+    id: 48,
+    category: "Pro Dev",
+    front: {
+      en: "What is the difference between std::latch and std::barrier (C++20)?",
+      fr: "Quelle est la différence entre std::latch et std::barrier (C++20) ?"
+    },
+    back: {
+      en: "std::latch is a single-use countdown synchronizer (once count reaches zero, it stays open). std::barrier is reusable across repeated phases with an optional completion function.",
+      fr: "std::latch est un compte à rebours à usage unique (reste ouvert une fois à 0). std::barrier est réutilisable à travers des phases successives avec une fonction d'étape."
+    },
+    codeSnippet: `std::latch sync(4); // 4 threads arrive, then unblock\nsync.count_down(); sync.wait();`
+  },
+  {
+    id: 49,
+    category: "Modern C++",
+    front: {
+      en: "Why are C++20 Concepts superior to traditional SFINAE (std::enable_if)?",
+      fr: "Pourquoi les Concepts C++20 sont-ils supérieurs à SFINAE (std::enable_if) ?"
+    },
+    back: {
+      en: "Concepts express compile-time type constraints directly in the function signature, provide readable compiler error messages, compile faster, and support logical operators (&&, ||).",
+      fr: "Les concepts expriment les contraintes directement dans la signature, offrent des messages d'erreur clairs (sans pavés illisibles), compilent plus vite et supportent les opérateurs && et ||."
+    },
+    codeSnippet: `template<typename T>\nconcept Numeric = std::integral<T> || std::floating_point<T>;\n\ntemplate<Numeric T> T add(T a, T b) { return a + b; }`
+  },
+  {
+    id: 50,
+    category: "Modern C++",
+    front: {
+      en: "How do C++20 Ranges (std::views) optimize collection transformations?",
+      fr: "Comment les Ranges C++20 (std::views) optimisent-ils les transformations de conteneurs ?"
+    },
+    back: {
+      en: "std::views are non-owning, O(1) copy, lazy-evaluated transformations. Elements are computed on the fly during iteration without allocating temporary intermediate containers.",
+      fr: "std::views sont des vues non-propriétaires, à copie O(1) et évaluation paresseuse. Les éléments sont calculés à la volée sans allouer de conteneurs intermédiaires."
+    },
+    codeSnippet: `auto evens = vec | std::views::filter([](int n){ return n % 2 == 0; })\n                 | std::views::transform([](int n){ return n * 2; });`
+  },
+  {
+    id: 51,
+    category: "Modern C++",
+    front: {
+      en: "What are the three C++20 Coroutine keywords and what do they do?",
+      fr: "Quels sont les trois mots-clés des Coroutines C++20 et que font-ils ?"
+    },
+    back: {
+      en: "'co_await' suspends execution until an async task finishes; 'co_yield' suspends execution and returns an intermediate value; 'co_return' completes the coroutine with a final value.",
+      fr: "'co_await' suspend jusqu'à la fin d'une tâche asynchrone ; 'co_yield' suspend et produit une valeur intermédiaire ; 'co_return' termine la coroutine et renvoie le résultat."
+    },
+    codeSnippet: `// Inside a generator:\nfor (int i = 0; i < 10; i++) {\n    co_yield i; // Yields value, suspends state\n}\nco_return;`
+  },
+  {
+    id: 52,
+    category: "Architecture",
+    front: {
+      en: "What is CRTP (Curiously Recurring Template Pattern) and when should you use it?",
+      fr: "Qu'est-ce que le CRTP (Curiously Recurring Template Pattern) et quand l'utiliser ?"
+    },
+    back: {
+      en: "CRTP is a static polymorphism idiom where a class derives from a template instantiated with itself. It provides polymorphic interface dispatch at compile-time with zero virtual table overhead.",
+      fr: "Le CRTP est un idiome de polymorphisme statique où une classe dérive d'un template instancié avec elle-même. Il permet un polymorphisme à la compilation avec 0 surcoût de table virtuelle."
+    },
+    codeSnippet: `template<typename Derived>\nstruct Base {\n    void act() { static_cast<Derived*>(this)->impl(); }\n};\nstruct Derived : Base<Derived> { void impl(); };`
   }
 ];
 
@@ -1345,6 +1475,222 @@ const GRAND_EXAM_QUESTIONS = [
       en: "std::atomic provides hardware-level lock-free instructions without the overhead of thread context switches.",
       fr: "std::atomic exploite les instructions matérielles sans verrou (lock-free) évitant les changements de contexte."
     }
+  },
+  {
+    id: 46,
+    subject: "Concurrency",
+    question: {
+      en: "What critical problem does std::jthread (C++20) resolve compared to std::thread?",
+      fr: "Quel problème critique std::jthread (C++20) résout-il par rapport à std::thread ?"
+    },
+    options: [
+      { text: { en: "It automatically joins on destruction instead of calling std::terminate()", fr: "Il s'auto-joint à sa destruction au lieu d'appeler std::terminate()" }, correct: true },
+      { text: { en: "It eliminates all CPU thread context switches", fr: "Il élimine tout changement de contexte processeur" }, correct: false },
+      { text: { en: "It makes all shared variables thread-safe without locks", fr: "Il rend toutes les variables thread-safe sans verrous" }, correct: false },
+      { text: { en: "It allows threads to run without an operating system", fr: "Il permet aux threads de tourner sans système d'exploitation" }, correct: false }
+    ],
+    explanation: {
+      en: "std::thread crashes the entire process via std::terminate() if destroyed while joinable; std::jthread joins automatically.",
+      fr: "std::thread crashe le processus avec std::terminate() s'il est détruit sans join() ; std::jthread s'auto-joint proprement."
+    }
+  },
+  {
+    id: 47,
+    subject: "Concurrency",
+    question: {
+      en: "How does std::scoped_lock (C++17) prevent deadlocks when locking multiple mutexes?",
+      fr: "Comment std::scoped_lock (C++17) prévient-il les interblocages lors du verrouillage de plusieurs mutex ?"
+    },
+    options: [
+      { text: { en: "It uses a deadlock-avoidance algorithm to lock all mutexes in a single atomic-like step", fr: "Il utilise un algorithme anti-deadlock pour verrouiller tous les mutex sans ordre conflictuel" }, correct: true },
+      { text: { en: "It converts all mutexes into spinlocks", fr: "Il convertit tous les mutex en spinlocks" }, correct: false },
+      { text: { en: "It runs each thread on a separate CPU core", fr: "Il force chaque thread sur un cœur CPU différent" }, correct: false },
+      { text: { en: "It disables hardware interrupts", fr: "Il désactive les interruptions matérielles" }, correct: false }
+    ],
+    explanation: {
+      en: "std::scoped_lock acquires all passed mutexes simultaneously without deadlock hazard, replacing std::lock.",
+      fr: "std::scoped_lock acquiert tous les mutex fournis simultanément avec un algorithme évitant les interblocages."
+    }
+  },
+  {
+    id: 48,
+    subject: "Concurrency",
+    question: {
+      en: "Why is a predicate loop (e.g. cv.wait(lock, []{ return ready; });) mandatory with std::condition_variable?",
+      fr: "Pourquoi un prédicat en boucle (ex. cv.wait(lock, []{ return ready; });) est-il obligatoire avec std::condition_variable ?"
+    },
+    options: [
+      { text: { en: "To protect against spurious wakeups where the OS unblocks a thread without a signal", fr: "Pour se prémunir des réveils spontanés (spurious wakeups) où l'OS réveille un thread sans signal" }, correct: true },
+      { text: { en: "To convert condition variables into semaphores", fr: "Pour convertir les variables de condition en sémaphores" }, correct: false },
+      { text: { en: "To avoid creating mutex locks", fr: "Pour éviter de créer des verrous mutex" }, correct: false },
+      { text: { en: "To speed up floating point arithmetic", fr: "Pour accélérer les calculs à virgule flottante" }, correct: false }
+    ],
+    explanation: {
+      en: "Operating systems can wake sleeping threads spuriously; the predicate ensures the condition actually holds before continuing.",
+      fr: "L'OS peut réveiller un thread de façon intempestive ; le prédicat garantit que la condition voulue est réellement vérifiée."
+    }
+  },
+  {
+    id: 49,
+    subject: "Concurrency",
+    question: {
+      en: "What happens if an asynchronous task executed via std::async throws an unhandled exception?",
+      fr: "Que se passe-t-il si une tâche lancée avec std::async lève une exception non interceptée ?"
+    },
+    options: [
+      { text: { en: "The exception is captured and re-thrown on the calling thread when future.get() is called", fr: "L'exception est capturée et relancée sur le thread appelant lors de l'appel à future.get()" }, correct: true },
+      { text: { en: "The entire application terminates immediately with SIGABRT", fr: "L'application plante immédiatement avec SIGABRT" }, correct: false },
+      { text: { en: "The exception is silently ignored and returns zero", fr: "L'exception est silencieusement ignorée et renvoie zéro" }, correct: false },
+      { text: { en: "The background thread restarts from main()", fr: "Le thread d'arrière-plan redémarre depuis main()" }, correct: false }
+    ],
+    explanation: {
+      en: "std::future acts as an exception transport channel, faithfully re-throwing exceptions across thread boundaries upon .get().",
+      fr: "std::future transporte les exceptions entre threads et les relance fidèlement lors de l'appel à .get()."
+    }
+  },
+  {
+    id: 50,
+    subject: "Concurrency",
+    question: {
+      en: "What is False Sharing in multithreaded systems and how do you prevent it?",
+      fr: "Qu'est-ce que le False Sharing en multithreading et comment l'éliminer ?"
+    },
+    options: [
+      { text: { en: "Different threads modifying variables on the same 64-byte cache line; prevent it with alignas(64)", fr: "Des threads modifiant des variables distinctes sur la même ligne de cache de 64 octets ; évité avec alignas(64)" }, correct: true },
+      { text: { en: "Multiple threads sharing a network socket; prevent it with TCP", fr: "Des threads partageant une socket réseau ; évité avec TCP" }, correct: false },
+      { text: { en: "A race condition on global variables; prevent it with volatile", fr: "Une condition de course sur variables globales ; évitée avec volatile" }, correct: false },
+      { text: { en: "Using new and delete on the same pointer; prevent it with smart pointers", fr: "Utiliser new et delete sur le même pointeur ; évité avec des pointeurs intelligents" }, correct: false }
+    ],
+    explanation: {
+      en: "When variables share a 64-byte CPU cache line, updates by one core invalidate other cores' caches. Aligning to 64 bytes prevents this.",
+      fr: "Si des variables partagent la même ligne de cache de 64 octets, une mise à jour invalide les caches des autres cœurs. alignas(64) isole chaque variable."
+    }
+  },
+  {
+    id: 51,
+    subject: "Concurrency",
+    question: {
+      en: "What is the primary operational difference between std::latch and std::barrier (C++20)?",
+      fr: "Quelle est la principale différence opérationnelle entre std::latch et std::barrier (C++20) ?"
+    },
+    options: [
+      { text: { en: "std::latch is single-use, whereas std::barrier can be reused across repeated synchronization phases", fr: "std::latch est à usage unique, tandis que std::barrier est réutilisable à travers des phases répétées" }, correct: true },
+      { text: { en: "std::latch runs on GPU while std::barrier runs on CPU", fr: "std::latch tourne sur GPU tandis que std::barrier tourne sur CPU" }, correct: false },
+      { text: { en: "std::barrier requires mutex locks but std::latch does not", fr: "std::barrier requiert des verrous mutex mais pas std::latch" }, correct: false },
+      { text: { en: "std::latch is deprecated in modern C++", fr: "std::latch est obsolète en C++ moderne" }, correct: false }
+    ],
+    explanation: {
+      en: "std::latch countdowns once and remains open; std::barrier resets its counter for subsequent phases.",
+      fr: "std::latch effectue un compte à rebours unique puis reste ouvert ; std::barrier se réinitialise pour des phases successives."
+    }
+  },
+  {
+    id: 52,
+    subject: "Architecture",
+    question: {
+      en: "What major advantage do C++20 Concepts provide over traditional SFINAE (std::enable_if)?",
+      fr: "Quel avantage majeur les Concepts C++20 apportent-ils par rapport à SFINAE (std::enable_if) ?"
+    },
+    options: [
+      { text: { en: "Clean, human-readable compiler diagnostics and direct signature constraints (e.g. template<Numeric T>)", fr: "Des diagnostics d'erreur clairs et lisibles et des contraintes directes (ex. template<Numeric T>)" }, correct: true },
+      { text: { en: "Automatic runtime garbage collection", fr: "Un ramasse-miettes automatique à l'exécution" }, correct: false },
+      { text: { en: "Compiles without an actual C++ compiler", fr: "Compile sans compilateur C++" }, correct: false },
+      { text: { en: "Converts all virtual functions into static variables", fr: "Convertit toutes les fonctions virtuelles en variables statiques" }, correct: false }
+    ],
+    explanation: {
+      en: "Concepts express requirements directly in template signatures and output clear, readable error messages instead of walls of cryptic template errors.",
+      fr: "Les concepts expriment les contraintes directement et génèrent des erreurs courtes et compréhensibles au lieu d'interminables pavés."
+    }
+  },
+  {
+    id: 53,
+    subject: "Architecture",
+    question: {
+      en: "Why do C++20 Ranges pipelines (std::views) have zero heap allocation overhead?",
+      fr: "Pourquoi les pipelines de Ranges C++20 (std::views) n'allouent-ils aucune mémoire sur le tas ?"
+    },
+    options: [
+      { text: { en: "They are non-owning, lazy wrappers that transform elements on the fly during iteration", fr: "Ce sont des vues non-propriétaires et paresseuses qui transforment les éléments à la volée pendant l'itération" }, correct: true },
+      { text: { en: "They compress data into 32-bit registers", fr: "Ils compressent les données dans des registres 32 bits" }, correct: false },
+      { text: { en: "They force the compiler to allocate everything on the stack", fr: "Ils forcent le compilateur à tout allouer sur la pile" }, correct: false },
+      { text: { en: "They can only be used with arrays of size 10 or less", fr: "Ils ne fonctionnent qu'avec des tableaux de taille 10 ou moins" }, correct: false }
+    ],
+    explanation: {
+      en: "std::views wrap iterators without storing elements, evaluating transformations strictly on demand.",
+      fr: "std::views enveloppe des itérateurs sans stocker de copie, évaluant les transformations à la volée."
+    }
+  },
+  {
+    id: 54,
+    subject: "Architecture",
+    question: {
+      en: "Which keyword is used in a C++20 coroutine to suspend execution and yield an intermediate value to the caller?",
+      fr: "Quel mot-clé est utilisé dans une coroutine C++20 pour suspendre l'exécution et produire une valeur intermédiaire ?"
+    },
+    options: [
+      { text: { en: "co_yield", fr: "co_yield" }, correct: true },
+      { text: { en: "co_await", fr: "co_await" }, correct: false },
+      { text: { en: "co_return", fr: "co_return" }, correct: false },
+      { text: { en: "yield_break", fr: "yield_break" }, correct: false }
+    ],
+    explanation: {
+      en: "co_yield yields a value and pauses the coroutine frame; co_await waits for completion; co_return finishes.",
+      fr: "co_yield produit une valeur et suspend la coroutine ; co_await attend une tâche ; co_return termine la coroutine."
+    }
+  },
+  {
+    id: 55,
+    subject: "Architecture",
+    question: {
+      en: "Why is Data-Oriented Design (Structure of Arrays - SoA) preferred over Array of Structures (AoS) in game engines and simulation loops?",
+      fr: "Pourquoi la conception orientée données (Structure of Arrays - SoA) est-elle préférée en moteur de jeu par rapport à Array of Structures (AoS) ?"
+    },
+    options: [
+      { text: { en: "It packs homogeneous fields contiguously, maximizing CPU cache line hit rate and SIMD auto-vectorization", fr: "Elle regroupe les champs contigus en mémoire, maximisant le taux de succès du cache CPU et la vectorisation SIMD" }, correct: true },
+      { text: { en: "It eliminates all memory deallocation", fr: "Elle élimine toute libération mémoire" }, correct: false },
+      { text: { en: "It prevents compilation errors in templates", fr: "Elle empêche les erreurs de compilation sur les templates" }, correct: false },
+      { text: { en: "It automatically creates multiple threads", fr: "Elle crée automatiquement plusieurs threads" }, correct: false }
+    ],
+    explanation: {
+      en: "SoA allows CPUs to load only the memory needed for a loop into 64-byte cache lines, enabling hardware vector registers (AVX/SSE).",
+      fr: "SoA charge uniquement les données nécessaires dans les lignes de cache de 64 octets, permettant l'auto-vectorisation SIMD."
+    }
+  },
+  {
+    id: 56,
+    subject: "Architecture",
+    question: {
+      en: "What is the primary benefit of CRTP (Curiously Recurring Template Pattern) over virtual functions?",
+      fr: "Quel est le bénéfice principal du CRTP par rapport aux fonctions virtuelles ?"
+    },
+    options: [
+      { text: { en: "Static compile-time dispatch with zero vtable pointer overhead, enabling compiler inlining", fr: "Polymorphisme statique à la compilation sans surcoût de table virtuelle (vtable), permettant l'inlining" }, correct: true },
+      { text: { en: "Allows multiple inheritance from non-template classes", fr: "Permet l'héritage multiple de classes non templates" }, correct: false },
+      { text: { en: "Allocates all derived classes in stack memory only", fr: "Alloue toutes les classes dérivées uniquement sur la pile" }, correct: false },
+      { text: { en: "Automatically creates thread-safe destructors", fr: "Crée automatiquement des destructeurs thread-safe" }, correct: false }
+    ],
+    explanation: {
+      en: "CRTP resolves polymorphic calls at compile-time via static_cast<Derived*>(this), removing vpointer indirections.",
+      fr: "Le CRTP résout les appels polymorphiques dès la compilation via static_cast, éliminant les pointeurs de vtable."
+    }
+  },
+  {
+    id: 57,
+    subject: "Architecture",
+    question: {
+      en: "What standard modern C++ utility provides compile-time checked pattern matching across a std::variant?",
+      fr: "Quel utilitaire C++ standard moderne offre un filtrage par motif (pattern matching) vérifié à la compilation sur std::variant ?"
+    },
+    options: [
+      { text: { en: "std::visit with overloaded lambdas", fr: "std::visit avec des lambdas surchargées" }, correct: true },
+      { text: { en: "dynamic_cast in a switch statement", fr: "dynamic_cast dans une instruction switch" }, correct: false },
+      { text: { en: "reinterpret_cast on unions", fr: "reinterpret_cast sur des unions" }, correct: false },
+      { text: { en: "std::any_cast with try-catch blocks", fr: "std::any_cast avec des blocs try-catch" }, correct: false }
+    ],
+    explanation: {
+      en: "std::visit ensures at compile-time that all possible types held by a std::variant have a matching handler.",
+      fr: "std::visit garantit à la compilation que chaque type possible contenu dans un std::variant possède un gestionnaire valide."
+    }
   }
 ];
 
@@ -1880,6 +2226,171 @@ const LESSON_QUIZZES = {
       en: "Pimpl confines private headers to .cpp files, preventing recompilation cascading when internals change.",
       fr: "Pimpl isole les en-têtes privés dans les .cpp, évitant les recompilations en cascade."
     }
+  },
+  74: {
+    question: {
+      en: "Why does std::jthread automatically prevent application crashes on scope exit?",
+      fr: "Pourquoi std::jthread prévient-il automatiquement les crashs de l'application en sortie de portée ?"
+    },
+    options: [
+      { text: { en: "Its destructor automatically calls request_stop() and join()", fr: "Son destructeur appelle automatiquement request_stop() et join()" }, correct: true },
+      { text: { en: "It forces the operating system to pause", fr: "Il force le système d'exploitation à se mettre en pause" }, correct: false },
+      { text: { en: "It converts multithreaded code into single-threaded code", fr: "Il convertit le code multithread en code mono-thread" }, correct: false }
+    ],
+    explanation: {
+      en: "std::jthread joins automatically in its destructor, avoiding the fatal std::terminate() triggered by std::thread.",
+      fr: "std::jthread fait un join automatique dans son destructeur, évitant le redouté crash std::terminate() de std::thread."
+    }
+  },
+  75: {
+    question: {
+      en: "Which RAII lock wrapper should you use to lock multiple mutexes simultaneously without deadlocks?",
+      fr: "Quel wrapper RAII devez-vous utiliser pour verrouiller plusieurs mutex simultanément sans risque d'interblocage ?"
+    },
+    options: [
+      { text: { en: "std::scoped_lock (C++17)", fr: "std::scoped_lock (C++17)" }, correct: true },
+      { text: { en: "std::lock_guard", fr: "std::lock_guard" }, correct: false },
+      { text: { en: "raw mtx.lock() calls in sequence", fr: "des appels manuels successifs à mtx.lock()" }, correct: false }
+    ],
+    explanation: {
+      en: "std::scoped_lock accepts any number of mutexes and uses a deadlock-avoidance algorithm to lock them all safely.",
+      fr: "std::scoped_lock accepte plusieurs mutex et utilise un algorithme anti-deadlock pour les verrouiller en toute sécurité."
+    }
+  },
+  76: {
+    question: {
+      en: "Why should you always pass a predicate lambda to cv.wait()?",
+      fr: "Pourquoi doit-on toujours passer un prédicat lambda à cv.wait() ?"
+    },
+    options: [
+      { text: { en: "To prevent spurious wakeups from executing code before the condition is truly met", fr: "Pour empêcher les réveils spontanés (spurious wakeups) d'exécuter du code sans condition valide" }, correct: true },
+      { text: { en: "To enable compilation on 32-bit systems", fr: "Pour permettre la compilation sur architectures 32 bits" }, correct: false },
+      { text: { en: "To unlock the mutex permanently", fr: "Pour déverrouiller définitivement le mutex" }, correct: false }
+    ],
+    explanation: {
+      en: "cv.wait(lock, []{ return condition; }); re-checks the condition whenever the thread wakes, ignoring false wakeups.",
+      fr: "cv.wait avec prédicat réévalue la condition à chaque réveil et se rendort si elle n'est pas encore satisfaite."
+    }
+  },
+  77: {
+    question: {
+      en: "Which policy flag ensures std::async runs on a separate asynchronous OS thread?",
+      fr: "Quel flag de politique garantit que std::async s'exécute sur un thread d'arrière-plan distinct ?"
+    },
+    options: [
+      { text: { en: "std::launch::async", fr: "std::launch::async" }, correct: true },
+      { text: { en: "std::launch::deferred", fr: "std::launch::deferred" }, correct: false },
+      { text: { en: "std::launch::sync", fr: "std::launch::sync" }, correct: false }
+    ],
+    explanation: {
+      en: "std::launch::async guarantees a dedicated background thread; std::launch::deferred delays execution until .get().",
+      fr: "std::launch::async force un thread dédié ; std::launch::deferred retarde l'exécution synchrone jusqu'à .get()."
+    }
+  },
+  78: {
+    question: {
+      en: "What alignment attribute should you use to prevent False Sharing on modern CPU cache lines?",
+      fr: "Quel attribut d'alignement devez-vous utiliser pour éliminer le False Sharing sur les lignes de cache CPU modernes ?"
+    },
+    options: [
+      { text: { en: "alignas(64) (or std::hardware_destructive_interference_size)", fr: "alignas(64) (ou std::hardware_destructive_interference_size)" }, correct: true },
+      { text: { en: "alignas(4)", fr: "alignas(4)" }, correct: false },
+      { text: { en: "inline", fr: "inline" }, correct: false }
+    ],
+    explanation: {
+      en: "Standard CPU cache lines are 64 bytes; aligning atomic variables to 64 bytes isolates them into their own cache lines.",
+      fr: "Les lignes de cache CPU mesurent 64 octets ; aligner à 64 octets isole chaque variable atomique dans sa propre ligne."
+    }
+  },
+  79: {
+    question: {
+      en: "What synchronization primitive allows controlling a pool of N concurrent resources in C++20?",
+      fr: "Quel outil de synchronisation permet de contrôler un pool de N ressources concurrentes en C++20 ?"
+    },
+    options: [
+      { text: { en: "std::counting_semaphore", fr: "std::counting_semaphore" }, correct: true },
+      { text: { en: "std::mutex", fr: "std::mutex" }, correct: false },
+      { text: { en: "std::latch", fr: "std::latch" }, correct: false }
+    ],
+    explanation: {
+      en: "std::counting_semaphore manages a counter of available resources, permitting acquire() when count > 0.",
+      fr: "std::counting_semaphore gère un compteur d'accès simultanés, autorisant acquire() tant que le compteur est supérieur à 0."
+    }
+  },
+  80: {
+    question: {
+      en: "How do you constrain a function template using a C++20 concept?",
+      fr: "Comment contraint-on un template de fonction à l'aide d'un concept C++20 ?"
+    },
+    options: [
+      { text: { en: "template<MyConcept T> void func(T x) or using 'requires MyConcept<T>'", fr: "template<MyConcept T> void func(T x) ou avec 'requires MyConcept<T>'" }, correct: true },
+      { text: { en: "using try-catch blocks at runtime", fr: "avec des blocs try-catch à l'exécution" }, correct: false },
+      { text: { en: "by casting T to void*", fr: "en castant T en void*" }, correct: false }
+    ],
+    explanation: {
+      en: "C++20 concepts can be used directly as type constraints in template brackets or following a 'requires' clause.",
+      fr: "Les concepts C++20 s'utilisent directement à la place de typename/class ou après la clause 'requires'."
+    }
+  },
+  81: {
+    question: {
+      en: "What makes C++20 std::views highly efficient when transforming containers?",
+      fr: "Qu'est-ce qui rend les std::views C++20 extrêmement efficaces pour transformer des conteneurs ?"
+    },
+    options: [
+      { text: { en: "They evaluate lazily on iteration with zero heap memory allocations", fr: "Ils sont évalués de façon paresseuse à l'itération sans aucune allocation mémoire sur le tas" }, correct: true },
+      { text: { en: "They clone the entire vector into GPU memory", fr: "Ils dupliquent tout le vecteur dans la mémoire GPU" }, correct: false },
+      { text: { en: "They delete the original vector", fr: "Ils suppriment le vecteur d'origine" }, correct: false }
+    ],
+    explanation: {
+      en: "std::views are lightweight wrappers that calculate values on demand, eliminating temporary vector copies.",
+      fr: "std::views sont des vues légères calculant les valeurs à la volée, supprimant les copies temporaires."
+    }
+  },
+  82: {
+    question: {
+      en: "What does the 'co_yield' keyword do inside a C++20 coroutine?",
+      fr: "Que fait le mot-clé 'co_yield' dans une coroutine C++20 ?"
+    },
+    options: [
+      { text: { en: "Suspends the coroutine and sends an intermediate value back to the caller", fr: "Suspend la coroutine et renvoie une valeur intermédiaire à l'appelant" }, correct: true },
+      { text: { en: "Destroys the coroutine stack frame", fr: "Détruit le cadre d'exécution de la coroutine" }, correct: false },
+      { text: { en: "Throws an exception to abort execution", fr: "Lève une exception pour interrompre l'exécution" }, correct: false }
+    ],
+    explanation: {
+      en: "co_yield produces a value and pauses execution while preserving all local variables in the coroutine frame.",
+      fr: "co_yield émet une valeur et met en pause l'exécution tout en préservant l'état des variables locales."
+    }
+  },
+  83: {
+    question: {
+      en: "Why is Structure of Arrays (SoA) vastly faster in simulation loops than Array of Structures (AoS)?",
+      fr: "Pourquoi Structure of Arrays (SoA) est-elle bien plus rapide en boucle de calcul que Array of Structures (AoS) ?"
+    },
+    options: [
+      { text: { en: "Contiguous arrays maximize cache line hits and enable SIMD vectorization", fr: "La contiguïté mémoire maximise les succès de ligne de cache et permet la vectorisation SIMD" }, correct: true },
+      { text: { en: "SoA runs on 16 threads by default", fr: "SoA tourne par défaut sur 16 threads" }, correct: false },
+      { text: { en: "SoA does not use any RAM", fr: "SoA n'utilise pas de mémoire RAM" }, correct: false }
+    ],
+    explanation: {
+      en: "CPUs fetch 64-byte chunks into L1 cache; SoA ensures 100% of fetched bytes belong to the data being processed.",
+      fr: "Le CPU charge des lignes de 64 octets dans le cache L1 ; SoA assure que chaque octet chargé est immédiatement utile."
+    }
+  },
+  84: {
+    question: {
+      en: "How does CRTP (Curiously Recurring Template Pattern) avoid the performance overhead of virtual functions?",
+      fr: "Comment le CRTP élimine-t-il le surcoût de performance des fonctions virtuelles ?"
+    },
+    options: [
+      { text: { en: "It resolves polymorphic calls statically at compile-time with no vtable pointer indirection", fr: "Il résout les appels polymorphiques dès la compilation sans aucune indirection de pointeur vtable" }, correct: true },
+      { text: { en: "It converts functions into assembly macros", fr: "Il convertit les fonctions en macros assembleur" }, correct: false },
+      { text: { en: "It runs all calculations in registers", fr: "Il exécute tous les calculs dans des registres" }, correct: false }
+    ],
+    explanation: {
+      en: "CRTP uses static_cast<Derived*>(this) at compile time, enabling compiler inlining and zero vtable size penalty.",
+      fr: "Le CRTP utilise static_cast<Derived*>(this) à la compilation, permettant l'inlining et éliminant la vtable."
+    }
   }
 };
 
@@ -1919,6 +2430,20 @@ const MODULE_QUIZZES = {
       fr: "Grand Quiz Module 9 : Outils du Développeur Professionnel"
     },
     questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Pro Dev")
+  },
+  "mod-10": {
+    title: {
+      en: "Module 10 Master Quiz: Multithreading & High-Performance Concurrency",
+      fr: "Grand Quiz Module 10 : Multithreading & Concurrence Haute Performance"
+    },
+    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Concurrency")
+  },
+  "mod-11": {
+    title: {
+      en: "Module 11 Master Quiz: Modern C++20/C++23 Architecture & Performance",
+      fr: "Grand Quiz Module 11 : Architecture C++20/C++23 & Haute Performance"
+    },
+    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Architecture")
   }
 };
 

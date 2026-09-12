@@ -171,6 +171,17 @@
             <li><strong>Pass by Const Reference:</strong> Pass non-primitive objects as <code>const Type&amp;</code> or <code>std::string_view</code> to eliminate copies.</li>
           </ul>
         </div>
+
+        <div>
+          <h4 style="color: var(--accent-blue); margin-bottom: 8px;">4. Concurrency & Multithreading Rules of Thumb</h4>
+          <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 20px; line-height: 1.6;">
+            <li><strong>Prefer <code>std::jthread</code> over <code>std::thread</code>:</strong> Auto-joins on destruction and cleanly handles cooperative cancellation via <code>std::stop_token</code>.</li>
+            <li><strong>Deadlock Prevention:</strong> Always use <code>std::scoped_lock(mtxA, mtxB)</code> when locking multiple mutexes simultaneously.</li>
+            <li><strong>Spurious Wakeups:</strong> Never call <code>cv.wait(lock)</code> without a predicate lambda loop: <code>cv.wait(lock, [&amp;]{ return !queue.empty(); });</code>.</li>
+            <li><strong>Eliminate False Sharing:</strong> Align hot atomic counters to CPU cache lines using <code>alignas(64)</code>.</li>
+            <li><strong>Prefer Tasks over Threads:</strong> Use <code>std::async(std::launch::async, ...)</code> and <code>std::future</code> for concurrent calculations with automatic exception propagation.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

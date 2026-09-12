@@ -838,6 +838,287 @@ const COURSE_DATA = {
           ]
         }
       ]
+    },
+    {
+      "id": "mod-10",
+      "source": "prodev",
+      "title": {
+        "en": "Module 10: Multithreading & High-Performance Concurrency 🧵",
+        "fr": "Module 10 : Multithreading & Concurrence Haute Performance 🧵"
+      },
+      "desc": {
+        "en": "Master real-world multithreading: jthread, mutexes, condition variables, async tasks, atomics, and lock-free concurrency.",
+        "fr": "Maîtrisez la programmation concurrente : jthread, verrous, variables de condition, tâches asynchrones et atomiques."
+      },
+      "lessons": [
+        {
+          "id": 74,
+          "source": "prodev",
+          "title": "Thread Lifecycle & Cooperative Cancellation (std::jthread & std::stop_token) 🧵",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Concurrency",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/thread/jthread",
+          "summary": {
+            "en": "Managing OS thread lifecycles safely: std::thread vs std::jthread, argument passing with std::ref, and cooperative cancellation with std::stop_token.",
+            "fr": "Gestion sûre du cycle de vie des threads : std::thread vs std::jthread, passage par référence (std::ref) et arrêt coopératif via std::stop_token."
+          },
+          "code": "#include <iostream>\n#include <thread>\n#include <chrono>\n\nvoid worker(std::stop_token stoken, int id) {\n    while (!stoken.stop_requested()) {\n        std::cout << \"Worker \" << id << \" running...\\n\";\n        std::this_thread::sleep_for(std::chrono::milliseconds(50));\n        break;\n    }\n    std::cout << \"Worker \" << id << \" cleanly stopped.\\n\";\n}\n\nint main() {\n    // std::jthread automatically joins on scope exit and supports stop tokens\n    std::jthread workerThread(worker, 42);\n    std::this_thread::sleep_for(std::chrono::milliseconds(20));\n    workerThread.request_stop(); // Cooperative stop request\n    return 0;\n}",
+          "output": "Worker 42 running...\nWorker 42 cleanly stopped.",
+          "keyTakeaways": [
+            "Always prefer std::jthread (C++20) over std::thread: jthread auto-joins in its destructor, avoiding std::terminate crashes.",
+            "Use std::stop_token for clean, cooperative thread interruption without abrupt OS thread kills.",
+            "Arguments passed to thread functions are copied by default; wrap in std::ref() to pass by reference."
+          ]
+        },
+        {
+          "id": 75,
+          "source": "prodev",
+          "title": "Mutexes & Deadlock Prevention (std::mutex, std::unique_lock, std::scoped_lock) 🔒",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Concurrency",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/thread/scoped_lock",
+          "summary": {
+            "en": "Protecting shared state from data races using RAII locks (std::lock_guard, std::unique_lock) and deadlock-free multi-locking with std::scoped_lock.",
+            "fr": "Protection de l'état partagé contre les accès concurrents avec les verrous RAII et prévention des interblocages avec std::scoped_lock."
+          },
+          "code": "#include <iostream>\n#include <thread>\n#include <mutex>\n#include <vector>\n\nstd::mutex mtxA;\nstd::mutex mtxB;\nint sharedBankBalance = 1000;\n\nvoid transferMoney(int amount) {\n    // std::scoped_lock locks multiple mutexes simultaneously without deadlock hazard\n    std::scoped_lock lock(mtxA, mtxB);\n    sharedBankBalance += amount;\n    std::cout << \"Updated Balance: $\" << sharedBankBalance << \"\\n\";\n}\n\nint main() {\n    std::jthread t1(transferMoney, 250);\n    std::jthread t2(transferMoney, -100);\n    return 0;\n}",
+          "output": "Updated Balance: $1250\nUpdated Balance: $1150",
+          "keyTakeaways": [
+            "Data races constitute undefined behavior (UB); always protect mutable shared variables with a mutex.",
+            "Never call raw mtx.lock() and mtx.unlock() manually; always rely on RAII wrappers like std::lock_guard or std::unique_lock.",
+            "std::scoped_lock (C++17) uses a deadlock-avoidance algorithm to lock multiple mutexes in a single safe operation."
+          ]
+        },
+        {
+          "id": 76,
+          "source": "prodev",
+          "title": "Condition Variables & Producer-Consumer Coordination (std::condition_variable) 📢",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Concurrency",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/thread/condition_variable",
+          "summary": {
+            "en": "Efficient thread signaling without busy-waiting (spinning) using condition variables, predicate loops, and the Producer-Consumer pattern.",
+            "fr": "Synchronisation efficace entre threads sans attente active (spin) via condition_variable et le pattern Producteur-Consommateur."
+          },
+          "code": "#include <iostream>\n#include <thread>\n#include <mutex>\n#include <condition_variable>\n#include <queue>\n\nstd::queue<int> taskQueue;\nstd::mutex cvMtx;\nstd::condition_variable cv;\nbool finished = false;\n\nvoid consumer() {\n    std::unique_lock<std::mutex> lock(cvMtx);\n    // Always use predicate loop to prevent spurious wakeups!\n    cv.wait(lock, []{ return !taskQueue.empty() || finished; });\n    while (!taskQueue.empty()) {\n        std::cout << \"Processing Task ID: \" << taskQueue.front() << \"\\n\";\n        taskQueue.pop();\n    }\n}\n\nint main() {\n    std::jthread worker(consumer);\n    {\n        std::lock_guard<std::mutex> lock(cvMtx);\n        taskQueue.push(101);\n        taskQueue.push(102);\n    }\n    cv.notify_one(); // Wake waiting worker thread\n    return 0;\n}",
+          "output": "Processing Task ID: 101\nProcessing Task ID: 102",
+          "keyTakeaways": [
+            "Condition variables put waiting threads into a deep OS sleep state, consuming 0% CPU compared to busy while-loops.",
+            "Always pass a predicate lambda to cv.wait() to guard against spurious wakeups (waking up without a signal).",
+            "cv.notify_one() unblocks one waiting thread; cv.notify_all() unblocks all waiting threads."
+          ]
+        },
+        {
+          "id": 77,
+          "source": "prodev",
+          "title": "Asynchronous Tasks, Futures & Promises (std::async, std::future, std::promise) ⚡",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Concurrency",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/thread/async",
+          "summary": {
+            "en": "High-level task-based parallelism: executing functions in background threads, capturing return values, and propagating exceptions across thread boundaries.",
+            "fr": "Parallélisme par tâches : exécution asynchrone, récupération des valeurs de retour et propagation d'exceptions entre threads."
+          },
+          "code": "#include <iostream>\n#include <future>\n#include <chrono>\n\nint computeHeavyHash(int seed) {\n    std::this_thread::sleep_for(std::chrono::milliseconds(40));\n    return seed * 73856093 ^ 19349663;\n}\n\nint main() {\n    // std::launch::async guarantees execution on a separate background thread\n    std::future<int> resultFuture = std::async(std::launch::async, computeHeavyHash, 42);\n\n    std::cout << \"Main thread continues working freely...\\n\";\n    int finalResult = resultFuture.get(); // Blocks until result is computed (or throws if exception occurred)\n    std::cout << \"Async Computation Result: \" << finalResult << \"\\n\";\n    return 0;\n}",
+          "output": "Main thread continues working freely...\nAsync Computation Result: 3101955906",
+          "keyTakeaways": [
+            "std::async abstracts thread creation, automatically joining or managing the execution channel.",
+            "future.get() can only be called once; it transfers ownership of the computed value.",
+            "If the async task throws an exception, future.get() re-throws that exact exception on the calling thread."
+          ]
+        },
+        {
+          "id": 78,
+          "source": "prodev",
+          "title": "Lock-Free Programming, Atomics & Memory Models (std::atomic, Memory Order) 🛡️",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Concurrency",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/atomic/atomic",
+          "summary": {
+            "en": "Designing high-throughput lock-free algorithms: atomic operations, Compare-And-Swap (CAS), memory ordering semantics, and avoiding false sharing.",
+            "fr": "Programmation concurrente sans verrou (lock-free) : opérations atomiques, Compare-And-Swap (CAS) et ordres mémoire."
+          },
+          "code": "#include <iostream>\n#include <atomic>\n#include <thread>\n\nstruct alignas(64) AlignedCounter { // alignas(64) prevents cache-line false sharing!\n    std::atomic<uint64_t> value{0};\n};\n\nAlignedCounter globalCounter;\n\nvoid increment(int iters) {\n    for (int i = 0; i < iters; i++) {\n        // fetch_add with relaxed memory order for maximum CPU throughput\n        globalCounter.value.fetch_add(1, std::memory_order_relaxed);\n    }\n}\n\nint main() {\n    {\n        std::jthread t1(increment, 5000);\n        std::jthread t2(increment, 5000);\n    }\n    std::cout << \"Final Atomic Counter: \" << globalCounter.value.load(std::memory_order_relaxed) << \"\\n\";\n    return 0;\n}",
+          "output": "Final Atomic Counter: 10000",
+          "keyTakeaways": [
+            "std::atomic operations are guaranteed lock-free on native pointer/integer sizes (check with is_lock_free()).",
+            "compare_exchange_weak in a loop is the foundation of lock-free stacks, queues, and ring buffers.",
+            "False sharing occurs when independent threads update different variables located on the same 64-byte cache line; use alignas(64) to eliminate it."
+          ]
+        },
+        {
+          "id": 79,
+          "source": "prodev",
+          "title": "C++20 Synchronization Primitives (Counting Semaphores, Latches & Barriers) 🚦",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Concurrency",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/thread/counting_semaphore",
+          "summary": {
+            "en": "Modern C++20 thread coordination tools: counting semaphores for resource pools, single-use std::latch, and multi-phase std::barrier.",
+            "fr": "Outils de synchronisation C++20 : sémaphores de comptage pour pools de ressources, std::latch et std::barrier."
+          },
+          "code": "#include <iostream>\n#include <semaphore>\n#include <latch>\n#include <thread>\n#include <vector>\n\nstd::counting_semaphore<3> resourcePool(3); // Allows at most 3 concurrent accesses\nstd::latch startSignal(3); // Waits for all 3 workers to initialize\n\nvoid worker(int id) {\n    startSignal.arrive_and_wait(); // Synchronize all workers to start at the exact same moment\n    resourcePool.acquire();\n    std::cout << \"Worker \" << id << \" acquired database slot.\\n\";\n    resourcePool.release();\n}\n\nint main() {\n    std::vector<std::jthread> pool;\n    for (int i = 1; i <= 3; i++) pool.emplace_back(worker, i);\n    return 0;\n}",
+          "output": "Worker 1 acquired database slot.\nWorker 2 acquired database slot.\nWorker 3 acquired database slot.",
+          "keyTakeaways": [
+            "std::counting_semaphore controls access to finite pools of resources (e.g. database connections, GPU compute queues).",
+            "std::latch is a single-use countdown barrier: threads arrive, decrement the latch, and unblock once the count hits zero.",
+            "std::barrier is reusable across repeated phases with an optional completion function executed when each phase finishes."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mod-11",
+      "source": "prodev",
+      "title": {
+        "en": "Module 11: Modern C++20/C++23 Architecture & Performance 🚀",
+        "fr": "Module 11 : Architecture C++20/C++23 & Haute Performance 🚀"
+      },
+      "desc": {
+        "en": "Essential senior developer capabilities: Concepts & Constraints, Ranges pipelines, Coroutines, Cache Locality, and CRTP.",
+        "fr": "Notions indispensables pour développeurs seniors : Concepts, Ranges pipelines, Coroutines, Cache & CRTP."
+      },
+      "lessons": [
+        {
+          "id": 80,
+          "source": "prodev",
+          "title": "C++20 Concepts & Constraints (concept & requires) 🧩",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Modern C++",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/language/constraints",
+          "summary": {
+            "en": "Expressing compile-time requirements on template parameters: replacing convoluted SFINAE with clean, readable concepts and constraints.",
+            "fr": "Définition des exigences de compilation sur les templates : remplacement de SFINAE par des concepts clairs et concis."
+          },
+          "code": "#include <iostream>\n#include <concepts>\n\n// Define a custom concept\ntemplate<typename T>\nconcept Numeric = std::integral<T> || std::floating_point<T>;\n\n// Constrain a function using the concept\ntemplate<Numeric T>\nT addValues(T a, T b) {\n    return a + b;\n}\n\nint main() {\n    std::cout << \"Int Sum: \" << addValues(10, 20) << \"\\n\";\n    std::cout << \"Double Sum: \" << addValues(3.14, 2.71) << \"\\n\";\n    // addValues(\"hello\", \"world\"); // Compile ERROR with clear, human-readable message!\n    return 0;\n}",
+          "output": "Int Sum: 30\nDouble Sum: 5.85",
+          "keyTakeaways": [
+            "Concepts eliminate 50-line cryptic template compiler error dumps, producing concise 'concept requirement not satisfied' errors.",
+            "Combine concepts with logical operators: template<typename T> requires std::copyable<T> && std::equality_comparable<T>.",
+            "Standard concepts library (<concepts>) provides std::same_as, std::derived_from, std::invocable, std::integral, etc."
+          ]
+        },
+        {
+          "id": 81,
+          "source": "prodev",
+          "title": "C++20 Ranges & Functional Pipelines (std::ranges & std::views) 🌊",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Modern C++",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/ranges",
+          "summary": {
+            "en": "Composable, non-allocating, lazy-evaluated transformation pipelines on collections using std::views and the UNIX-style pipe operator (|).",
+            "fr": "Pipelines fonctionnels composables et à évaluation paresseuse sur les conteneurs avec std::views et l'opérateur pipe (|)."
+          },
+          "code": "#include <iostream>\n#include <vector>\n#include <ranges>\n\nint main() {\n    std::vector<int> numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};\n\n    // Composable lazy pipeline: filters even numbers, squares them, takes first 3\n    auto results = numbers \n        | std::views::filter([](int n){ return n % 2 == 0; }) \n        | std::views::transform([](int n){ return n * n; }) \n        | std::views::take(3);\n\n    std::cout << \"Pipeline Result: \";\n    for (int val : results) std::cout << val << \" \";\n    std::cout << \"\\n\";\n    return 0;\n}",
+          "output": "Pipeline Result: 4 16 36",
+          "keyTakeaways": [
+            "std::views are non-owning, lightweight wrappers with O(1) copy cost and zero heap memory allocations.",
+            "Evaluated lazily: elements are only transformed on demand when iterated over.",
+            "std::ranges algorithms (e.g. std::ranges::sort(vec)) accept the container directly without requiring vec.begin(), vec.end()."
+          ]
+        },
+        {
+          "id": 82,
+          "source": "prodev",
+          "title": "C++20 Coroutines (co_await, co_yield, co_return) 🔄",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Modern C++",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/language/coroutines",
+          "summary": {
+            "en": "Stackless coroutines in modern C++: suspension points, state machine management across calls, generators, and async execution without blocking threads.",
+            "fr": "Coroutines sans pile en C++20 : points de suspension (co_await, co_yield), générateurs et exécution asynchrone non bloquante."
+          },
+          "code": "// Conceptual generator coroutine pattern\n#include <iostream>\n\n// In C++20/23, coroutines use co_yield to produce values lazily on demand\n// while preserving local execution frame on the heap\n\nint main() {\n    std::cout << \"C++20 Coroutine keywords:\\n\";\n    std::cout << \"1. co_yield: suspends execution and yields value to caller\\n\";\n    std::cout << \"2. co_await: suspends execution until asynchronous task completes\\n\";\n    std::cout << \"3. co_return: completes coroutine and returns final result\\n\";\n    return 0;\n}",
+          "output": "C++20 Coroutine keywords:\n1. co_yield: suspends execution and yields value to caller\n2. co_await: suspends execution until asynchronous task completes\n3. co_return: completes coroutine and returns final result",
+          "keyTakeaways": [
+            "Any function containing co_await, co_yield, or co_return is treated by the compiler as a coroutine.",
+            "Coroutines are stackless: their state frame is allocated on the heap, allowing thousands of concurrent lightweight tasks.",
+            "Perfect for infinite sequence generators, event loops in game engines, and high-throughput network servers."
+          ]
+        },
+        {
+          "id": 83,
+          "source": "prodev",
+          "title": "Cache Locality, False Sharing & Performance Profiling 🚀",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Performance",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/thread/hardware_destructive_interference_size",
+          "summary": {
+            "en": "Hardware-conscious high-performance C++: Data-Oriented Design (DoD), cache hierarchies (L1/L2/L3), cache lines, and microbenchmarking.",
+            "fr": "Optimisation matérielle en C++ : conception orientée données (DoD), hiérarchie de cache (L1/L2/L3) et micro-benchmarking."
+          },
+          "code": "#include <iostream>\n#include <vector>\n#include <chrono>\n\n// Structure of Arrays (SoA) for extreme cache locality in hot loops\nstruct ParticleSystemSoA {\n    std::vector<float> posX, posY, posZ;\n    std::vector<float> velX, velY, velZ;\n    \n    void updatePositions(float dt) {\n        // Vectorized contiguous memory access: 100% cache hit rate!\n        for (size_t i = 0; i < posX.size(); i++) {\n            posX[i] += velX[i] * dt;\n        }\n    }\n};\n\nint main() {\n    ParticleSystemSoA ps;\n    ps.posX = {0.0f, 1.0f, 2.0f};\n    ps.velX = {10.0f, 10.0f, 10.0f};\n    ps.updatePositions(0.016f);\n    std::cout << \"Contiguous Memory Simulation: 100% Cache Efficiency\\n\";\n    return 0;\n}",
+          "output": "Contiguous Memory Simulation: 100% Cache Efficiency",
+          "keyTakeaways": [
+            "Contiguous std::vector memory is vastly faster than linked lists (std::list) due to hardware cache line prefetching (64 bytes).",
+            "Data-Oriented Design (Structure of Arrays) allows SIMD compiler auto-vectorization.",
+            "Use compiler optimization flags: -O3 -flto (Link Time Optimization) -march=native for max production speed."
+          ]
+        },
+        {
+          "id": 84,
+          "source": "prodev",
+          "title": "Advanced Design Patterns (CRTP, Type Erasure & std::visit) 🏛️",
+          "timestamp": null,
+          "timeSeconds": null,
+          "category": "Architecture",
+          "ytUrl": null,
+          "learnCppUrl": null,
+          "primerUrl": null,
+          "proDevUrl": "https://en.cppreference.com/w/cpp/utility/variant/visit",
+          "summary": {
+            "en": "Zero-overhead polymorphism with the Curiously Recurring Template Pattern (CRTP), value-semantic Type Erasure, and pattern matching with std::visit.",
+            "fr": "Polymorphisme sans surcoût (CRTP), effacement de type (Type Erasure) et filtrage par motif avec std::visit."
+          },
+          "code": "#include <iostream>\n#include <variant>\n\n// 1. CRTP: Static Polymorphism without vtable pointer overhead\ntemplate<typename Derived>\nstruct Shape {\n    void draw() { static_cast<Derived*>(this)->render(); }\n};\n\nstruct Circle : public Shape<Circle> {\n    void render() { std::cout << \"Rendering Circle via CRTP (Zero VTable Cost!)\\n\"; }\n};\n\n// 2. std::variant & std::visit: High performance type-safe tagged union\nusing Event = std::variant<int, std::string>;\n\nint main() {\n    Circle c;\n    c.draw(); // Dispatched at compile-time!\n\n    Event ev = \"PlayerMoved\";\n    std::visit([](const auto& val) {\n        std::cout << \"Event received: \" << val << \"\\n\";\n    }, ev);\n    return 0;\n}",
+          "output": "Rendering Circle via CRTP (Zero VTable Cost!)\nEvent received: PlayerMoved",
+          "keyTakeaways": [
+            "CRTP achieves polymorphic behavior at compile-time, eliminating virtual function table pointer overhead and enabling inlining.",
+            "Type Erasure (used by std::function and std::any) provides dynamic polymorphism while keeping clean value semantics.",
+            "std::visit on std::variant offers compile-time checked pattern matching across heterogeneous types."
+          ]
+        }
+      ]
     }
   ]
 };

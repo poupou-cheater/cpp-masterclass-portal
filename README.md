@@ -35,12 +35,24 @@ Every lesson is color-coded and organized into dedicated educational tracks:
      - **Debugging with GDB & LLDB** (breakpoints, stack frame backtraces, inspection)
      - **Unit Testing** (GoogleTest `TEST()`, `EXPECT_EQ`, `ASSERT_NE`, and Catch2)
      - **Package Management** (Microsoft vcpkg manifest mode, Conan)
-     - **Modern Concurrency** (C++20 `std::jthread` auto-joining, stop tokens, `std::atomic`)
      - **Architecture & ABI Stability** (The Pimpl Idiom)
+5. **🧵 High-Performance Multithreading & Concurrency Module**:
+   - **Thread Lifecycle & Cooperative Cancellation** (`std::jthread` auto-joining, `std::stop_token`)
+   - **Deadlock-Free Mutexes** (`std::mutex`, `std::unique_lock`, `std::scoped_lock`)
+   - **Condition Variables & Producer-Consumer Queues** (`std::condition_variable`, predicate loops)
+   - **Asynchronous Tasks & Futures** (`std::async`, `std::future`, `std::promise`)
+   - **Lock-Free Programming & Memory Ordering** (`std::atomic`, `memory_order_relaxed/seq_cst`, eliminating false sharing with `alignas(64)`)
+   - **C++20 Synchronization Primitives** (`std::counting_semaphore`, `std::latch`, `std::barrier`)
+6. **🚀 Modern C++20/C++23 Architecture & Performance Module**:
+   - **C++20 Concepts & Constraints** (`concept`, `requires` clauses, replacing SFINAE)
+   - **C++20 Ranges & Functional Pipelines** (`std::ranges`, `std::views`, pipe `|` operator)
+   - **C++20 Coroutines** (`co_await`, `co_yield`, `co_return`, generators)
+   - **Cache Locality & Data-Oriented Design (DoD)** (Structure of Arrays vs AoS, SIMD auto-vectorization)
+   - **Advanced Modern Patterns** (CRTP static polymorphism without vtables, Type Erasure, `std::visit`)
 
 ---
 
-### 🗂️ 3. Active-Recall Flashcards System (42 Cards)
+### 🗂️ 3. Active-Recall Flashcards System (52 Cards)
 - **Category Filtering**: Filter cards by *All*, *Basics*, *Memory*, *Functions*, *OOP*, *Modern C++*, *STL*, or *Pro Dev*.
 - **Small Grid Mode**: Fast overview of concepts with an interactive "Reveal Answer" toggle and syntax-highlighted code snippets.
 - **Large Focus Mode**: Immersive 3D card flip animation (`rotateY(180deg)`), previous/next keyboard/button navigation, and in-depth explanations.
@@ -48,16 +60,22 @@ Every lesson is color-coded and organized into dedicated educational tracks:
 ---
 
 ### 🧪 4. Multi-Tier Interactive Quiz Engine
-- **Little Section (Per-Lesson Quick Check)**:
+- **Little Section (Per-Lesson Quick Check - 46 Lessons)**:
   - Every single lesson includes an interactive self-check quiz at the bottom.
-  - Options are randomized on each visit with immediate color-coded feedback (green/red) and detailed explanations.
-- **Big Section (Module Master Quizzes)**:
-  - Comprehensive mastery exams at the end of modules 1, 5, 7, 8, and 9.
-  - Multi-step question runner, scored summary, and retake capability.
-- **🎓 Grand Master Exam (Quiz of Everything)**:
-  - Dedicated navbar button triggering a comprehensive final exam across all C++ domains.
-  - Randomized pool of **45 questions** with Fisher-Yates shuffled options.
-  - Features real-time progress bar, question categories, final score percentage, and an in-depth answer review detailing the correct solution and explanations.
+  - Immediate visual contrast: wrong answers turn red with `❌`, the good answer is highlighted in glowing green with `✅`.
+  - Side-by-side comparison: `Your Choice` vs `Correct Answer` + concept explanation.
+  - Active recall `🔄 Try Again` button to immediately re-test memory.
+- **Big Section (Module Master Quizzes - 7 Modules)**:
+  - Comprehensive mastery exams for Modules 1, 5, 7, 8, 9, 10, and 11.
+  - Detailed error breakdown and answer review with filter pills (`All`, `❌ Mistakes Only`, `✅ Correct`).
+  - **`🎯 Custom Test: Practice Mistakes Only`** button: generates a custom test containing *only* the questions missed!
+- **🎓 Grand Master Exam (57 Questions)**:
+  - Comprehensive final exam covering the entire language curriculum.
+  - Randomized questions and shuffled options.
+  - 1-click custom re-test of missed questions.
+- **🏦 Centralized Mistakes Bank**:
+  - Persistent tracking of missed questions across the site in `localStorage`.
+  - Navbar button `🎯 Mistakes (N)` launches an instant custom practice session.
 
 ---
 
