@@ -95,6 +95,27 @@ const App = {
   grandExamIsRetest: false,
   grandExamReviewFilter: 'mistakes', // 'all', 'mistakes', 'correct'
 
+  // Mobile Sidebar Drawer Management
+  toggleMobileSidebar(forceState) {
+    const sidebar = document.getElementById('doc-sidebar-panel');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (!sidebar) return;
+    const shouldOpen = forceState !== undefined ? forceState : !sidebar.classList.contains('mobile-open');
+    if (shouldOpen) {
+      sidebar.classList.add('mobile-open');
+      if (backdrop) backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    } else {
+      sidebar.classList.remove('mobile-open');
+      if (backdrop) backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  },
+
+  closeMobileSidebar() {
+    this.toggleMobileSidebar(false);
+  },
+
   // Flattened lesson list
   getAllLessons() {
     const list = [];
@@ -239,6 +260,7 @@ const App = {
   },
 
   navigate(view, lessonId = null) {
+    this.closeMobileSidebar();
     const lang = I18N.currentLang;
     let newHash = '';
     if (view === 'roadmap') {
@@ -354,6 +376,8 @@ const App = {
 
     // Re-render only the article
     contentWrapper.innerHTML = this.renderDocArticleHtml();
+    contentWrapper.scrollTop = 0;
+    this.closeMobileSidebar();
     this.attachDocEventListeners();
 
     // Restore sidebar scroll position exactly
@@ -443,7 +467,15 @@ const App = {
     const lang = I18N.currentLang;
 
     // Sidebar items with source badges
-    let sidebarHtml = '';
+    let sidebarHtml = `
+      <div class="sidebar-mobile-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.1rem;">⚡</span>
+          <span class="sidebar-mobile-title">${lang === 'fr' ? 'Leçons du cours (1-65)' : 'Course Lessons (1-65)'}</span>
+        </div>
+        <button id="close-sidebar-btn" class="close-sidebar-btn" aria-label="${I18N.t('closeMenu')}">&times;</button>
+      </div>
+    `;
     COURSE_DATA.modules.forEach(mod => {
       const modTitle = mod.title[lang] || mod.title['en'];
       let lessonItemsHtml = '';
@@ -699,6 +731,11 @@ const App = {
   },
 
   attachDocEventListeners() {
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+    if (closeSidebarBtn) {
+      closeSidebarBtn.addEventListener('click', () => this.closeMobileSidebar());
+    }
+
     const currentLesson = this.getLessonById(this.activeLessonId);
     if (!currentLesson) return;
 
@@ -1949,6 +1986,25 @@ const App = {
     if (mistakesBtn) {
       mistakesBtn.addEventListener('click', () => this.startMistakesBankQuiz());
     }
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.toggleMobileSidebar();
+      });
+    }
+
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', () => this.closeMobileSidebar());
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeMobileSidebar();
+      }
+    });
 
     this.handleRouting();
     this.updateMistakesNavButton();

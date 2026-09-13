@@ -11,20 +11,27 @@
 </head>
 <body>
 
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
   <!-- App Header & Navigation Bar -->
   <header class="app-nav">
-    <div class="brand-section" onclick="App.navigate('doc', 1)">
-      <div class="brand-badge">C++20</div>
-      <div class="brand-titles">
-        <h1 id="header-title">C++ Masterclass</h1>
-        <p id="header-subtitle">Interactive Course & Complete Documentation</p>
+    <div class="brand-wrapper">
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle curriculum menu" title="Menu">
+        <span>☰</span>
+      </button>
+      <div class="brand-section" onclick="App.navigate('doc', 1)">
+        <div class="brand-badge">C++</div>
+        <div class="brand-titles">
+          <h1 id="header-title">C++ Masterclass</h1>
+          <p id="header-subtitle">Complete Course & Interactive Portal</p>
+        </div>
       </div>
     </div>
 
     <!-- Center Search Bar -->
     <div class="search-wrapper">
       <span class="search-icon">🔍</span>
-      <input type="text" id="search-input" class="search-input" placeholder="Search 75+ topics, syntax, algorithms... (Press /)" autocomplete="off">
+      <input type="text" id="search-input" class="search-input" placeholder="Search 65 lessons, syntax, OOP, STL... (Press /)" autocomplete="off">
       <span class="search-shortcut">/</span>
     </div>
 
@@ -173,13 +180,13 @@
         </div>
 
         <div>
-          <h4 style="color: var(--accent-blue); margin-bottom: 8px;">4. Concurrency & Multithreading Rules of Thumb</h4>
+          <h4 style="color: var(--accent-blue); margin-bottom: 8px;">4. Intermediate Mastery & Practical Threading Rules</h4>
           <ul style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 20px; line-height: 1.6;">
-            <li><strong>Prefer <code>std::jthread</code> over <code>std::thread</code>:</strong> Auto-joins on destruction and cleanly handles cooperative cancellation via <code>std::stop_token</code>.</li>
-            <li><strong>Deadlock Prevention:</strong> Always use <code>std::scoped_lock(mtxA, mtxB)</code> when locking multiple mutexes simultaneously.</li>
-            <li><strong>Spurious Wakeups:</strong> Never call <code>cv.wait(lock)</code> without a predicate lambda loop: <code>cv.wait(lock, [&amp;]{ return !queue.empty(); });</code>.</li>
-            <li><strong>Eliminate False Sharing:</strong> Align hot atomic counters to CPU cache lines using <code>alignas(64)</code>.</li>
-            <li><strong>Prefer Tasks over Threads:</strong> Use <code>std::async(std::launch::async, ...)</code> and <code>std::future</code> for concurrent calculations with automatic exception propagation.</li>
+            <li><strong>Dynamic Arrays:</strong> Use <code>std::vector</code> as your default container. It handles dynamic resizing and memory cleanup automatically.</li>
+            <li><strong>Polymorphism & Destructors:</strong> Always declare base class destructors as <code>virtual ~Base() = default;</code> to ensure derived objects are cleanly destroyed.</li>
+            <li><strong>Thread Lifetime:</strong> Always call <code>.join()</code> on every <code>std::thread</code> before it goes out of scope to avoid program termination.</li>
+            <li><strong>Safe Mutex Locking:</strong> Always wrap mutexes with <code>std::lock_guard&lt;std::mutex&gt;</code> (RAII) to prevent race conditions and deadlocks.</li>
+            <li><strong>Prefer Smart Pointers over raw 'new/delete':</strong> Use <code>std::make_unique&lt;T&gt;()</code> to eliminate manual memory management and leaks entirely.</li>
           </ul>
         </div>
       </div>

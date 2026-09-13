@@ -13,6 +13,9 @@ const I18N = {
       viewFlashcards: "Flashcards",
       searchPlaceholder: "Search 75+ topics, syntax, algorithms... (Press / to focus)",
       
+      menuToggle: "Toggle curriculum menu",
+      closeMenu: "Close menu",
+
       // Status Filters
       filterAll: "All Statuses",
       filterTodo: "Not Started",
@@ -142,6 +145,9 @@ const I18N = {
       viewFlashcards: "Cartes Mémoire",
       searchPlaceholder: "Rechercher 75+ leçons, syntaxe, algorithmes... (Touche /)",
       
+      menuToggle: "Afficher le menu du cours",
+      closeMenu: "Fermer le menu",
+
       // Filtres de statut
       filterAll: "Tous les statuts",
       filterTodo: "Non commencé",

@@ -1661,3 +1661,405 @@ main.app-body {
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
+/* ==========================================================================
+   Mobile Navigation & Off-Canvas Drawer Styles
+   ========================================================================== */
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.mobile-menu-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(4, 7, 13, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-mobile-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-mobile-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.close-sidebar-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.close-sidebar-btn:hover {
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints for Phone & Tablet Compatibility
+   ========================================================================== */
+
+/* Tablets and small screens (max-width: 992px) */
+@media (max-width: 992px) {
+  header.app-nav {
+    padding: 10px 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .search-wrapper {
+    order: 3;
+    flex-basis: 100%;
+    max-width: 100%;
+    margin-top: 4px;
+  }
+
+  .doc-sidebar {
+    width: 280px;
+  }
+
+  .doc-content-wrapper {
+    padding: 24px 24px;
+  }
+}
+
+/* Mobile Phones (max-width: 768px) */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-mobile-header {
+    display: flex;
+  }
+
+  header.app-nav {
+    padding: 8px 12px;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+  }
+
+  .brand-titles p {
+    display: none; /* Hide subtitle on phone screens to conserve vertical height */
+  }
+
+  .brand-badge {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+  }
+
+  .brand-titles h1 {
+    font-size: 0.98rem;
+  }
+
+  .nav-actions {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .view-btn {
+    padding: 5px 8px;
+    font-size: 0.72rem;
+  }
+
+  .btn-secondary {
+    padding: 5px 8px;
+    font-size: 0.72rem;
+  }
+
+  /* Progress Strip on mobile */
+  .progress-strip {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .progress-info {
+    min-width: 100%;
+    gap: 8px;
+  }
+
+  .progress-label {
+    font-size: 0.76rem;
+  }
+
+  .progress-percentage {
+    font-size: 0.82rem;
+    min-width: 38px;
+  }
+
+  .progress-meta {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .stat-pill {
+    padding: 3px 7px;
+    font-size: 0.7rem;
+  }
+
+  .progress-meta button {
+    padding: 3px 6px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Off-canvas sidebar drawer on phone */
+  .doc-layout {
+    position: relative;
+    height: auto;
+    min-height: calc(100vh - 110px);
+    overflow: visible;
+  }
+
+  .doc-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 84vw;
+    max-width: 330px;
+    height: 100vh;
+    z-index: 1000;
+    background: var(--bg-secondary);
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.8);
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 16px 12px 60px 12px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .doc-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Doc Content Area on phone */
+  .doc-content-wrapper {
+    width: 100%;
+    padding: 16px 12px 40px 12px;
+    overflow-y: visible;
+    height: auto;
+  }
+
+  .doc-article h2 {
+    font-size: 1.3rem;
+    line-height: 1.35;
+  }
+
+  .doc-header-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Resource Cards on phone */
+  .resource-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .resource-card {
+    padding: 10px 12px;
+  }
+
+  /* Horizontal scrolling code blocks on phone */
+  .code-section {
+    margin: 14px 0;
+    border-radius: var(--radius-md);
+  }
+
+  .code-body pre {
+    padding: 12px;
+    font-size: 0.78rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: pre;
+    word-break: normal;
+  }
+
+  .code-header {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+
+  .code-btn {
+    padding: 3px 8px;
+    font-size: 0.72rem;
+  }
+
+  /* Lesson Check Quiz on phone */
+  .lesson-quiz-box {
+    padding: 14px 12px;
+  }
+
+  .quiz-options {
+    gap: 8px;
+  }
+
+  .quiz-opt-btn {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    text-align: left;
+    width: 100%;
+  }
+
+  /* Modals on phone (95vw wide, scrollable body) */
+  .modal-container {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    padding: 16px 12px !important;
+  }
+
+  .modal-header h3 {
+    font-size: 1.02rem;
+  }
+
+  .cheatsheet-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.75rem;
+  }
+
+  /* Flashcards on phone */
+  .flashcards-container {
+    padding: 16px 12px;
+  }
+
+  .flashcards-grid-small {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .flashcards-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .flip-card-large {
+    min-height: 320px;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    padding: 20px 16px;
+  }
+
+  .large-card-content h3 {
+    font-size: 1.05rem;
+  }
+
+  .large-card-back-text {
+    font-size: 0.88rem;
+  }
+
+  /* Roadmap on phone */
+  .roadmap-container {
+    padding: 14px 10px;
+  }
+
+  .roadmap-module {
+    padding: 12px 10px;
+  }
+
+  .roadmap-lesson-item {
+    padding: 8px 8px;
+    font-size: 0.8rem;
+  }
+
+  .doc-pagination {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pagination-btn {
+    width: 100%;
+    text-align: center !important;
+  }
+}
+
+/* Extra Small Phones (max-width: 480px) */
+@media (max-width: 480px) {
+  header.app-nav {
+    padding: 6px 10px;
+  }
+
+  .brand-badge {
+    padding: 3px 6px;
+    font-size: 0.78rem;
+  }
+
+  .brand-titles h1 {
+    font-size: 0.92rem;
+  }
+
+  .view-btn span:not(:first-child) {
+    display: none;
+  }
+
+  .view-btn {
+    padding: 5px 8px;
+  }
+
+  .btn-secondary span:not(:first-child) {
+    display: none;
+  }
+
+  .btn-secondary {
+    padding: 5px 8px;
+  }
+}
+

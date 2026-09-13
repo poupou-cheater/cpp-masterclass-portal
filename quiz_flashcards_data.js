@@ -1,2452 +1,6463 @@
-// Expanded Flashcards & Massive Quiz Question Bank
-// Supports:
-// 1. 42 Active-Recall Flashcards across all C++ topics
-// 2. 45 Questions in Centralized Question Bank for Grand Master Exam of Everything
-// 3. Per-lesson quick check quizzes for ALL 35 lessons
-// 4. Fisher-Yates randomization utilities
+// C++ Course Flashcards & Comprehensive Quiz Question Bank
+// 100% Aligned with the Complete 60 Bro Code Lessons + Intermediate Mastery Bridge
+// Bilingual (EN & FR) with Instant Answer Explanations
 
 const FLASHCARDS_DATA = [
-  // BASICS & SYNTAX
   {
-    id: 1,
-    category: "Basics",
-    front: {
-      en: "What is the key difference between a Pointer (*) and a Reference (&)?",
-      fr: "Quelle est la différence fondamentale entre un Pointeur (*) et une Référence (&) ?"
+    "id": 1,
+    "category": "Basics",
+    "front": {
+      "en": "What is the key difference between a Pointer (*) and a Reference (&)?",
+      "fr": "Quelle est la différence fondamentale entre un Pointeur (*) et une Référence (&) ?"
     },
-    back: {
-      en: "A pointer holds a memory address and can be reassigned or be nullptr. A reference is an immutable alias to an existing object and cannot be null.",
-      fr: "Un pointeur stocke une adresse mémoire et peut être réassigné ou valoir nullptr. Une référence est un alias immuable vers un objet existant et ne peut pas être nulle."
+    "back": {
+      "en": "A pointer holds a memory address and can be reassigned or be nullptr. A reference is an immutable alias to an existing object and cannot be null.",
+      "fr": "Un pointeur stocke une adresse mémoire et peut être réassigné ou valoir nullptr. Une référence est un alias immuable vers un objet existant et ne peut pas être nulle."
     },
-    codeSnippet: `int x = 10;\nint* ptr = &x; // Can be reassigned, can be nullptr\nint& ref = x;  // Permanent alias to x, cannot be null`
+    "codeSnippet": "int x = 10;\nint* ptr = &x; // Can be reassigned, can be nullptr\nint& ref = x;  // Permanent alias to x, cannot be null"
   },
   {
-    id: 2,
-    category: "Basics",
-    front: {
-      en: "What is the difference between 'const' and 'constexpr'?",
-      fr: "Quelle est la différence entre 'const' et 'constexpr' ?"
+    "id": 2,
+    "category": "Basics",
+    "front": {
+      "en": "What is the difference between 'const' and type alias 'using'?",
+      "fr": "Quelle est la différence entre 'const' et l'alias de type 'using' ?"
     },
-    back: {
-      en: "'const' means read-only at runtime. 'constexpr' guarantees computation at compile-time, allowing use in template arguments and fixed array sizes.",
-      fr: "'const' signifie en lecture seule à l'exécution. 'constexpr' garantit l'évaluation dès la compilation (arguments de templates, tailles de tableaux)."
+    "back": {
+      "en": "'const' makes variable values immutable. 'using' creates an alias for a data type without modifying values or types.",
+      "fr": "'const' rend une valeur immuable. 'using' crée un alias lisible pour un type de données."
     },
-    codeSnippet: `const int runtimeVal = rand();       // OK: initialized at runtime\nconstexpr int compileVal = 10 * 5;   // Evaluated at compile-time!`
+    "codeSnippet": "const double PI = 3.14159;\nusing text_t = std::string;"
   },
   {
-    id: 3,
-    category: "Basics",
-    front: {
-      en: "Why is 'using namespace std;' dangerous in header files (.h / .hpp)?",
-      fr: "Pourquoi 'using namespace std;' est-il dangereux dans les en-têtes (.h / .hpp) ?"
+    "id": 3,
+    "category": "Basics",
+    "front": {
+      "en": "Why should you use static_cast<double>(val) instead of C-style (double)val?",
+      "fr": "Pourquoi utiliser static_cast<double>(val) plutôt que le cast C (double)val ?"
     },
-    back: {
-      en: "It pollutes the global namespace of any source file including that header, creating silent name clashes with standard library functions (like std::count, std::min).",
-      fr: "Il pollue l'espace de noms global de tout fichier incluant cet en-tête, risquant de créer des collisions invisibles (ex. std::count, std::min)."
+    "back": {
+      "en": "static_cast is checked by the compiler and prevents accidental, dangerous casts between incompatible types.",
+      "fr": "static_cast est validé par le compilateur et interdit les conversions accidentelles dangereuses entre types incompatibles."
     },
-    codeSnippet: `// Good in headers:\nvoid print(const std::string& str);\n// Avoid in headers: using namespace std;`
+    "codeSnippet": "double score = static_cast<double>(correct) / total * 100;"
   },
   {
-    id: 4,
-    category: "Basics",
-    front: {
-      en: "Why should you use 'static_cast<Type>' instead of C-style casting '(Type)'?",
-      fr: "Pourquoi utiliser 'static_cast<Type>' plutôt que le cast à la C '(Type)' ?"
+    "id": 4,
+    "category": "Control Flow",
+    "front": {
+      "en": "What is Short-Circuit Evaluation in boolean logic?",
+      "fr": "Qu'est-ce que l'évaluation en court-circuit en logique booléenne ?"
     },
-    back: {
-      en: "static_cast is checked by the compiler for validity and prevents accidental, dangerous casts like converting pointers to unrelated types.",
-      fr: "static_cast est validé par le compilateur et interdit les conversions accidentelles dangereuses entre types incompatibles."
+    "back": {
+      "en": "In 'A && B', if A is false, B is never evaluated. In 'A || B', if A is true, B is never evaluated.",
+      "fr": "Dans 'A && B', si A est faux, B n'est jamais évalué. Dans 'A || B', si A est vrai, B n'est pas évalué."
     },
-    codeSnippet: `double d = 9.99;\nint i = static_cast<int>(d); // Explicit and compiler-checked`
+    "codeSnippet": "if (ptr != nullptr && ptr->isValid()) { ... } // Safe from null dereference!"
   },
   {
-    id: 5,
-    category: "Basics",
-    front: {
-      en: "What is Short-Circuit Evaluation in boolean logic?",
-      fr: "Qu'est-ce que l'évaluation en court-circuit en logique booléenne ?"
+    "id": 5,
+    "category": "Loops",
+    "front": {
+      "en": "When should you choose a do-while loop over a while loop?",
+      "fr": "Quand choisir une boucle do-while plutôt qu'une boucle while ?"
     },
-    back: {
-      en: "In 'A && B', if A is false, B is never evaluated. In 'A || B', if A is true, B is never evaluated. This allows safe null pointer checks before dereferencing.",
-      fr: "Dans 'A && B', si A est faux, B n'est jamais évalué. Dans 'A || B', si A est vrai, B n'est pas évalué. Cela permet de vérifier un pointeur nul avant de l'utiliser."
+    "back": {
+      "en": "When the loop body must run at least once before checking the condition (e.g. user input prompts).",
+      "fr": "Lorsque le corps de la boucle doit impérativement s'exécuter au moins une fois (ex. saisie utilisateur)."
     },
-    codeSnippet: `if (ptr != nullptr && ptr->isValid()) { ... } // Safe!`
-  },
-
-  // MEMORY & POINTERS
-  {
-    id: 6,
-    category: "Memory",
-    front: {
-      en: "Why should you prefer nullptr over NULL or 0 in modern C++?",
-      fr: "Pourquoi privilégier nullptr par rapport à NULL ou 0 en C++ moderne ?"
-    },
-    back: {
-      en: "nullptr has its own distinct type (std::nullptr_t), preventing ambiguity during function overloading where NULL (macro for 0) might call an integer overload.",
-      fr: "nullptr possède son propre type (std::nullptr_t), évitant toute ambiguïté lors de la surcharge où NULL (valeur 0) appellerait une version entière."
-    },
-    codeSnippet: `void f(int); void f(int*);\nf(nullptr); // Calls f(int*) unambiguously!`
+    "codeSnippet": "do {\n    std::cout << \"Enter positive number: \";\n    std::cin >> num;\n} while (num <= 0);"
   },
   {
-    id: 7,
-    category: "Memory",
-    front: {
-      en: "What is the difference between Stack and Heap memory?",
-      fr: "Quelle est la différence entre la mémoire Pile (Stack) et le Tas (Heap) ?"
+    "id": 6,
+    "category": "Functions",
+    "front": {
+      "en": "What are the requirements for Function Overloading in C++?",
+      "fr": "Quelles sont les conditions pour surcharger une fonction en C++ ?"
     },
-    back: {
-      en: "Stack memory is fast, automatically managed (LIFO), but limited in size. Heap memory is manually allocated at runtime (dynamic), larger, but slower and risks leaks.",
-      fr: "La Pile (Stack) est ultra-rapide et gérée automatiquement (LIFO), mais de taille limitée. Le Tas (Heap) est dynamique, volumineux, mais plus lent et source potentielle de fuites."
+    "back": {
+      "en": "Overloaded functions must have the same name but different parameter types or parameter counts. Return type alone cannot overload.",
+      "fr": "Les fonctions surchargées doivent avoir le même nom mais des paramètres différents (types ou nombre). Le type de retour seul ne suffit pas."
     },
-    codeSnippet: `int stackVar = 5;            // Instant, auto freed\nint* heapVar = new int(5);   // Manual, requires delete`
+    "codeSnippet": "void print(int x);\nvoid print(double x);\nvoid print(std::string x);"
   },
   {
-    id: 8,
-    category: "Memory",
-    front: {
-      en: "What is a Dangling Pointer and how can you prevent it?",
-      fr: "Qu'est-ce qu'un pointeur pendant (Dangling Pointer) et comment l'éviter ?"
+    "id": 7,
+    "category": "Arrays",
+    "front": {
+      "en": "What is 'Array Decay' when passing arrays to functions?",
+      "fr": "Qu'est-ce que la 'dégénérescence de tableau' (Array Decay) en C++ ?"
     },
-    back: {
-      en: "A dangling pointer points to memory that has already been deallocated. Prevent it by assigning pointers to nullptr immediately after delete, or using smart pointers.",
-      fr: "Un pointeur pendant pointe vers une zone mémoire déjà libérée. On l'évite en affectant nullptr après delete, ou en utilisant des smart pointers."
+    "back": {
+      "en": "A raw array implicitly converts into a pointer to its first element when passed to a function, losing its size information.",
+      "fr": "Un tableau brut passé à une fonction se convertit en pointeur vers son premier élément et perd sa taille."
     },
-    codeSnippet: `delete ptr;\nptr = nullptr; // Prevents dangling access`
+    "codeSnippet": "void printArray(int arr[], int size) { // arr is really int*, pass size separately!\n}"
   },
   {
-    id: 9,
-    category: "Memory",
-    front: {
-      en: "Why should you use std::make_unique<T>() instead of new?",
-      fr: "Pourquoi utiliser std::make_unique<T>() plutôt que new ?"
+    "id": 8,
+    "category": "Memory",
+    "front": {
+      "en": "What is the difference between Stack and Heap memory?",
+      "fr": "Quelle est la différence entre la mémoire Pile (Stack) et le Tas (Heap) ?"
     },
-    back: {
-      en: "std::make_unique provides exception safety (no leaks if another argument throws) and avoids repetitive type declarations.",
-      fr: "std::make_unique garantit la sécurité vis-à-vis des exceptions (pas de fuite si un autre paramètre lève une exception) et évite de répéter le type."
+    "back": {
+      "en": "Stack memory is fast, automatically managed (LIFO), but limited in size. Heap memory is manually allocated at runtime (dynamic), larger, but requires delete.",
+      "fr": "La Pile (Stack) est ultra-rapide et gérée automatiquement (LIFO). Le Tas (Heap) est dynamique, volumineux, mais nécessite d'être libéré."
     },
-    codeSnippet: `auto ptr = std::make_unique<MyClass>(arg1, arg2); // Exception-safe`
+    "codeSnippet": "int stackVar = 10;          // Stack (auto free)\nint* heapVar = new int(10); // Heap (must delete heapVar!)"
   },
   {
-    id: 10,
-    category: "Memory",
-    front: {
-      en: "What is the purpose of std::weak_ptr?",
-      fr: "À quoi sert std::weak_ptr ?"
+    "id": 9,
+    "category": "Memory",
+    "front": {
+      "en": "Why should you prefer nullptr over NULL or 0 in modern C++?",
+      "fr": "Pourquoi privilégier nullptr par rapport à NULL ou 0 en C++ moderne ?"
     },
-    back: {
-      en: "std::weak_ptr holds a non-owning reference to an object managed by std::shared_ptr, breaking circular reference memory leaks.",
-      fr: "std::weak_ptr détient une référence non-propriétaire vers un objet géré par std::shared_ptr, brisant les cycles de références qui causent des fuites."
+    "back": {
+      "en": "nullptr has its own distinct type (std::nullptr_t), preventing ambiguity during function overloading where NULL (macro for 0) might call an integer overload.",
+      "fr": "nullptr possède son propre type (std::nullptr_t), évitant toute ambiguïté lors de la surcharge où NULL (0) appellerait une version entière."
     },
-    codeSnippet: `std::shared_ptr<Node> a = std::make_shared<Node>();\nstd::weak_ptr<Node> weakA = a; // Does not increment ref count`
-  },
-
-  // FUNCTIONS & SCOPE
-  {
-    id: 11,
-    category: "Functions",
-    front: {
-      en: "When should you pass parameters by const reference (const T&)?",
-      fr: "Quand devez-vous passer des paramètres par référence constante (const T&) ?"
-    },
-    back: {
-      en: "For non-primitive objects (std::string, std::vector, custom classes) where you only need read access, eliminating expensive object copies.",
-      fr: "Pour les objets non primitifs (std::string, std::vector, classes personnalisées) en lecture seule, éliminant ainsi les copies coûteuses."
-    },
-    codeSnippet: `void process(const std::vector<int>& data); // Zero copies!`
+    "codeSnippet": "void f(int); void f(int*);\nf(nullptr); // Calls f(int*) unambiguously!"
   },
   {
-    id: 12,
-    category: "Functions",
-    front: {
-      en: "What is Function Overloading in C++?",
-      fr: "Qu'est-ce que la surcharge de fonction en C++ ?"
+    "id": 10,
+    "category": "OOP",
+    "front": {
+      "en": "What is Encapsulation and how is it implemented in C++ classes?",
+      "fr": "Qu'est-ce que l'Encapsulation et comment l'implémente-t-on en C++ ?"
     },
-    back: {
-      en: "Defining multiple functions with the same name but different parameter types or parameter counts in the same scope.",
-      fr: "Définir plusieurs fonctions portant le même nom mais ayant des types ou nombres de paramètres différents dans la même portée."
+    "back": {
+      "en": "Encapsulation restricts direct access to internal state by making variables private and providing public getters and validated setters.",
+      "fr": "L'encapsulation protège l'état interne en rendant les attributs privés et en exposant des getters et setters validés."
     },
-    codeSnippet: `void print(int x);\nvoid print(double d);\nvoid print(const std::string& s);`
+    "codeSnippet": "class BankAccount {\nprivate:\n    double balance;\npublic:\n    double getBalance() const { return balance; }\n};"
   },
   {
-    id: 13,
-    category: "Functions",
-    front: {
-      en: "What is an inline function?",
-      fr: "Qu'est-ce qu'une fonction inline ?"
+    "id": 11,
+    "category": "OOP",
+    "front": {
+      "en": "What is the role of Constructors in C++?",
+      "fr": "Quel est le rôle d'un constructeur en C++ ?"
     },
-    back: {
-      en: "A hint to the compiler to substitute the function body at the call site to eliminate function call overhead, and allows defining functions in headers without ODR violations.",
-      fr: "Une suggestion au compilateur de remplacer l'appel par le corps de la fonction pour supprimer l'overhead d'appel, permettant la définition dans les headers sans violation d'ODR."
+    "back": {
+      "en": "A constructor automatically runs upon object instantiation to initialize member variables and ensure the object starts in a valid state.",
+      "fr": "Le constructeur s'exécute automatiquement à l'instanciation pour initialiser les attributs et garantir la validité de l'objet."
     },
-    codeSnippet: `inline int square(int x) { return x * x; }`
-  },
-
-  // OBJECT-ORIENTED PROGRAMMING (OOP)
-  {
-    id: 14,
-    category: "OOP",
-    front: {
-      en: "What is the difference between a class and a struct in C++?",
-      fr: "Quelle est la différence entre une class et une struct en C++ ?"
-    },
-    back: {
-      en: "In a struct, members and base inheritance default to 'public'. In a class, members and inheritance default to 'private'. Otherwise, they are identical.",
-      fr: "Dans une struct, les membres et l'héritage sont 'public' par défaut. Dans une class, ils sont 'private' par défaut. Hormis cela, elles sont identiques."
-    },
-    codeSnippet: `struct Point { int x, y; }; // public by default\nclass User { std::string name; }; // private by default`
+    "codeSnippet": "class Car {\npublic:\n    std::string model;\n    Car(std::string m) : model(m) {}\n};"
   },
   {
-    id: 15,
-    category: "OOP",
-    front: {
-      en: "What is Polymorphism and what keyword enables it in C++?",
-      fr: "Qu'est-ce que le polymorphisme et quel mot-clé l'active en C++ ?"
+    "id": 12,
+    "category": "OOP",
+    "front": {
+      "en": "Why must a base class with virtual methods have a virtual destructor?",
+      "fr": "Pourquoi une classe de base polymorphe doit-elle avoir un destructeur virtuel ?"
     },
-    back: {
-      en: "Polymorphism allows derived classes to override base class methods at runtime. It is enabled using the 'virtual' keyword in the base class and resolved via a vtable.",
-      fr: "Le polymorphisme permet aux classes dérivées de redéfinir des méthodes de base à l'exécution via le mot-clé 'virtual' et une table virtuelle (vtable)."
+    "back": {
+      "en": "To ensure that when a derived object is deleted via a base class pointer, the derived class destructor is called properly, preventing resource leaks.",
+      "fr": "Pour garantir que lors de la destruction d'un objet dérivé via un pointeur de base, le destructeur dérivé soit exécuté sans fuite."
     },
-    codeSnippet: `class Shape {\npublic:\n    virtual void draw() const = 0; // Pure virtual\n};`
+    "codeSnippet": "class Base {\npublic:\n    virtual void act() = 0;\n    virtual ~Base() = default; // Essential!\n};"
   },
   {
-    id: 16,
-    category: "OOP",
-    front: {
-      en: "Why MUST base class destructors be marked 'virtual' in polymorphic hierarchies?",
-      fr: "Pourquoi le destructeur d'une classe de base polymorphique DOIT-IL être virtuel ?"
+    "id": 13,
+    "category": "Intermediate",
+    "front": {
+      "en": "Why is std::vector preferred over raw C-style arrays?",
+      "fr": "Pourquoi préférer std::vector aux tableaux bruts à la C ?"
     },
-    back: {
-      en: "If deleted via a base class pointer (Base* p = new Derived()), a non-virtual destructor only executes ~Base(), leaking resources allocated by Derived.",
-      fr: "En cas de suppression via un pointeur de base (Base* p = new Derived()), un destructeur non virtuel n'appelle que ~Base(), provoquant des fuites dans Derived."
+    "back": {
+      "en": "std::vector handles dynamic resizing automatically, manages its own heap memory (no manual delete), and provides bounds checking via .at().",
+      "fr": "std::vector gère automatiquement son redimensionnement et sa mémoire sur le tas, sans delete manuel, avec accès sécurisé .at()."
     },
-    codeSnippet: `class Base {\npublic:\n    virtual ~Base() = default; // Essential!\n};`
+    "codeSnippet": "std::vector<int> v = {1, 2, 3};\nv.push_back(4); // Dynamically expands!"
   },
   {
-    id: 17,
-    category: "OOP",
-    front: {
-      en: "What are the 5 special member functions in 'The Rule of 5'?",
-      fr: "Quelles sont les 5 fonctions spéciales de la 'Règle des 5' ?"
+    "id": 14,
+    "category": "Intermediate",
+    "front": {
+      "en": "What is std::unique_ptr and why should you use std::make_unique?",
+      "fr": "Qu'est-ce que std::unique_ptr et pourquoi utiliser std::make_unique ?"
     },
-    back: {
-      en: "1. Destructor\n2. Copy Constructor\n3. Copy Assignment Operator\n4. Move Constructor\n5. Move Assignment Operator",
-      fr: "1. Destructeur\n2. Constructeur de copie\n3. Opérateur d'assignation par copie\n4. Constructeur de déplacement (move)\n5. Opérateur d'assignation par déplacement"
+    "back": {
+      "en": "std::unique_ptr owns heap memory exclusively and deletes it automatically on scope exit (RAII). std::make_unique is the exception-safe allocation function.",
+      "fr": "std::unique_ptr possède la ressource en exclusivité et la libère automatiquement (RAII). std::make_unique garantit la sécurité vis-à-vis des exceptions."
     },
-    codeSnippet: `~Widget();\nWidget(const Widget&);\nWidget& operator=(const Widget&);\nWidget(Widget&&) noexcept;\nWidget& operator=(Widget&&) noexcept;`
+    "codeSnippet": "auto ptr = std::make_unique<Car>(\"Tesla\"); // No delete needed!"
   },
   {
-    id: 18,
-    category: "OOP",
-    front: {
-      en: "What is RAII (Resource Acquisition Is Initialization)?",
-      fr: "Qu'est-ce que le patron RAII (Resource Acquisition Is Initialization) ?"
-    },
-    back: {
-      en: "A core C++ idiom where resource management (memory, file handles, mutex locks) is tied to object lifetime: acquired in constructor, released automatically in destructor.",
-      fr: "Un idiome fondamental où la gestion des ressources (mémoire, fichiers, verrous) est liée à la durée de vie d'un objet : acquise dans le constructeur, libérée dans le destructeur."
-    },
-    codeSnippet: `std::lock_guard<std::mutex> lock(mtx); // Locked here, auto-unlocked at scope exit`
-  },
-
-  // MODERN C++ (C++11 TO C++20)
-  {
-    id: 19,
-    category: "Modern C++",
-    front: {
-      en: "What is an Rvalue Reference (Type&&) and Move Semantics?",
-      fr: "Qu'est-ce qu'une référence rvalue (Type&&) et la sémantique de déplacement (Move) ?"
-    },
-    back: {
-      en: "An rvalue reference binds to temporary objects about to be destroyed, enabling 'moving' their internal heap buffers instead of making expensive deep copies.",
-      fr: "Une référence rvalue se lie aux objets temporaires sur le point d'être détruits, permettant de 'voler' leurs buffers internes plutôt que de faire une copie coûteuse."
-    },
-    codeSnippet: `std::vector<int> a = {1, 2, 3};\nstd::vector<int> b = std::move(a); // Steals buffer, a is now empty`
-  },
-  {
-    id: 20,
-    category: "Modern C++",
-    front: {
-      en: "What is std::string_view and why is it preferred for read-only string parameters?",
-      fr: "Qu'est-ce que std::string_view et pourquoi est-il préféré pour les paramètres en lecture seule ?"
-    },
-    back: {
-      en: "It is a lightweight non-owning view (pointer + length). It avoids dynamic allocations when passing C-string literals, substrings, or std::string.",
-      fr: "C'est une vue non-propriétaire très légère (pointeur + taille). Elle évite toute allocation dynamique lors du passage de littéraux, sous-chaînes ou std::string."
-    },
-    codeSnippet: `void log(std::string_view message); // Zero allocations for literals!`
-  },
-  {
-    id: 21,
-    category: "Modern C++",
-    front: {
-      en: "What is the difference between std::optional<T> and returning a sentinel value (like -1 or nullptr)?",
-      fr: "Quelle est la différence entre std::optional<T> et renvoyer une valeur sentinelle (-1 ou nullptr) ?"
-    },
-    back: {
-      en: "std::optional explicitly models the possibility of an absent value in a type-safe way, forcing caller checks and avoiding confusing magic numbers.",
-      fr: "std::optional modélise explicitement l'absence de valeur de façon typée et sûre, obligeant l'appelant à vérifier l'état sans valeurs magiques."
-    },
-    codeSnippet: `std::optional<int> findUser(int id);\nauto res = findUser(42);\nif (res.has_value()) { use(*res); }`
-  },
-  {
-    id: 22,
-    category: "Modern C++",
-    front: {
-      en: "What is std::variant<Types...>?",
-      fr: "Qu'est-ce que std::variant<Types...> ?"
-    },
-    back: {
-      en: "A type-safe, union-like container that holds a value of one of several alternative types. It remembers which type is currently held and cleans up properly.",
-      fr: "Un conteneur typé et sûr (union moderne) contenant une valeur parmi plusieurs types possibles. Il sait quel type est actif et appelle le destructeur adéquat."
-    },
-    codeSnippet: `std::variant<int, std::string, double> var = "hello";\nstd::cout << std::get<std::string>(var);`
-  },
-  {
-    id: 23,
-    category: "Modern C++",
-    front: {
-      en: "What is a Lambda Expression in C++?",
-      fr: "Qu'est-ce qu'une expression Lambda en C++ ?"
-    },
-    back: {
-      en: "An anonymous inline function object that can capture variables from its enclosing scope ([capture](params){ body }).",
-      fr: "Un objet fonction anonyme défini en ligne capable de capturer des variables de sa portée englobante ([capture](params){ corps })."
-    },
-    codeSnippet: `auto isEven = [](int n) { return n % 2 == 0; };\nbool ok = isEven(4); // true`
-  },
-
-  // STANDARD TEMPLATE LIBRARY (STL)
-  {
-    id: 24,
-    category: "STL",
-    front: {
-      en: "What is the difference between std::vector and std::deque?",
-      fr: "Quelle est la différence entre std::vector et std::deque ?"
-    },
-    back: {
-      en: "std::vector stores elements in a single contiguous memory buffer (fastest iteration). std::deque stores elements in fixed-size chunk blocks, enabling fast O(1) front insertions.",
-      fr: "std::vector stocke les éléments dans un buffer contigu (itération optimale). std::deque utilise des blocs chaînés, permettant des insertions rapides en O(1) à l'avant."
-    },
-    codeSnippet: `std::deque<int> dq;\ndq.push_front(1); // O(1) front insertion\ndq.push_back(2);  // O(1) back insertion`
-  },
-  {
-    id: 25,
-    category: "STL",
-    front: {
-      en: "What is the difference between std::map and std::unordered_map?",
-      fr: "Quelle est la différence entre std::map et std::unordered_map ?"
-    },
-    back: {
-      en: "std::map is an ordered Red-Black Tree (O(log N) lookup). std::unordered_map is an unsorted Hash Table (O(1) average lookup).",
-      fr: "std::map est un arbre bicolore ordonné (recherche en O(log N)). std::unordered_map est une table de hachage non ordonnée (recherche moyenne en O(1))."
-    },
-    codeSnippet: `std::unordered_map<std::string, int> ages; // O(1) average lookup`
-  },
-  {
-    id: 26,
-    category: "STL",
-    front: {
-      en: "What does std::sort do and what is its computational complexity?",
-      fr: "Que fait std::sort et quelle est sa complexité algorithmique ?"
-    },
-    back: {
-      en: "It sorts elements in ascending order using Introsort (hybrid of Quicksort, Heapsort, and Insertion Sort) with guaranteed O(N log N) worst-case time complexity.",
-      fr: "Il trie les éléments par ordre croissant avec Introsort (hybride Quicksort, Heapsort et Insertion Sort) avec une complexité garantie en O(N log N) au pire cas."
-    },
-    codeSnippet: `std::vector<int> v = {4, 1, 3};\nstd::sort(v.begin(), v.end()); // {1, 3, 4}`
-  },
-
-  // PROFESSIONAL DEVELOPER TOOLING
-  {
-    id: 27,
-    category: "Pro Dev",
-    front: {
-      en: "Why is target_link_libraries() preferred over global link_directories() in CMake?",
-      fr: "Pourquoi target_link_libraries() est-il recommandé par rapport à link_directories() dans CMake ?"
-    },
-    back: {
-      en: "target_link_libraries is target-scoped, cleanly propagating include directories, compiler definitions, and dependencies only where needed without polluting global flags.",
-      fr: "target_link_libraries est attaché à une cible précise, propageant proprement les dépendances et en-têtes sans polluer les drapeaux globaux."
-    },
-    codeSnippet: `target_link_libraries(my_app PRIVATE fmt::fmt)`
-  },
-  {
-    id: 28,
-    category: "Pro Dev",
-    front: {
-      en: "What is the primary difference between GDB commands 'step' (s) and 'next' (n)?",
-      fr: "Quelle est la différence fondamentale entre 'step' (s) et 'next' (n) dans GDB ?"
-    },
-    back: {
-      en: "'step' (s) steps into function calls; 'next' (n) executes the function call as a single step without diving into it.",
-      fr: "'step' (s) entre à l'intérieur des fonctions appelées ; 'next' (n) exécute la ligne sans entrer dans la fonction."
-    },
-    codeSnippet: `(gdb) s  # Step into\n(gdb) n  # Next line`
-  },
-  {
-    id: 29,
-    category: "Pro Dev",
-    front: {
-      en: "What is the difference between EXPECT_EQ and ASSERT_EQ in GoogleTest?",
-      fr: "Quelle est la différence entre EXPECT_EQ et ASSERT_EQ dans GoogleTest ?"
-    },
-    back: {
-      en: "EXPECT_EQ logs failure but allows the rest of the test case to continue running. ASSERT_EQ immediately aborts the current test function upon failure.",
-      fr: "EXPECT_EQ enregistre l'échec et continue l'exécution du test. ASSERT_EQ interrompt immédiatement le test en cours."
-    },
-    codeSnippet: `EXPECT_EQ(calc(2, 3), 5); // Non-fatal\nASSERT_NE(ptr, nullptr);  // Fatal: prevents crash on next line`
-  },
-  {
-    id: 30,
-    category: "Pro Dev",
-    front: {
-      en: "Why is std::jthread safer than std::thread in C++20?",
-      fr: "Pourquoi std::jthread est-il plus sûr que std::thread en C++20 ?"
-    },
-    back: {
-      en: "std::jthread automatically requests cancellation and joins upon destruction, whereas an unjoined std::thread will call std::terminate() crashing your program.",
-      fr: "std::jthread appelle automatiquement join() et supporte les arrêts coopératifs lors de sa destruction, évitant le crash de std::terminate() provoqué par un std::thread non joint."
-    },
-    codeSnippet: `{\n    std::jthread t([]{ /* work */ });\n} // Automatically joins here cleanly!`
-  },
-  {
-    id: 31,
-    category: "Pro Dev",
-    front: {
-      en: "What is the Pimpl (Pointer to Implementation) Idiom used for?",
-      fr: "À quoi sert l'idiome Pimpl (Pointer to Implementation) en C++ ?"
-    },
-    back: {
-      en: "It hides private implementation details and third-party dependencies inside a source (.cpp) file, speeding up build times and preserving binary ABI compatibility.",
-      fr: "Il isole les détails privés et dépendances lourdes dans le fichier .cpp, accélérant drastiquement la compilation et garantissant la stabilité ABI."
-    },
-    codeSnippet: `class Widget {\n    struct Impl;\n    std::unique_ptr<Impl> pImpl;\n};`
-  },
-  {
-    id: 32,
-    category: "Pro Dev",
-    front: {
-      en: "What is a Data Race and how do you prevent it in C++?",
-      fr: "Qu'est-ce qu'une Data Race (condition de course) et comment l'éviter ?"
-    },
-    back: {
-      en: "When two threads access the same memory location concurrently and at least one is a write without synchronization. Prevent it using std::mutex or std::atomic.",
-      fr: "Lorsque deux threads accèdent simultanément à la même zone mémoire dont au moins un en écriture sans verrou. On l'évite via std::mutex ou std::atomic."
-    },
-    codeSnippet: `std::atomic<int> safeCounter{0};\nsafeCounter.fetch_add(1); // Lock-free thread safe!`
-  },
-  {
-    id: 33,
-    category: "Modern C++",
-    front: {
-      en: "How does 'auto' type deduction work in C++11/14/17?",
-      fr: "Comment fonctionne la déduction de type 'auto' en C++11/14/17 ?"
-    },
-    back: {
-      en: "'auto' deduces the type of a variable from its initializer expression at compile time without any runtime overhead. By default, it drops const and references unless explicitly specified (e.g. const auto&).",
-      fr: "'auto' déduit le type de la variable dès la compilation à partir de l'expression d'initialisation, sans aucun surcoût d'exécution. Il ignore const et les références sauf si précisé explicitement (ex. const auto&)."
-    },
-    codeSnippet: `auto x = 42;             // int\nconst auto& ref = myVec; // const reference to vector`
-  },
-  {
-    id: 34,
-    category: "Modern C++",
-    front: {
-      en: "What are Structured Bindings introduced in C++17?",
-      fr: "Que sont les liaisons structurées (Structured Bindings) introduites en C++17 ?"
-    },
-    back: {
-      en: "They allow decomposing tuples, pairs, arrays, or structs directly into individual named variables in a single clean declaration.",
-      fr: "Elles permettent de décomposer des tuples, paires, tableaux ou structs directement en variables nommées distinctes dans une déclaration unique."
-    },
-    codeSnippet: `auto [key, val] = *map.begin();\nauto [x, y, z] = getCoordinates();`
-  },
-  {
-    id: 35,
-    category: "Modern C++",
-    front: {
-      en: "What are C++20 Concepts and what problem do they solve?",
-      fr: "Que sont les Concepts en C++20 et quel problème résolvent-ils ?"
-    },
-    back: {
-      en: "Concepts specify compile-time constraints on template arguments, transforming cryptic pages of template compilation errors into clear, readable diagnostic messages.",
-      fr: "Les concepts définissent des contraintes de compilation sur les arguments de templates, remplaçant les erreurs cryptiques de templates par des messages clairs et précis."
-    },
-    codeSnippet: `template<std::integral T>\nT add(T a, T b) { return a + b; }`
-  },
-  {
-    id: 36,
-    category: "Modern C++",
-    front: {
-      en: "What is 'if constexpr' in C++17?",
-      fr: "Qu'est-ce que 'if constexpr' en C++17 ?"
-    },
-    back: {
-      en: "A compile-time conditional statement where the non-selected branch is discarded by the compiler without generating code or triggering invalid template syntax errors.",
-      fr: "Une conditionnelle évaluée à la compilation où la branche non sélectionnée est rejetée par le compilateur sans générer de code ni d'erreurs de syntaxe template."
-    },
-    codeSnippet: `template <typename T>\nvoid print(T val) {\n    if constexpr (std::is_pointer_v<T>) std::cout << *val;\n    else std::cout << val;\n}`
-  },
-  {
-    id: 37,
-    category: "STL",
-    front: {
-      en: "What is the advantage of vector.emplace_back() over vector.push_back()?",
-      fr: "Quel est l'avantage de vector.emplace_back() par rapport à vector.push_back() ?"
-    },
-    back: {
-      en: "emplace_back forwards its arguments to construct the object directly in place inside the vector buffer, avoiding temporary object creation and copy/move operations.",
-      fr: "emplace_back transmet ses arguments pour construire l'objet directement sur place dans la mémoire du vecteur, évitant la création d'un temporaire et sa copie/déplacement."
-    },
-    codeSnippet: `std::vector<std::pair<int, std::string>> v;\nv.emplace_back(1, "item"); // Constructs pair in place!`
-  },
-  {
-    id: 38,
-    category: "Basics",
-    front: {
-      en: "What is the difference between Header Guards (#ifndef) and #pragma once?",
-      fr: "Quelle est la différence entre les Header Guards (#ifndef) et #pragma once ?"
-    },
-    back: {
-      en: "Header guards are 100% standard C++ macro guards. '#pragma once' is a non-standard compiler directive supported by all modern compilers that prevents multiple inclusion faster and without macro name clashes.",
-      fr: "Les header guards sont des macros 100% standard. '#pragma once' est une directive supportée par tous les compilateurs modernes, évitant les collisions de noms de macros plus rapidement."
-    },
-    codeSnippet: `// Method 1:\n#pragma once\n\n// Method 2:\n#ifndef MY_HEADER_H\n#define MY_HEADER_H\n...\n#endif`
-  },
-  {
-    id: 39,
-    category: "Pro Dev",
-    front: {
-      en: "What is the difference between ASan (AddressSanitizer) and UBSan (UndefinedBehaviorSanitizer)?",
-      fr: "Quelle est la différence entre ASan (AddressSanitizer) et UBSan (UndefinedBehaviorSanitizer) ?"
-    },
-    back: {
-      en: "ASan catches memory errors (buffer overflows, use-after-free, double delete). UBSan catches undefined logic behavior (signed integer overflow, null pointer dereference, misaligned memory access).",
-      fr: "ASan intercepte les erreurs mémoire (débordements, use-after-free, double free). UBSan intercepte les comportements indéterminés (dépassements d'entiers signés, déréférencement nul, alignement)."
-    },
-    codeSnippet: `g++ -fsanitize=address,undefined -g main.cpp -o app`
-  },
-  {
-    id: 40,
-    category: "Modern C++",
-    front: {
-      en: "What lifetime hazard must you watch out for with std::string_view?",
-      fr: "À quel risque de durée de vie doit-on faire attention avec std::string_view ?"
-    },
-    back: {
-      en: "std::string_view does not own the characters it points to. If the underlying std::string is destroyed or reallocated, the string_view becomes a dangling view causing undefined behavior.",
-      fr: "std::string_view ne possède pas les caractères pointés. Si le std::string sous-jacent est détruit ou réalloué, la vue pointe sur une mémoire invalide (dangling pointer)."
-    },
-    codeSnippet: `std::string_view sv = std::string("temporary"); // DANGER: dangling reference!\n// sv now points to freed memory!`
-  },
-  {
-    id: 41,
-    category: "OOP",
-    front: {
-      en: "What does the 'explicit' keyword do on a constructor?",
-      fr: "À quoi sert le mot-clé 'explicit' sur un constructeur ?"
-    },
-    back: {
-      en: "It prevents the compiler from using that constructor for implicit type conversions and copy-initialization, stopping subtle bugs.",
-      fr: "Il empêche le compilateur d'utiliser ce constructeur pour des conversions de type implicites et des initialisations par copie involontaires."
-    },
-    codeSnippet: `class Buffer {\npublic:\n    explicit Buffer(int size); // Prevents Buffer b = 10;\n};`
-  },
-  {
-    id: 42,
-    category: "Pro Dev",
-    front: {
-      en: "What is a Deadlock and how can std::scoped_lock (C++17) prevent it?",
-      fr: "Qu'est-ce qu'un interblocage (Deadlock) et comment std::scoped_lock (C++17) l'évite-t-il ?"
-    },
-    back: {
-      en: "A deadlock occurs when two threads wait on locks held by each other. std::scoped_lock locks multiple mutexes simultaneously using a deadlock-avoidance algorithm.",
-      fr: "Un interblocage survient lorsque deux threads s'attendent mutuellement sur des verrous. std::scoped_lock verrouille plusieurs mutex simultanément avec un algorithme anti-deadlock."
-    },
-    codeSnippet: `std::scoped_lock lock(mutexA, mutexB); // Deadlock-free multi-lock!`
-  },
-  {
-    id: 43,
-    category: "Pro Dev",
-    front: {
-      en: "Why is std::jthread (C++20) safer than std::thread?",
-      fr: "Pourquoi std::jthread (C++20) est-il plus sûr que std::thread ?"
-    },
-    back: {
-      en: "std::jthread automatically joins in its destructor on scope exit, preventing std::terminate() crashes. It also natively supports cooperative cancellation via std::stop_token.",
-      fr: "std::jthread s'auto-joint dans son destructeur en sortie de portée, évitant les crashs std::terminate(). Il intègre aussi l'arrêt coopératif via std::stop_token."
-    },
-    codeSnippet: `// Safe: auto-joins on destruction\nstd::jthread t([](std::stop_token st) {\n    while (!st.stop_requested()) { /* work */ }\n});`
-  },
-  {
-    id: 44,
-    category: "Pro Dev",
-    front: {
-      en: "What is the difference between std::lock_guard and std::unique_lock?",
-      fr: "Quelle est la différence entre std::lock_guard et std::unique_lock ?"
-    },
-    back: {
-      en: "std::lock_guard is a strict, lightweight RAII wrapper that only locks on construction and unlocks on destruction. std::unique_lock is movable and supports deferred locking, timed locking, and condition variables.",
-      fr: "std::lock_guard est un verrou RAII strict et léger (verrouille à la création, libère à la destruction). std::unique_lock est déplaçable, supporte le verrouillage différé et est requis par std::condition_variable."
-    },
-    codeSnippet: `std::unique_lock<std::mutex> lock(mtx, std::defer_lock);\n// Lock later:\nlock.lock();`
-  },
-  {
-    id: 45,
-    category: "Pro Dev",
-    front: {
-      en: "What is a Spurious Wakeup and how do you prevent it with std::condition_variable?",
-      fr: "Qu'est-ce qu'un réveil spontané (Spurious Wakeup) et comment l'éviter avec std::condition_variable ?"
-    },
-    back: {
-      en: "An OS thread waiting on a condition variable can wake up without any signal sent. Always pass a predicate lambda to cv.wait(lock, []{ return condition; }); to re-check the condition in a loop.",
-      fr: "Un thread en attente peut être réveillé sans notification du système. On doit toujours passer un prédicat lambda à cv.wait(lock, []{ return condition; }); pour vérifier la condition en boucle."
-    },
-    codeSnippet: `std::unique_lock<std::mutex> lock(mtx);\ncv.wait(lock, [&]{ return !queue.empty(); }); // Safe predicate!`
-  },
-  {
-    id: 46,
-    category: "Pro Dev",
-    front: {
-      en: "What is the difference between std::launch::async and std::launch::deferred in std::async?",
-      fr: "Quelle est la différence entre std::launch::async et std::launch::deferred dans std::async ?"
-    },
-    back: {
-      en: "std::launch::async guarantees execution on a separate physical background thread. std::launch::deferred delays execution until .get() or .wait() is called, running synchronously on the calling thread.",
-      fr: "std::launch::async garantit l'exécution sur un thread séparé en arrière-plan. std::launch::deferred diffère l'exécution jusqu'à l'appel de .get(), s'exécutant sur le thread appelant."
-    },
-    codeSnippet: `auto f1 = std::async(std::launch::async, task);    // New thread!\nauto f2 = std::async(std::launch::deferred, task); // Lazy synchronous`
-  },
-  {
-    id: 47,
-    category: "Pro Dev",
-    front: {
-      en: "What is False Sharing and how do you prevent it in high-performance multithreading?",
-      fr: "Qu'est-ce que le False Sharing et comment l'éliminer en multithreading haute performance ?"
-    },
-    back: {
-      en: "False sharing occurs when independent threads modify distinct variables that share the same 64-byte CPU cache line, causing constant cache invalidations. Prevent it with alignas(64).",
-      fr: "Le faux partage survient quand des threads modifient des variables distinctes situées sur la même ligne de cache (64 octets), invalidant inutilement le cache. On l'évite avec alignas(64)."
-    },
-    codeSnippet: `struct alignas(64) ThreadData {\n    std::atomic<int> counter{0}; // Isolated in its own 64-byte cache line!\n};`
-  },
-  {
-    id: 48,
-    category: "Pro Dev",
-    front: {
-      en: "What is the difference between std::latch and std::barrier (C++20)?",
-      fr: "Quelle est la différence entre std::latch et std::barrier (C++20) ?"
-    },
-    back: {
-      en: "std::latch is a single-use countdown synchronizer (once count reaches zero, it stays open). std::barrier is reusable across repeated phases with an optional completion function.",
-      fr: "std::latch est un compte à rebours à usage unique (reste ouvert une fois à 0). std::barrier est réutilisable à travers des phases successives avec une fonction d'étape."
-    },
-    codeSnippet: `std::latch sync(4); // 4 threads arrive, then unblock\nsync.count_down(); sync.wait();`
-  },
-  {
-    id: 49,
-    category: "Modern C++",
-    front: {
-      en: "Why are C++20 Concepts superior to traditional SFINAE (std::enable_if)?",
-      fr: "Pourquoi les Concepts C++20 sont-ils supérieurs à SFINAE (std::enable_if) ?"
-    },
-    back: {
-      en: "Concepts express compile-time type constraints directly in the function signature, provide readable compiler error messages, compile faster, and support logical operators (&&, ||).",
-      fr: "Les concepts expriment les contraintes directement dans la signature, offrent des messages d'erreur clairs (sans pavés illisibles), compilent plus vite et supportent les opérateurs && et ||."
-    },
-    codeSnippet: `template<typename T>\nconcept Numeric = std::integral<T> || std::floating_point<T>;\n\ntemplate<Numeric T> T add(T a, T b) { return a + b; }`
-  },
-  {
-    id: 50,
-    category: "Modern C++",
-    front: {
-      en: "How do C++20 Ranges (std::views) optimize collection transformations?",
-      fr: "Comment les Ranges C++20 (std::views) optimisent-ils les transformations de conteneurs ?"
-    },
-    back: {
-      en: "std::views are non-owning, O(1) copy, lazy-evaluated transformations. Elements are computed on the fly during iteration without allocating temporary intermediate containers.",
-      fr: "std::views sont des vues non-propriétaires, à copie O(1) et évaluation paresseuse. Les éléments sont calculés à la volée sans allouer de conteneurs intermédiaires."
-    },
-    codeSnippet: `auto evens = vec | std::views::filter([](int n){ return n % 2 == 0; })\n                 | std::views::transform([](int n){ return n * 2; });`
-  },
-  {
-    id: 51,
-    category: "Modern C++",
-    front: {
-      en: "What are the three C++20 Coroutine keywords and what do they do?",
-      fr: "Quels sont les trois mots-clés des Coroutines C++20 et que font-ils ?"
-    },
-    back: {
-      en: "'co_await' suspends execution until an async task finishes; 'co_yield' suspends execution and returns an intermediate value; 'co_return' completes the coroutine with a final value.",
-      fr: "'co_await' suspend jusqu'à la fin d'une tâche asynchrone ; 'co_yield' suspend et produit une valeur intermédiaire ; 'co_return' termine la coroutine et renvoie le résultat."
-    },
-    codeSnippet: `// Inside a generator:\nfor (int i = 0; i < 10; i++) {\n    co_yield i; // Yields value, suspends state\n}\nco_return;`
-  },
-  {
-    id: 52,
-    category: "Architecture",
-    front: {
-      en: "What is CRTP (Curiously Recurring Template Pattern) and when should you use it?",
-      fr: "Qu'est-ce que le CRTP (Curiously Recurring Template Pattern) et quand l'utiliser ?"
-    },
-    back: {
-      en: "CRTP is a static polymorphism idiom where a class derives from a template instantiated with itself. It provides polymorphic interface dispatch at compile-time with zero virtual table overhead.",
-      fr: "Le CRTP est un idiome de polymorphisme statique où une classe dérive d'un template instancié avec elle-même. Il permet un polymorphisme à la compilation avec 0 surcoût de table virtuelle."
-    },
-    codeSnippet: `template<typename Derived>\nstruct Base {\n    void act() { static_cast<Derived*>(this)->impl(); }\n};\nstruct Derived : Base<Derived> { void impl(); };`
+    "id": 15,
+    "category": "Intermediate",
+    "front": {
+      "en": "How does std::lock_guard prevent thread deadlocks and resource leaks?",
+      "fr": "Comment std::lock_guard évite-t-il les verrous mortels (deadlocks) et fuites ?"
+    },
+    "back": {
+      "en": "It follows RAII: locks the mutex upon construction and guarantees unlocking when leaving scope, even if exceptions occur.",
+      "fr": "Par RAII : verrouille le mutex à sa création et garantit son déverrouillage en sortie de portée, même en cas d'exception."
+    },
+    "codeSnippet": "std::mutex mtx;\nvoid safeWork() {\n    std::lock_guard<std::mutex> lock(mtx);\n    // Critical section\n}"
   }
 ];
 
-// Comprehensive Question Bank for Grand Master Exam of Everything (45 Questions)
 const GRAND_EXAM_QUESTIONS = [
   {
-    id: 1,
-    subject: "Basics",
-    question: {
-      en: "Which function is the mandatory entry point for any standard C++ executable?",
-      fr: "Quelle fonction est le point d'entrée obligatoire de tout exécutable C++ standard ?"
+    "id": 1,
+    "subject": "Basics",
+    "question": {
+      "en": "What stream object is used to output text to the console in C++?",
+      "fr": "Quel objet de flux est utilisé pour afficher du texte dans la console en C++ ?"
     },
-    options: [
-      { text: { en: "void start()", fr: "void start()" }, correct: false },
-      { text: { en: "int main()", fr: "int main()" }, correct: true },
-      { text: { en: "int WinMain()", fr: "int WinMain()" }, correct: false },
-      { text: { en: "void run()", fr: "void run()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "std::cout",
+          "fr": "std::cout"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "std::cin",
+          "fr": "std::cin"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "printf_s",
+          "fr": "printf_s"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "int main() is the universal standard entry point defined by the ISO C++ specification.",
-      fr: "int main() est le point d'entrée standard universel défini par la norme ISO C++."
+    "explanation": {
+      "en": "std::cout (character output) in <iostream> sends formatted text to the standard console.",
+      "fr": "std::cout (character output) dans <iostream> envoie le texte formaté vers la console standard."
     }
   },
   {
-    id: 2,
-    subject: "Basics",
-    question: {
-      en: "What is the output of 'std::cout << 5 / 2;' in C++?",
-      fr: "Quelle est la sortie de 'std::cout << 5 / 2;' en C++ ?"
+    "id": 2,
+    "subject": "Basics",
+    "question": {
+      "en": "Which C++ data type should you use to store a single ASCII character?",
+      "fr": "Quel type de données C++ doit-on utiliser pour stocker un unique caractère ASCII ?"
     },
-    options: [
-      { text: { en: "2.5", fr: "2.5" }, correct: false },
-      { text: { en: "2", fr: "2" }, correct: true },
-      { text: { en: "3", fr: "3" }, correct: false },
-      { text: { en: "Compile error", fr: "Erreur de compilation" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "char",
+          "fr": "char"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "std::string",
+          "fr": "std::string"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "byte",
+          "fr": "byte"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Integer division truncates decimals toward zero, resulting in 2.",
-      fr: "La division entière tronque la partie décimale vers zéro, produisant 2."
+    "explanation": {
+      "en": "char uses single quotes like 'A' and represents an 8-bit character in memory.",
+      "fr": "char utilise des guillemets simples comme 'A' et occupe 1 octet en mémoire."
     }
   },
   {
-    id: 3,
-    subject: "Basics",
-    question: {
-      en: "Which keyword guarantees that an expression is evaluated at compile time?",
-      fr: "Quel mot-clé garantit qu'une expression est évaluée dès la compilation ?"
+    "id": 3,
+    "subject": "Basics",
+    "question": {
+      "en": "What happens if you try to reassign a variable declared with 'const'?",
+      "fr": "Que se passe-t-il si vous tentez de réassigner une variable déclarée avec 'const' ?"
     },
-    options: [
-      { text: { en: "const", fr: "const" }, correct: false },
-      { text: { en: "constexpr", fr: "constexpr" }, correct: true },
-      { text: { en: "static", fr: "static" }, correct: false },
-      { text: { en: "inline", fr: "inline" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Compile-time error",
+          "fr": "Erreur de compilation"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Runtime warning",
+          "fr": "Avertissement à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The value silently changes",
+          "fr": "La valeur change silencieusement"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "constexpr enforces compile-time evaluation whenever possible.",
-      fr: "constexpr impose une évaluation à la compilation dès que possible."
+    "explanation": {
+      "en": "The compiler rejects assignments to read-only const variables at compile time.",
+      "fr": "Le compilateur rejette les affectations aux variables const en lecture seule dès la compilation."
     }
   },
   {
-    id: 4,
-    subject: "Memory",
-    question: {
-      en: "What operator retrieves the memory address of an existing variable?",
-      fr: "Quel opérateur extrait l'adresse mémoire d'une variable existante ?"
+    "id": 4,
+    "subject": "Basics",
+    "question": {
+      "en": "Which operator is used to access an entity inside a specific namespace?",
+      "fr": "Quel opérateur permet d'accéder à une entité située dans un espace de noms spécifique ?"
     },
-    options: [
-      { text: { en: "*", fr: "*" }, correct: false },
-      { text: { en: "&", fr: "&" }, correct: true },
-      { text: { en: "->", fr: "->" }, correct: false },
-      { text: { en: "%", fr: "%" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Scope resolution operator (::)",
+          "fr": "Opérateur de résolution de portée (::)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Member access dot (.)",
+          "fr": "Point d'accès membre (.)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Pointer arrow (->)",
+          "fr": "Flèche de pointeur (->)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The ampersand (&) is the address-of operator in C++.",
-      fr: "L'esperluette (&) est l'opérateur d'adresse en C++."
+    "explanation": {
+      "en": "The scope resolution operator (::) tells the compiler which namespace to look inside.",
+      "fr": "L'opérateur de résolution de portée (::) indique au compilateur dans quel namespace chercher."
     }
   },
   {
-    id: 5,
-    subject: "Memory",
-    question: {
-      en: "What happens when you dereference a null pointer (*p when p == nullptr)?",
-      fr: "Que se passe-t-il si vous déréférencez un pointeur nul (*p avec p == nullptr) ?"
+    "id": 5,
+    "subject": "Basics",
+    "question": {
+      "en": "What is the preferred modern C++ keyword to define type aliases instead of 'typedef'?",
+      "fr": "Quel mot-clé moderne en C++ est recommandé pour définir un alias de type plutôt que 'typedef' ?"
     },
-    options: [
-      { text: { en: "It returns 0", fr: "Il renvoie 0" }, correct: false },
-      { text: { en: "Undefined behavior (typically immediate segmentation fault)", fr: "Comportement indéterminé (crash immédiat par segmentation fault)" }, correct: true },
-      { text: { en: "Throws std::bad_alloc exception", fr: "Lève une exception std::bad_alloc" }, correct: false },
-      { text: { en: "The compiler skips the line", fr: "Le compilateur ignore la ligne" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "using",
+          "fr": "using"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "alias",
+          "fr": "alias"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "rename",
+          "fr": "rename"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Dereferencing nullptr is undefined behavior and causes an operating system crash.",
-      fr: "Déréférencer nullptr est un comportement indéterminé provoquant un crash système."
+    "explanation": {
+      "en": "'using new_name = old_type;' is clearer and supports template aliases cleanly.",
+      "fr": "'using nom = type;' est plus lisible et supporte directement les alias de templates."
     }
   },
   {
-    id: 6,
-    subject: "Memory",
-    question: {
-      en: "Which smart pointer should be your default choice for single exclusive ownership?",
-      fr: "Quel pointeur intelligent doit être votre choix par défaut pour une propriété exclusive ?"
+    "id": 6,
+    "subject": "Basics",
+    "question": {
+      "en": "What does the modulus operator (%) return in integer arithmetic?",
+      "fr": "Que renvoie l'opérateur modulo (%) en arithmétique entière ?"
     },
-    options: [
-      { text: { en: "std::shared_ptr", fr: "std::shared_ptr" }, correct: false },
-      { text: { en: "std::unique_ptr", fr: "std::unique_ptr" }, correct: true },
-      { text: { en: "std::weak_ptr", fr: "std::weak_ptr" }, correct: false },
-      { text: { en: "std::auto_ptr", fr: "std::auto_ptr" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The remainder of the division",
+          "fr": "Le reste de la division entière"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The floating-point quotient",
+          "fr": "Le quotient en virgule flottante"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The percentage proportion",
+          "fr": "Le pourcentage proportionnel"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::unique_ptr has zero runtime overhead and prevents multiple ownership bugs.",
-      fr: "std::unique_ptr n'a aucun surcoût d'exécution et garantit la propriété exclusive."
+    "explanation": {
+      "en": "For example, 14 % 4 evaluates to 2 because 14 divided by 4 leaves a remainder of 2.",
+      "fr": "Par exemple, 14 % 4 donne 2 car 14 divisé par 4 donne un reste de 2."
     }
   },
   {
-    id: 7,
-    subject: "OOP",
-    question: {
-      en: "What is the default member access specifier in a C++ 'class' vs 'struct'?",
-      fr: "Quelle est la visibilité par défaut des membres dans une 'class' vs une 'struct' ?"
+    "id": 7,
+    "subject": "Basics",
+    "question": {
+      "en": "Why is static_cast<double>(intVal) preferred over C-style (double)intVal?",
+      "fr": "Pourquoi static_cast<double>(val) est-il préféré au cast à la C (double)val ?"
     },
-    options: [
-      { text: { en: "class: private, struct: public", fr: "class : private, struct : public" }, correct: true },
-      { text: { en: "class: public, struct: private", fr: "class : public, struct : private" }, correct: false },
-      { text: { en: "Both are private by default", fr: "Les deux sont privées par défaut" }, correct: false },
-      { text: { en: "Both are public by default", fr: "Les deux sont publiques par défaut" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It is checked by the compiler and explicit in intent",
+          "fr": "Il est vérifié par le compilateur et explicite d'intention"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It runs faster at runtime",
+          "fr": "Il s'exécute plus vite à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "C-style cast is deprecated and illegal in C++20",
+          "fr": "Le cast C est déprécié et illégal en C++20"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "In C++, struct members default to public, while class members default to private.",
-      fr: "En C++, les membres d'une struct sont publics par défaut, ceux d'une class sont privés."
+    "explanation": {
+      "en": "static_cast prevents unintended dangerous type conversions at compile-time.",
+      "fr": "static_cast évite les conversions de types dangereuses et accidentelles dès la compilation."
     }
   },
   {
-    id: 8,
-    subject: "OOP",
-    question: {
-      en: "Why must a polymorphic base class define a virtual destructor?",
-      fr: "Pourquoi une classe de base polymorphique doit-elle avoir un destructeur virtuel ?"
+    "id": 8,
+    "subject": "Basics",
+    "question": {
+      "en": "Why does std::cin >> fail when reading a full name like 'Bro Code'?",
+      "fr": "Pourquoi std::cin >> échoue-t-il lors de la saisie d'un nom complet comme 'Bro Code' ?"
     },
-    options: [
-      { text: { en: "To ensure the derived class destructor is invoked upon deletion", fr: "Pour garantir que le destructeur dérivé soit appelé lors d'un delete" }, correct: true },
-      { text: { en: "To allow the class to be copied", fr: "Pour autoriser la copie de la classe" }, correct: false },
-      { text: { en: "Virtual destructors make objects faster", fr: "Les destructeurs virtuels accélèrent l'objet" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It stops reading at whitespace (spaces, tabs, newlines)",
+          "fr": "Il s'arrête dès le premier espace blanc (espace, tabulation, saut de ligne)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "std::cin cannot read std::string",
+          "fr": "std::cin ne peut pas lire de std::string"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Strings cannot exceed 4 characters",
+          "fr": "Les chaînes ne peuvent pas dépasser 4 caractères"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Without a virtual destructor, 'delete pBase' only executes the base destructor, leaking derived resources.",
-      fr: "Sans destructeur virtuel, 'delete pBase' n'exécute que le destructeur de base, fuyant les ressources filles."
+    "explanation": {
+      "en": "std::cin extraction stops at whitespace. Use std::getline(std::cin, str) to read full lines.",
+      "fr": "L'extraction std::cin s'arrête au premier espace. Utilisez std::getline(std::cin, str) pour lire toute la ligne."
     }
   },
   {
-    id: 9,
-    subject: "Modern C++",
-    question: {
-      en: "What does 'std::move(x)' do?",
-      fr: "Que fait 'std::move(x)' ?"
+    "id": 9,
+    "subject": "Basics",
+    "question": {
+      "en": "Which standard header must be included to use sqrt(), pow(), and round()?",
+      "fr": "Quel en-tête standard doit-on inclure pour utiliser sqrt(), pow() et round() ?"
     },
-    options: [
-      { text: { en: "It moves the memory of x to another core", fr: "Il déplace la mémoire de x sur un autre cœur" }, correct: false },
-      { text: { en: "It casts x to an rvalue reference (Type&&)", fr: "Il effectue un cast de x en référence rvalue (Type&&)" }, correct: true },
-      { text: { en: "It deletes x immediately", fr: "Il détruit x immédiatement" }, correct: false },
-      { text: { en: "It clones x into a new heap location", fr: "Il clone x dans une nouvelle zone mémoire" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "<cmath>",
+          "fr": "<cmath>"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "<maths>",
+          "fr": "<maths>"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "<algorithm>",
+          "fr": "<algorithm>"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::move is an unconditional cast to an rvalue reference, enabling move constructors.",
-      fr: "std::move est un simple cast en référence rvalue permettant d'activer le constructeur de déplacement."
+    "explanation": {
+      "en": "#include <cmath> provides standard mathematical functions.",
+      "fr": "#include <cmath> fournit les fonctions mathématiques standard."
     }
   },
   {
-    id: 10,
-    subject: "Modern C++",
-    question: {
-      en: "What advantage does std::string_view provide over const std::string&?",
-      fr: "Quel avantage offre std::string_view par rapport à const std::string& ?"
+    "id": 10,
+    "subject": "Basics",
+    "question": {
+      "en": "Which mathematical formula calculates the hypotenuse c given sides a and b?",
+      "fr": "Quelle formule mathématique calcule l'hypoténuse c à partir des côtés a et b ?"
     },
-    options: [
-      { text: { en: "Zero-copy non-owning view that avoids allocations for string literals", fr: "Vue non-propriétaire sans copie évitant les allocations pour les littéraux" }, correct: true },
-      { text: { en: "It can modify the characters in place", fr: "Il peut modifier les caractères sur place" }, correct: false },
-      { text: { en: "It automatically encrypts strings", fr: "Il chiffre automatiquement les chaînes" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "c = std::sqrt(a*a + b*b)",
+          "fr": "c = std::sqrt(a*a + b*b)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "c = a + b",
+          "fr": "c = a + b"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "c = (a * b) / 2",
+          "fr": "c = (a * b) / 2"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::string_view holds only a pointer and length, completely avoiding heap allocations.",
-      fr: "std::string_view ne stocke qu'un pointeur et une taille, évitant toute allocation sur le tas."
+    "explanation": {
+      "en": "By the Pythagorean theorem, hypotenuse c equals the square root of (a² + b²).",
+      "fr": "D'après le théorème de Pythagore, l'hypoténuse c est égale à la racine carrée de (a² + b²)."
     }
   },
   {
-    id: 11,
-    subject: "Pro Dev",
-    question: {
-      en: "Which compiler flag enables Google AddressSanitizer (ASan) in GCC/Clang?",
-      fr: "Quel flag de compilation active AddressSanitizer (ASan) sous GCC/Clang ?"
+    "id": 11,
+    "subject": "Control Flow",
+    "question": {
+      "en": "What happens if all conditions in an if - else if chain evaluate to false and there is an else block?",
+      "fr": "Que se passe-t-il si toutes les conditions d'un if - else if sont fausses et qu'il y a un bloc else ?"
     },
-    options: [
-      { text: { en: "-fsanitize=address", fr: "-fsanitize=address" }, correct: true },
-      { text: { en: "-O3", fr: "-O3" }, correct: false },
-      { text: { en: "-Wpedantic", fr: "-Wpedantic" }, correct: false },
-      { text: { en: "-g3", fr: "-g3" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The else block executes",
+          "fr": "Le bloc else s'exécute"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The program crashes",
+          "fr": "Le programme plante"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The first if block re-executes",
+          "fr": "Le premier bloc if s'exécute à nouveau"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "-fsanitize=address instruments memory accesses to instantly catch buffer overflows and leaks at runtime.",
-      fr: "-fsanitize=address instrumente les accès mémoire pour intercepter les dépassements et fuites."
+    "explanation": {
+      "en": "The else block acts as the fallback default when no preceding conditions match.",
+      "fr": "Le bloc else fait office d'alternative par défaut lorsque aucune condition précédente n'est remplie."
     }
   },
   {
-    id: 12,
-    subject: "Pro Dev",
-    question: {
-      en: "What command in CMake properly links a library to a target executable?",
-      fr: "Quelle commande CMake lie proprement une bibliothèque à une cible exécutable ?"
+    "id": 12,
+    "subject": "Control Flow",
+    "question": {
+      "en": "Why is the 'break;' statement essential inside each case of a switch statement?",
+      "fr": "Pourquoi l'instruction 'break;' est-elle essentielle à la fin de chaque case d'un switch ?"
     },
-    options: [
-      { text: { en: "target_link_libraries(target PRIVATE lib)", fr: "target_link_libraries(cible PRIVATE lib)" }, correct: true },
-      { text: { en: "link_libraries(lib)", fr: "link_libraries(lib)" }, correct: false },
-      { text: { en: "include_directories(lib)", fr: "include_directories(lib)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To prevent falling through to execute subsequent cases",
+          "fr": "Pour empêcher l'exécution en cascade des cases suivants (fall-through)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To reset the variable value",
+          "fr": "Pour réinitialiser la valeur de la variable"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To return from the enclosing function",
+          "fr": "Pour quitter la fonction appelante"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "target_link_libraries scopes dependencies directly to targets without global pollution.",
-      fr: "target_link_libraries restreint les dépendances à la cible sans polluer l'espace global."
+    "explanation": {
+      "en": "Without break;, execution continues down through all remaining cases regardless of condition.",
+      "fr": "Sans break;, l'exécution continue sans interruption dans les blocs case suivants."
     }
   },
   {
-    id: 13,
-    subject: "Pro Dev",
-    question: {
-      en: "Why is C++20's std::jthread preferred over std::thread?",
-      fr: "Pourquoi std::jthread en C++20 est-il préféré à std::thread ?"
+    "id": 13,
+    "subject": "Control Flow",
+    "question": {
+      "en": "Why must you check if the divisor is zero before performing division in a calculator?",
+      "fr": "Pourquoi doit-on vérifier si le diviseur est nul avant d'effectuer une division dans une calculatrice ?"
     },
-    options: [
-      { text: { en: "It automatically joins on destruction and supports cooperative cancellation", fr: "Il appelle join() automatiquement à la destruction et gère l'annulation" }, correct: true },
-      { text: { en: "It is twice as fast as std::thread", fr: "Il est deux fois plus rapide que std::thread" }, correct: false },
-      { text: { en: "It does not use the operating system scheduler", fr: "Il n'utilise pas l'ordonnanceur du système" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Division by zero causes undefined behavior or runtime crash",
+          "fr": "La division par zéro provoque un plantage ou comportement indéfini"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It produces the number zero automatically",
+          "fr": "Elle produit automatiquement le nombre zéro"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The compiler will delete the executable",
+          "fr": "Le compilateur supprime l'exécutable"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::jthread joins upon going out of scope, preventing std::terminate() crashes from unjoined threads.",
-      fr: "std::jthread appelle join() lors de sa destruction, évitant les crashs std::terminate() d'un thread non joint."
+    "explanation": {
+      "en": "Dividing by zero in integer arithmetic causes an immediate program crash / SIGFPE signal.",
+      "fr": "La division par zéro en arithmétique entière déclenche un plantage immédiat."
     }
   },
   {
-    id: 14,
-    subject: "STL",
-    question: {
-      en: "What is the average lookup time complexity of std::unordered_map?",
-      fr: "Quelle est la complexité moyenne de recherche dans std::unordered_map ?"
+    "id": 14,
+    "subject": "Control Flow",
+    "question": {
+      "en": "What is the return value of (grade >= 60) ? \"Pass\" : \"Fail\" when grade = 75?",
+      "fr": "Quelle est la valeur de retour de (grade >= 60) ? \"Pass\" : \"Fail\" quand grade = 75 ?"
     },
-    options: [
-      { text: { en: "O(1)", fr: "O(1)" }, correct: true },
-      { text: { en: "O(log N)", fr: "O(log N)" }, correct: false },
-      { text: { en: "O(N)", fr: "O(N)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "\"Pass\"",
+          "fr": "\"Pass\""
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "\"Fail\"",
+          "fr": "\"Fail\""
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "true",
+          "fr": "true"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::unordered_map is implemented as a hash table, achieving O(1) average lookup.",
-      fr: "std::unordered_map est une table de hachage offrant une recherche moyenne en O(1)."
+    "explanation": {
+      "en": "Since (75 >= 60) is true, the ternary operator evaluates and returns the first expression: \"Pass\".",
+      "fr": "Puisque (75 >= 60) est vrai, l'opérateur ternaire évalue et renvoie la première expression : \"Pass\"."
     }
   },
   {
-    id: 15,
-    subject: "STL",
-    question: {
-      en: "What does vector.reserve(N) do compared to vector.resize(N)?",
-      fr: "Que fait vector.reserve(N) comparé à vector.resize(N) ?"
+    "id": 15,
+    "subject": "Control Flow",
+    "question": {
+      "en": "In the expression 'if (A && B)', when is expression B NOT evaluated?",
+      "fr": "Dans l'expression 'if (A && B)', quand l'expression B n'est-elle PAS évaluée ?"
     },
-    options: [
-      { text: { en: "reserve allocates memory capacity without changing size()", fr: "reserve alloue la capacité mémoire sans modifier size()" }, correct: true },
-      { text: { en: "reserve inserts N default elements", fr: "reserve insère N éléments par défaut" }, correct: false },
-      { text: { en: "Both functions are identical", fr: "Les deux fonctions sont identiques" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "When A is false (short-circuit evaluation)",
+          "fr": "Quand A est faux (évaluation en court-circuit)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "When A is true",
+          "fr": "Quand A est vrai"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Expression B is always evaluated",
+          "fr": "L'expression B est toujours évaluée"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "reserve(N) prevents frequent reallocations by preallocating buffer capacity.",
-      fr: "reserve(N) évite les réallocations fréquentes en réservant la mémoire tampon."
+    "explanation": {
+      "en": "Logical AND (&&) short-circuits: if the first operand is false, the result is guaranteed false.",
+      "fr": "Le ET logique (&&) fonctionne en court-circuit : si le premier terme est faux, le second n'est pas évalué."
     }
   },
   {
-    id: 16,
-    subject: "Basics",
-    question: {
-      en: "What is the difference between prefix (++i) and postfix (i++) increment?",
-      fr: "Quelle est la différence entre préfixe (++i) et postfixe (i++) ?"
+    "id": 16,
+    "subject": "Control Flow",
+    "question": {
+      "en": "Which formula accurately converts degrees Fahrenheit to Celsius in C++?",
+      "fr": "Quelle formule convertit précisément les degrés Fahrenheit en Celsius en C++ ?"
     },
-    options: [
-      { text: { en: "++i increments first and returns the new value; i++ returns original value and increments after", fr: "++i incrémente d'abord et renvoie la nouvelle valeur ; i++ renvoie l'originale et incrémente après" }, correct: true },
-      { text: { en: "They are completely identical in every situation", fr: "Ils sont strictement identiques en toute circonstance" }, correct: false },
-      { text: { en: "i++ is only valid in for loops", fr: "i++ n'est valide que dans les boucles for" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "(temp - 32.0) / 1.8",
+          "fr": "(temp - 32.0) / 1.8"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "(temp * 1.8) + 32.0",
+          "fr": "(temp * 1.8) + 32.0"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "temp / 100.0",
+          "fr": "temp / 100.0"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Prefix increments in-place without creating a temporary copy of the old value.",
-      fr: "Le préfixe incrémente directement sans avoir à copier l'ancienne valeur temporaire."
+    "explanation": {
+      "en": "Celsius = (Fahrenheit - 32) / 1.8. Using 1.8 or 32.0 ensures floating point arithmetic.",
+      "fr": "Celsius = (Fahrenheit - 32) / 1.8. L'utilisation de décimaux garantit le calcul flottant."
     }
   },
   {
-    id: 17,
-    subject: "Basics",
-    question: {
-      en: "What happens if a switch case statement does not end with 'break;'?",
-      fr: "Que se passe-t-il si un bloc case d'un switch ne se termine pas par 'break;' ?"
+    "id": 17,
+    "subject": "Control Flow",
+    "question": {
+      "en": "What does string.find(char) return if the character is not found in the string?",
+      "fr": "Que renvoie string.find(char) si le caractère recherché n'est pas présent dans la chaîne ?"
     },
-    options: [
-      { text: { en: "Execution falls through to the next case automatically", fr: "L'exécution continue (fallthrough) vers le case suivant automatiquement" }, correct: true },
-      { text: { en: "A compilation error occurs", fr: "Une erreur de compilation se produit" }, correct: false },
-      { text: { en: "The program crashes", fr: "Le programme plante" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "std::string::npos",
+          "fr": "std::string::npos"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "-1",
+          "fr": "-1"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "0",
+          "fr": "0"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Without break, control flows through subsequent cases until a break or switch exit is encountered.",
-      fr: "Sans break, le flux passe aux cas suivants jusqu'au prochain break ou la fin du switch."
+    "explanation": {
+      "en": "std::string::npos is the standard sentinel value representing 'no position / not found'.",
+      "fr": "std::string::npos est la valeur sentinelle standard indiquant l'absence de correspondance."
     }
   },
   {
-    id: 18,
-    subject: "Basics",
-    question: {
-      en: "How does the ternary conditional operator evaluate: 'condition ? expr1 : expr2'?",
-      fr: "Comment l'opérateur ternaire s'évalue-t-il : 'condition ? expr1 : expr2' ?"
+    "id": 18,
+    "subject": "Loops",
+    "question": {
+      "en": "What causes an infinite loop in a while loop statement?",
+      "fr": "Qu'est-ce qui provoque une boucle infinie dans une instruction while ?"
     },
-    options: [
-      { text: { en: "If condition is true, expr1 is returned; otherwise expr2 is returned", fr: "Si condition est vraie, expr1 est retourné ; sinon expr2 est retourné" }, correct: true },
-      { text: { en: "Both expressions are executed simultaneously", fr: "Les deux expressions sont exécutées simultanément" }, correct: false },
-      { text: { en: "It always returns a boolean", fr: "Il renvoie toujours un booléen" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The loop condition never evaluates to false",
+          "fr": "La condition de boucle ne devient jamais fausse"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Using semicolons inside braces",
+          "fr": "L'utilisation de points-virgules entre accolades"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Declaring variables inside main",
+          "fr": "La déclaration de variables dans main"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The ternary operator is an inline conditional expression evaluating either expr1 or expr2.",
-      fr: "L'opérateur ternaire est une expression conditionnelle en ligne qui évalue soit expr1, soit expr2."
+    "explanation": {
+      "en": "A while loop will repeat forever unless its condition is eventually modified to false or broken.",
+      "fr": "Une boucle while se répète indéfiniment si sa condition ne devient jamais fausse."
     }
   },
   {
-    id: 19,
-    subject: "Basics",
-    question: {
-      en: "Why should you use std::getline(std::cin, str) instead of 'std::cin >> str' to read user input?",
-      fr: "Pourquoi utiliser std::getline(std::cin, str) plutôt que 'std::cin >> str' pour lire une entrée ?"
+    "id": 19,
+    "subject": "Loops",
+    "question": {
+      "en": "What is the primary difference between a while loop and a do-while loop?",
+      "fr": "Quelle est la différence fondamentale entre une boucle while et do-while ?"
     },
-    options: [
-      { text: { en: "getline reads full lines including spaces; >> stops at the first whitespace", fr: "getline lit la ligne entière avec espaces ; >> s'arrête au premier espace" }, correct: true },
-      { text: { en: "cin >> only works for integers", fr: "cin >> ne fonctionne que pour les entiers" }, correct: false },
-      { text: { en: "getline is 100x faster", fr: "getline est 100x plus rapide" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "do-while always executes the body at least once",
+          "fr": "do-while exécute toujours le corps au moins une fois"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "while is faster at runtime",
+          "fr": "while est plus rapide à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "do-while does not check conditions",
+          "fr": "do-while ne teste pas de condition"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::cin >> treats whitespace (spaces, tabs) as delimiters, while std::getline reads until newline.",
-      fr: "std::cin >> s'arrête aux espaces blancs, tandis que std::getline lit jusqu'au saut de ligne."
+    "explanation": {
+      "en": "A do-while loop tests its condition at the bottom, guaranteeing at least one execution pass.",
+      "fr": "La boucle do-while teste sa condition en fin de bloc, garantissant au moins un passage."
     }
   },
   {
-    id: 20,
-    subject: "Basics",
-    question: {
-      en: "What is the typical precision difference between float and double in C++?",
-      fr: "Quelle est la différence classique de précision entre float et double en C++ ?"
+    "id": 20,
+    "subject": "Loops",
+    "question": {
+      "en": "What are the three components inside a standard for loop header: for(A; B; C)?",
+      "fr": "Quels sont les trois éléments de l'en-tête for(A; B; C) ?"
     },
-    options: [
-      { text: { en: "float is 32-bit (~7 digits), double is 64-bit (~15-17 digits)", fr: "float est 32 bits (~7 chiffres), double est 64 bits (~15-17 chiffres)" }, correct: true },
-      { text: { en: "float has infinite precision", fr: "float a une précision infinie" }, correct: false },
-      { text: { en: "double can only store positive values", fr: "double ne stocke que des valeurs positives" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Initialization; Condition; Update/Increment",
+          "fr": "Initialisation ; Condition ; Mise à jour/Incrément"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Condition; Body; Break",
+          "fr": "Condition ; Corps ; Interruption"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Start; Finish; Output",
+          "fr": "Début ; Fin ; Affichage"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Double provides IEEE 754 double precision (64-bit) compared to float's single precision (32-bit).",
-      fr: "Le type double offre la double précision IEEE 754 (64 bits) contre la simple précision (32 bits) pour float."
+    "explanation": {
+      "en": "for (int i = 0; i < N; i++) sets initial counter, checks continuation, and increments.",
+      "fr": "for (int i = 0; i < N; i++) initialise le compteur, vérifie la poursuite et incrémente."
     }
   },
   {
-    id: 21,
-    subject: "Basics",
-    question: {
-      en: "What is the modern C++ syntax for creating a type alias?",
-      fr: "Quelle est la syntaxe moderne en C++ pour créer un alias de type ?"
+    "id": 21,
+    "subject": "Loops",
+    "question": {
+      "en": "What is the effect of the 'continue;' statement inside a loop?",
+      "fr": "Quel est l'effet de l'instruction 'continue;' dans une boucle ?"
     },
-    options: [
-      { text: { en: "using NewName = ExistingType;", fr: "using NouveauNom = TypeExistant;" }, correct: true },
-      { text: { en: "typedef ExistingType NewName;", fr: "typedef TypeExistant NouveauNom;" }, correct: false },
-      { text: { en: "alias NewName as ExistingType;", fr: "alias NouveauNom as TypeExistant;" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Skips the rest of the current iteration and jumps to the next iteration",
+          "fr": "Ignore le reste du tour actuel et passe immédiatement au tour suivant"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Terminates the loop completely",
+          "fr": "Termine la boucle définitivement"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Restarts the loop from index 0",
+          "fr": "Recommence la boucle à l'index 0"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The 'using' syntax is clearer and works with template aliases (unlike typedef).",
-      fr: "La syntaxe 'using' est plus lisible et fonctionne avec les templates (contrairement à typedef)."
+    "explanation": {
+      "en": "continue immediately bypasses remaining statements in the current iteration step.",
+      "fr": "continue saute les instructions restantes de l'itération courante sans quitter la boucle."
     }
   },
   {
-    id: 22,
-    subject: "Basics",
-    question: {
-      en: "In 'false && func()', does func() ever execute?",
-      fr: "Dans 'false && func()', func() s'exécute-t-il ?"
+    "id": 22,
+    "subject": "Loops",
+    "question": {
+      "en": "If an outer loop runs 4 times and an inner nested loop runs 5 times, how many total times does the inner body execute?",
+      "fr": "Si une boucle externe s'exécute 4 fois et une boucle imbriquée 5 fois, combien de fois le corps s'exécute-t-il au total ?"
     },
-    options: [
-      { text: { en: "No, short-circuit evaluation skips the right side", fr: "Non, l'évaluation en court-circuit ignore le côté droit" }, correct: true },
-      { text: { en: "Yes, both sides are always evaluated", fr: "Oui, les deux côtés sont toujours évalués" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "20 times",
+          "fr": "20 fois"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "9 times",
+          "fr": "9 fois"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "4 times",
+          "fr": "4 fois"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "In logical AND (&&), if the left operand is false, the result is already known, so the right operand is skipped.",
-      fr: "Pour le ET logique (&&), si la gauche est fausse, le résultat est certain, la droite n'est pas évaluée."
+    "explanation": {
+      "en": "Total iterations = outer_iterations * inner_iterations (4 * 5 = 20).",
+      "fr": "Nombre total d'itérations = itérations_externes * itérations_internes (4 * 5 = 20)."
     }
   },
   {
-    id: 23,
-    subject: "Basics",
-    question: {
-      en: "What function in <cmath> computes sqrt(a^2 + b^2) without intermediate overflow?",
-      fr: "Quelle fonction de <cmath> calcule sqrt(a^2 + b^2) sans débordement intermédiaire ?"
+    "id": 23,
+    "subject": "Loops",
+    "question": {
+      "en": "Why should you call srand(time(nullptr)) before calling rand()?",
+      "fr": "Pourquoi doit-on appeler srand(time(nullptr)) avant d'utiliser rand() ?"
     },
-    options: [
-      { text: { en: "std::hypot(a, b)", fr: "std::hypot(a, b)" }, correct: true },
-      { text: { en: "std::sqrt_sum(a, b)", fr: "std::sqrt_sum(a, b)" }, correct: false },
-      { text: { en: "std::pythagoras(a, b)", fr: "std::pythagoras(a, b)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To seed the generator with the current time so numbers change on each run",
+          "fr": "Pour initialiser le générateur avec l'heure courante afin de varier les tirages"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To make rand() return floating-point numbers",
+          "fr": "Pour que rand() renvoie des nombres décimaux"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It is required for compilation",
+          "fr": "C'est obligatoire pour compiler"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::hypot safely calculates the Euclidean distance hypotenuse avoiding overflow or underflow.",
-      fr: "std::hypot calcule l'hypoténuse euclidienne en évitant les dépassements de capacité numériques."
+    "explanation": {
+      "en": "Without a changing seed, rand() will generate the exact same sequence on every launch.",
+      "fr": "Sans graine (seed) dynamique, rand() reproduira exactement la même séquence à chaque lancement."
     }
   },
   {
-    id: 24,
-    subject: "Memory",
-    question: {
-      en: "What happens when a large object is passed by VALUE to a function?",
-      fr: "Que se passe-t-il lorsqu'un gros objet est passé par VALEUR à une fonction ?"
+    "id": 24,
+    "subject": "Loops",
+    "question": {
+      "en": "How do you restrict (rand() % 6) to generate numbers between 1 and 6 inclusive?",
+      "fr": "Comment ajuster (rand() % 6) pour obtenir un nombre entre 1 et 6 inclus ?"
     },
-    options: [
-      { text: { en: "A complete copy of the object is created on the stack (copy constructor runs)", fr: "Une copie intégrale de l'objet est créée sur la pile (constructeur de copie)" }, correct: true },
-      { text: { en: "Only a pointer is passed", fr: "Seul un pointeur est passé" }, correct: false },
-      { text: { en: "The original object is moved", fr: "L'objet original est déplacé" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "(rand() % 6) + 1",
+          "fr": "(rand() % 6) + 1"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "rand() % 7",
+          "fr": "rand() % 7"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "rand(1, 6)",
+          "fr": "rand(1, 6)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Pass by value always duplicates the object, incurring memory and CPU overhead.",
-      fr: "Le passage par valeur duplique toujours l'objet, consommant mémoire et cycles processeur."
+    "explanation": {
+      "en": "rand() % 6 produces 0, 1, 2, 3, 4, or 5. Adding 1 shifts the range to 1 through 6.",
+      "fr": "rand() % 6 donne un résultat de 0 à 5. Ajouter 1 décale la plage de 1 à 6."
     }
   },
   {
-    id: 25,
-    subject: "Memory",
-    question: {
-      en: "What happens to a raw C-style array 'int arr[10]' when passed to a function 'void f(int a[])'?",
-      fr: "Qu'arrive-t-il à un tableau brut 'int arr[10]' passé à une fonction 'void f(int a[])' ?"
+    "id": 25,
+    "subject": "Loops",
+    "question": {
+      "en": "In a number guessing game, which condition terminates the guessing loop?",
+      "fr": "Dans un jeu de devinette, quelle condition met fin à la boucle de jeu ?"
     },
-    options: [
-      { text: { en: "It decays to a pointer to its first element (int*), losing its size information", fr: "Il déchoit en pointeur vers son premier élément (int*), perdant sa taille" }, correct: true },
-      { text: { en: "The full array is copied onto the stack", fr: "Le tableau entier est copié sur la pile" }, correct: false },
-      { text: { en: "The compiler rejects it", fr: "Le compilateur refuse la syntaxe" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "When the player's guess equals the secret number",
+          "fr": "Lorsque la proposition du joueur égale le nombre secret"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "When guess is greater than 100",
+          "fr": "Quand la proposition dépasse 100"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "After exactly 3 tries automatically",
+          "fr": "Après exactement 3 essais automatiquement"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Array decay converts the array into a pointer to element 0; sizeof() no longer gives array size.",
-      fr: "Le decay de tableau transforme le tableau en simple pointeur (int*) ; sizeof() ne donne plus la taille totale."
+    "explanation": {
+      "en": "The game loop terminates with a win when the player guesses correctly (guess == secret).",
+      "fr": "La boucle de jeu se termine par une victoire lorsque le joueur devine le nombre exact."
     }
   },
   {
-    id: 26,
-    subject: "Memory",
-    question: {
-      en: "What constitutes a Memory Leak in C++?",
-      fr: "Qu'est-ce qui caractérise une fuite de mémoire (Memory Leak) en C++ ?"
+    "id": 26,
+    "subject": "Functions",
+    "question": {
+      "en": "What does a function return type of 'void' indicate?",
+      "fr": "Que signifie un type de retour 'void' pour une fonction ?"
     },
-    options: [
-      { text: { en: "Heap memory was allocated with new/malloc but never freed, becoming unreachable", fr: "De la mémoire tas allouée avec new/malloc n'a jamais été libérée et devient inaccessible" }, correct: true },
-      { text: { en: "Accessing an array past its boundaries", fr: "Accéder à un tableau au-delà de ses limites" }, correct: false },
-      { text: { en: "Stack overflow due to infinite recursion", fr: "Dépassement de pile par récursion infinie" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The function does not return any value to the caller",
+          "fr": "La fonction ne renvoie aucune valeur au point d'appel"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The function returns an integer 0",
+          "fr": "La fonction renvoie l'entier 0"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The function accepts zero parameters",
+          "fr": "La fonction n'accepte aucun paramètre"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Unreleased heap memory remains occupied until the OS terminates the process.",
-      fr: "La mémoire tas non libérée reste occupée jusqu'à la fermeture du processus par l'OS."
+    "explanation": {
+      "en": "void means the function performs an action (like printing or modifying state) without returning data.",
+      "fr": "void indique que la fonction effectue une action sans renvoyer de données."
     }
   },
   {
-    id: 27,
-    subject: "Memory",
-    question: {
-      en: "If you allocate an array with 'int* p = new int[50];', how MUST you release it?",
-      fr: "Si vous allouez un tableau avec 'int* p = new int[50];', comment DEVEZ-VOUS le libérer ?"
+    "id": 27,
+    "subject": "Functions",
+    "question": {
+      "en": "What happens to remaining code inside a function after a 'return' statement is executed?",
+      "fr": "Qu'arrive-t-il au code situé après une instruction 'return' dans une fonction ?"
     },
-    options: [
-      { text: { en: "delete[] p;", fr: "delete[] p;" }, correct: true },
-      { text: { en: "delete p;", fr: "delete p;" }, correct: false },
-      { text: { en: "free(p);", fr: "free(p);" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It is skipped; the function immediately exits",
+          "fr": "Il est ignoré ; la fonction se termine immédiatement"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It executes in the background",
+          "fr": "Il s'exécute en tâche de fond"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It causes a compiler warning",
+          "fr": "Il génère un avertissement de compilation"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Using 'delete' instead of 'delete[]' on an array causes undefined behavior and destructors won't run.",
-      fr: "Utiliser 'delete' au lieu de 'delete[]' sur un tableau engendre un comportement indéterminé."
+    "explanation": {
+      "en": "Executing 'return' hands back control to the caller immediately, ignoring any remaining lines.",
+      "fr": "L'instruction 'return' rend immédiatement la main à l'appelant en ignorant les lignes suivantes."
     }
   },
   {
-    id: 28,
-    subject: "Memory",
-    question: {
-      en: "How does std::shared_ptr manage the lifetime of its managed resource?",
-      fr: "Comment std::shared_ptr gère-t-il la durée de vie de la ressource allouée ?"
+    "id": 28,
+    "subject": "Functions",
+    "question": {
+      "en": "Can two functions in C++ share the same name if they only differ by return type?",
+      "fr": "Deux fonctions peuvent-elles porter le même nom si seul leur type de retour est différent ?"
     },
-    options: [
-      { text: { en: "Via a thread-safe atomic reference counter; deletes resource when count reaches 0", fr: "Via un compteur de références atomique ; détruit la ressource quand le compteur tombe à 0" }, correct: true },
-      { text: { en: "By polling every 100 milliseconds", fr: "En vérifiant toutes les 100 millisecondes" }, correct: false },
-      { text: { en: "Using a global garbage collector", fr: "Grâce à un garbage collector global" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "No, C++ overload resolution requires different parameter types or counts",
+          "fr": "Non, la surcharge en C++ exige des types ou un nombre de paramètres différents"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Yes, return type overloading is fully supported",
+          "fr": "Oui, la surcharge par type de retour est permise"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Only if declared static",
+          "fr": "Seulement si elles sont déclarées static"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::shared_ptr stores a control block with an atomic reference count.",
-      fr: "std::shared_ptr dispose d'un bloc de contrôle avec un compteur de références atomique."
+    "explanation": {
+      "en": "Function overloading in C++ requires distinct parameter signatures; return type alone is not enough.",
+      "fr": "La surcharge exige des paramètres différents ; le type de retour seul ne suffit pas."
     }
   },
   {
-    id: 29,
-    subject: "Memory",
-    question: {
-      en: "Why is a circular reference between two std::shared_ptr instances dangerous?",
-      fr: "Pourquoi une référence circulaire entre deux std::shared_ptr est-elle dangereuse ?"
+    "id": 29,
+    "subject": "Functions",
+    "question": {
+      "en": "How can you access a global variable 'x' if a local variable also named 'x' is in scope?",
+      "fr": "Comment accéder à une variable globale 'x' masquée par une variable locale portant le même nom ?"
     },
-    options: [
-      { text: { en: "The reference count never drops to 0, permanently leaking both objects", fr: "Le compteur de références ne tombe jamais à 0, causant une fuite mémoire permanente" }, correct: true },
-      { text: { en: "It causes an infinite compilation loop", fr: "Cela cause une boucle infinie à la compilation" }, correct: false },
-      { text: { en: "It immediately terminates the program", fr: "Cela arrête immédiatement le programme" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Using the unary scope resolution operator: ::x",
+          "fr": "En utilisant l'opérateur unaire de portée : ::x"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Using global.x",
+          "fr": "En écrivant global.x"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It is impossible; the global variable is deleted",
+          "fr": "C'est impossible ; la variable globale est détruite"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Cyclic ownership prevents either shared_ptr from ever reaching a count of zero. Use weak_ptr to break the cycle.",
-      fr: "Les cycles de possession empêchent le compteur d'atteindre zéro. On utilise weak_ptr pour briser le cycle."
+    "explanation": {
+      "en": "Prefixing with :: (unary scope resolution) accesses the global variable in global scope.",
+      "fr": "Le préfixe :: (résolution de portée globale unaire) permet d'accéder à la variable globale."
     }
   },
   {
-    id: 30,
-    subject: "Modern C++",
-    question: {
-      en: "What does 'auto& x = obj;' deduce for x?",
-      fr: "Que déduit 'auto& x = obj;' pour x ?"
+    "id": 30,
+    "subject": "Functions",
+    "question": {
+      "en": "In a banking simulation, why should deposit() and withdraw() check that amounts are positive (> 0)?",
+      "fr": "Dans un programme bancaire, pourquoi vérifier que les montants de dépôt/retrait sont strictement positifs ?"
     },
-    options: [
-      { text: { en: "A non-const reference to obj", fr: "Une référence non constante vers obj" }, correct: true },
-      { text: { en: "A copy of obj", fr: "Une copie de obj" }, correct: false },
-      { text: { en: "A pointer to obj", fr: "Un pointeur vers obj" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To prevent negative transaction fraud or unintended state corruption",
+          "fr": "Pour empêcher les transactions négatives ou la corruption du solde"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Because C++ does not support negative doubles",
+          "fr": "Car C++ ne supporte pas les doubles négatifs"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To speed up floating point calculations",
+          "fr": "Pour accélérer les calculs flottants"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Adding & to auto ensures reference semantics instead of creating a copy.",
-      fr: "L'ajout de & à auto garantit une sémantique de référence sans effectuer de copie."
+    "explanation": {
+      "en": "Input validation is essential business logic in robust software.",
+      "fr": "La validation des entrées utilisateur est une règle métier fondamentale."
     }
   },
   {
-    id: 31,
-    subject: "Modern C++",
-    question: {
-      en: "Given 'std::map<int, std::string> m;', how do structured bindings unpack an element?",
-      fr: "Soit 'std::map<int, std::string> m;', comment les liaisons structurées déballent-elles un élément ?"
+    "id": 31,
+    "subject": "Functions",
+    "question": {
+      "en": "In Rock-Paper-Scissors, what operator combination evaluates whether player beats computer?",
+      "fr": "Au chifoumi, quelle combinaison logique évalue si le joueur bat l'ordinateur ?"
     },
-    options: [
-      { text: { en: "for (const auto& [id, name] : m)", fr: "for (const auto& [id, name] : m)" }, correct: true },
-      { text: { en: "for (auto id, name in m)", fr: "for (auto id, name in m)" }, correct: false },
-      { text: { en: "for (unpack(id, name) : m)", fr: "for (unpack(id, name) : m)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')",
+          "fr": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "p > c",
+          "fr": "p > c"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "p == c",
+          "fr": "p == c"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "C++17 structured bindings use bracket notation [first, second] for pair/tuple decomposition.",
-      fr: "Les structured bindings C++17 utilisent les crochets [clé, valeur] pour déstructurer paires et tuples."
+    "explanation": {
+      "en": "Grouping each winning pair with && and combining all winning scenarios with ||.",
+      "fr": "En regroupant chaque paire gagnante avec && et en combinant les cas avec ||."
     }
   },
   {
-    id: 32,
-    subject: "Modern C++",
-    question: {
-      en: "What method provides a default fallback if a std::optional has no value?",
-      fr: "Quelle méthode fournit une valeur de repli si un std::optional est vide ?"
+    "id": 32,
+    "subject": "Arrays",
+    "question": {
+      "en": "What is the index of the first element in a C++ array?",
+      "fr": "Quel est l'index du premier élément d'un tableau en C++ ?"
     },
-    options: [
-      { text: { en: "opt.value_or(fallback)", fr: "opt.value_or(repli)" }, correct: true },
-      { text: { en: "opt.get_default(fallback)", fr: "opt.get_default(repli)" }, correct: false },
-      { text: { en: "opt.fallback(value)", fr: "opt.fallback(value)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "0",
+          "fr": "0"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "1",
+          "fr": "1"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "-1",
+          "fr": "-1"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "value_or() returns the contained value if present, or the passed fallback value if empty.",
-      fr: "value_or() renvoie la valeur contenue si présente, ou la valeur de secours passée en paramètre."
+    "explanation": {
+      "en": "C++ arrays are strictly 0-indexed; array[0] refers to the first element.",
+      "fr": "Les tableaux C++ commencent strictement à l'indice 0 ; array[0] est le premier élément."
     }
   },
   {
-    id: 33,
-    subject: "Modern C++",
-    question: {
-      en: "How does std::variant differ from an old C-style union?",
-      fr: "Comment std::variant se distingue-t-il d'une union à la C classique ?"
+    "id": 33,
+    "subject": "Arrays",
+    "question": {
+      "en": "How do you calculate the number of elements in a raw array 'int arr[10]' using sizeof?",
+      "fr": "Comment calculer le nombre d'éléments d'un tableau 'int arr[10]' avec sizeof ?"
     },
-    options: [
-      { text: { en: "std::variant is type-safe and automatically invokes proper destructors", fr: "std::variant est typé, sécurisé et invoque automatiquement les bons destructeurs" }, correct: true },
-      { text: { en: "std::variant can only store integers", fr: "std::variant ne peut contenir que des entiers" }, correct: false },
-      { text: { en: "std::variant has no size overhead", fr: "std::variant n'a aucun surcoût de mémoire" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "sizeof(arr) / sizeof(arr[0])",
+          "fr": "sizeof(arr) / sizeof(arr[0])"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "sizeof(arr)",
+          "fr": "sizeof(arr)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "arr.length()",
+          "fr": "arr.length()"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Unlike unions which can cause undefined memory corruption, std::variant tracks active type index.",
-      fr: "Contrairement aux unions qui corrompent facilement la mémoire, std::variant mémorise le type actif."
+    "explanation": {
+      "en": "Total byte size divided by the byte size of a single element yields the element count.",
+      "fr": "La taille totale en octets divisée par la taille d'un seul élément donne le nombre d'éléments."
     }
   },
   {
-    id: 34,
-    subject: "Modern C++",
-    question: {
-      en: "What does the range-based for loop 'for (const auto& item : vec)' do?",
-      fr: "Que fait la boucle for basée sur les plages 'for (const auto& item : vec)' ?"
+    "id": 34,
+    "subject": "Arrays",
+    "question": {
+      "en": "What condition should an index loop use to iterate through an array of 'size' elements?",
+      "fr": "Quelle condition de boucle for indexée doit-on utiliser pour un tableau de 'size' éléments ?"
     },
-    options: [
-      { text: { en: "Iterates over every element of vec without copying, in read-only mode", fr: "Parcourt chaque élément de vec sans copie, en mode lecture seule" }, correct: true },
-      { text: { en: "Duplicates the vector before iterating", fr: "Duplique le vecteur avant de boucler" }, correct: false },
-      { text: { en: "Clears vec upon completion", fr: "Vide vec une fois terminée" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "i < size",
+          "fr": "i < size"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "i <= size",
+          "fr": "i <= size"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "i == size",
+          "fr": "i == size"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "const auto& avoids copying elements and prevents accidental modification during iteration.",
-      fr: "const auto& évite toute copie des éléments et empêche leur modification involontaire."
+    "explanation": {
+      "en": "Valid indices are 0 through size - 1. Using i <= size accesses invalid memory beyond bounds.",
+      "fr": "Les index valides vont de 0 à size - 1. Utiliser i <= size lit en dehors du tableau."
     }
   },
   {
-    id: 35,
-    subject: "Modern C++",
-    question: {
-      en: "In C++20, what does 'template<std::integral T>' constrain T to be?",
-      fr: "En C++20, à quoi 'template<std::integral T>' contraint-il le type T ?"
+    "id": 35,
+    "subject": "Arrays",
+    "question": {
+      "en": "Why should you prefer 'const auto& item' in a range-based for loop over 'auto item' for large objects?",
+      "fr": "Pourquoi préférer 'const auto& item' dans une boucle for-each pour de gros objets ?"
     },
-    options: [
-      { text: { en: "Integer types only (int, long, short, char, etc.)", fr: "Types entiers uniquement (int, long, short, char, etc.)" }, correct: true },
-      { text: { en: "Any floating point type", fr: "N'importe quel type à virgule flottante" }, correct: false },
-      { text: { en: "Only pointers", fr: "Uniquement des pointeurs" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It avoids expensive copies while guaranteeing read-only safety",
+          "fr": "Elle évite les copies coûteuses tout en garantissant la lecture seule"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It allows modifying the original elements",
+          "fr": "Elle permet de modifier les originaux"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Range-based for requires references to compile",
+          "fr": "La boucle for-each l'exige pour compiler"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::integral is a standard concept satisfying types where std::is_integral_v<T> is true.",
-      fr: "std::integral est un concept standard satisfaisant les types où std::is_integral_v<T> est vrai."
+    "explanation": {
+      "en": "const auto& binds a read-only reference directly to the container element without copying.",
+      "fr": "const auto& lie une référence en lecture seule à chaque élément sans aucune copie."
     }
   },
   {
-    id: 36,
-    subject: "OOP",
-    question: {
-      en: "If a class manages a raw resource pointer, what is 'The Rule of Zero'?",
-      fr: "Si une classe gère des ressources, qu'est-ce que la 'Règle de Zéro' ?"
+    "id": 36,
+    "subject": "Arrays",
+    "question": {
+      "en": "What happens when you pass a raw array to a function parameter (e.g. void fn(int arr[]))?",
+      "fr": "Que se produit-il lorsqu'on passe un tableau brut en paramètre de fonction ?"
     },
-    back: {
-      en: "Use smart pointers and STL containers so you write zero custom destructors or copy/move operations.",
-      fr: "Utiliser des smart pointers et conteneurs STL pour n'écrire aucun destructeur ou constructeur manuel."
-    },
-    options: [
-      { text: { en: "Design classes so they need no custom destructors by using smart pointers and STL containers", fr: "Concevoir ses classes sans destructeur manuel en utilisant des smart pointers et conteneurs STL" }, correct: true },
-      { text: { en: "Classes should have zero member variables", fr: "Les classes ne doivent avoir aucune variable membre" }, correct: false },
-      { text: { en: "Initialize all numeric variables to 0", fr: "Initialiser toutes les variables à 0" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The array decays into a pointer (int*), losing its size information",
+          "fr": "Le tableau dégénère en pointeur (int*) et perd sa taille"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The entire array is cloned on the stack",
+          "fr": "Le tableau entier est cloné sur la pile"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The compiler throws an error",
+          "fr": "Le compilateur signale une erreur"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The Rule of Zero advises relying on modern RAII member types to eliminate manual memory management.",
-      fr: "La règle de zéro recommande de s'appuyer sur des membres RAII pour éliminer toute gestion manuelle."
+    "explanation": {
+      "en": "Array decay converts the array to a pointer to its first element; always pass size separately.",
+      "fr": "La dégénérescence convertit le tableau en pointeur vers le 1er élément ; la taille doit être passée."
     }
   },
   {
-    id: 37,
-    subject: "OOP",
-    question: {
-      en: "Why should single-argument constructors generally be marked 'explicit'?",
-      fr: "Pourquoi les constructeurs à un paramètre doivent-ils généralement être 'explicit' ?"
+    "id": 37,
+    "subject": "Arrays",
+    "question": {
+      "en": "What is the average time complexity of Linear Search on an unsorted array of N elements?",
+      "fr": "Quelle est la complexité temporelle moyenne d'une recherche linéaire sur un tableau de N éléments ?"
     },
-    options: [
-      { text: { en: "To prevent accidental implicit conversions from another type", fr: "Pour éviter les conversions de type implicites accidentelles" }, correct: true },
-      { text: { en: "To make compilation faster", fr: "Pour accélérer la compilation" }, correct: false },
-      { text: { en: "To allow polymorphic inheritance", fr: "Pour autoriser l'héritage polymorphique" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "O(N)",
+          "fr": "O(N)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "O(1)",
+          "fr": "O(1)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "O(log N)",
+          "fr": "O(log N)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Without 'explicit', a constructor MyClass(int) allows silent assignment MyClass obj = 5;",
-      fr: "Sans 'explicit', un constructeur MyClass(int) autorise silencieusement MyClass obj = 5;"
+    "explanation": {
+      "en": "Linear search checks each element one by one, requiring up to N comparisons in the worst case.",
+      "fr": "La recherche linéaire inspecte les éléments un par un, nécessitant jusqu'à N étapes au pire."
     }
   },
   {
-    id: 38,
-    subject: "OOP",
-    question: {
-      en: "What makes a C++ class an Abstract Base Class (ABC)?",
-      fr: "Qu'est-ce qui fait d'une classe C++ une classe de base abstraite ?"
+    "id": 38,
+    "subject": "Arrays",
+    "question": {
+      "en": "How does Bubble Sort arrange elements into ascending order?",
+      "fr": "Comment le tri à bulles (Bubble Sort) ordonne-t-il les éléments en ordre croissant ?"
     },
-    options: [
-      { text: { en: "Having at least one Pure Virtual Function ('virtual void f() = 0;')", fr: "Avoir au moins une fonction virtuelle pure ('virtual void f() = 0;')" }, correct: true },
-      { text: { en: "Having all private member variables", fr: "Avoir tous ses membres en privé" }, correct: false },
-      { text: { en: "Having no constructor", fr: "Ne posséder aucun constructeur" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Repeatedly compares adjacent pairs and swaps them if out of order",
+          "fr": "Compare les paires adjacentes et les échange si elles sont dans le désordre"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Divides the array into halves recursively",
+          "fr": "Divise récursivement le tableau en deux"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Inserts elements into a binary search tree",
+          "fr": "Insère les éléments dans un arbre binaire"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "A pure virtual function cannot be called directly; derived classes must implement it before instantiation.",
-      fr: "Une fonction virtuelle pure empêche l'instanciation directe tant que la classe dérivée ne l'a pas implémentée."
+    "explanation": {
+      "en": "Bubble Sort bubbles the largest remaining value to the end of the array each pass.",
+      "fr": "Le tri à bulles fait remonter le plus grand élément restant à la fin du tableau à chaque tour."
     }
   },
   {
-    id: 39,
-    subject: "OOP",
-    question: {
-      en: "How does C++ solve the diamond multiple inheritance problem?",
-      fr: "Comment C++ résout-il le problème du diamant en héritage multiple ?"
+    "id": 39,
+    "subject": "Arrays",
+    "question": {
+      "en": "What header is required to use the std::fill algorithm in C++?",
+      "fr": "Quel en-tête est requis pour utiliser l'algorithme std::fill en C++ ?"
     },
-    options: [
-      { text: { en: "Using Virtual Inheritance ('class B : virtual public A')", fr: "En utilisant l'héritage virtuel ('class B : virtual public A')" }, correct: true },
-      { text: { en: "By disallowing multiple inheritance altogether", fr: "En interdisant totalement l'héritage multiple" }, correct: false },
-      { text: { en: "By renaming duplicate methods", fr: "En renommant les méthodes en double" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "<algorithm>",
+          "fr": "<algorithm>"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "<vector>",
+          "fr": "<vector>"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "<array>",
+          "fr": "<array>"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Virtual inheritance ensures only a single shared instance of the base class subobject exists.",
-      fr: "L'héritage virtuel garantit qu'une seule instance partagée de la classe de base existe."
+    "explanation": {
+      "en": "std::fill is defined inside <algorithm>.",
+      "fr": "std::fill est défini dans <algorithm>."
     }
   },
   {
-    id: 40,
-    subject: "STL",
-    question: {
-      en: "Why is std::vector typically much faster than std::list even for arbitrary insertions?",
-      fr: "Pourquoi std::vector est-il généralement bien plus rapide que std::list même pour des insertions ?"
+    "id": 40,
+    "subject": "Arrays",
+    "question": {
+      "en": "When populating an array with user input, why must you track current count against maximum capacity?",
+      "fr": "Lors du remplissage d'un tableau par saisie utilisateur, pourquoi surveiller la capacité maximale ?"
     },
-    options: [
-      { text: { en: "Contiguous memory layout maximizes CPU hardware cache hits (cache locality)", fr: "La mémoire contiguë maximise les accès en cache processeur (localité de cache)" }, correct: true },
-      { text: { en: "std::vector is compiled as assembly directly", fr: "std::vector est directement compilé en assembleur" }, correct: false },
-      { text: { en: "std::list has a 10MB memory overhead", fr: "std::list a un surcoût fixe de 10 Mo" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To prevent writing past the array bounds and causing buffer overflows",
+          "fr": "Pour éviter d'écrire hors limites et provoquer un débordement de tampon"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "C++ arrays automatically double when full",
+          "fr": "Les tableaux C++ doublent automatiquement quand ils sont pleins"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The compiler requires it",
+          "fr": "Le compilateur l'exige"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Contiguous buffers mean CPU prefetching brings adjacent elements into L1/L2 cache instantly.",
-      fr: "Les buffers contigus permettent au processeur de charger les éléments adjacents instantanément en cache L1/L2."
+    "explanation": {
+      "en": "Fixed-size arrays cannot expand; writing beyond bounds leads to memory corruption.",
+      "fr": "Les tableaux bruts ont une taille fixe ; dépasser leur capacité corrompt la mémoire."
     }
   },
   {
-    id: 41,
-    subject: "STL",
-    question: {
-      en: "What is the return type of std::find(vec.begin(), vec.end(), value)?",
-      fr: "Quel est le type de retour de std::find(vec.begin(), vec.end(), valeur) ?"
+    "id": 41,
+    "subject": "Arrays",
+    "question": {
+      "en": "How do you access the element in row 1, column 2 of a 2D array 'grid'?",
+      "fr": "Comment accéder à l'élément de la ligne 1, colonne 2 d'une matrice 2D 'grid' ?"
     },
-    options: [
-      { text: { en: "An iterator pointing to the element, or vec.end() if not found", fr: "Un itérateur pointant sur l'élément, ou vec.end() si non trouvé" }, correct: true },
-      { text: { en: "A boolean true/false", fr: "Un booléen vrai/faux" }, correct: false },
-      { text: { en: "The integer index of the element", fr: "L'indice entier de l'élément" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "grid[1][2]",
+          "fr": "grid[1][2]"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "grid[1, 2]",
+          "fr": "grid[1, 2]"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "grid.at(1, 2)",
+          "fr": "grid.at(1, 2)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Standard algorithms return iterators; checking 'it != vec.end()' confirms if the element was found.",
-      fr: "Les algorithmes standards renvoient des itérateurs ; tester 'it != vec.end()' confirme la présence."
+    "explanation": {
+      "en": "2D arrays use chained brackets: array[rowIndex][columnIndex].",
+      "fr": "Les tableaux 2D utilisent des crochets successifs : tab[indexLigne][indexColonne]."
     }
   },
   {
-    id: 42,
-    subject: "STL",
-    question: {
-      en: "What predicate algorithm counts elements satisfying a custom lambda condition?",
-      fr: "Quel algorithme compte les éléments vérifiant une condition lambda ?"
+    "id": 42,
+    "subject": "Arrays",
+    "question": {
+      "en": "In the console Quiz Game program, how are questions, options, and answer keys synchronized?",
+      "fr": "Dans le jeu de quiz en console, comment synchroniser questions, options et réponses ?"
     },
-    options: [
-      { text: { en: "std::count_if", fr: "std::count_if" }, correct: true },
-      { text: { en: "std::filter_count", fr: "std::filter_count" }, correct: false },
-      { text: { en: "std::sum_where", fr: "std::sum_where" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Using a shared loop index (i) across all parallel arrays",
+          "fr": "En utilisant le même index de boucle (i) sur tous les tableaux parallèles"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "By merging them into a single string",
+          "fr": "En les fusionnant en une chaîne unique"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Through random matching",
+          "fr": "Par correspondance aléatoire"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::count_if(begin, end, unaryPredicate) counts elements where predicate returns true.",
-      fr: "std::count_if(begin, end, prédicat) dénombre les éléments pour lesquels le prédicat renvoie vrai."
+    "explanation": {
+      "en": "Index i references question[i], options[i], and answerKey[i] simultaneously.",
+      "fr": "L'index i permet d'accéder en même temps à question[i], options[i] et answerKey[i]."
     }
   },
   {
-    id: 43,
-    subject: "Pro Dev",
-    question: {
-      en: "What are Microsoft vcpkg and Conan in the modern C++ ecosystem?",
-      fr: "Que sont Microsoft vcpkg et Conan dans l'écosystème C++ moderne ?"
+    "id": 43,
+    "subject": "Memory",
+    "question": {
+      "en": "What does the address-of operator (&x) return?",
+      "fr": "Que renvoie l'opérateur d'adresse (&x) ?"
     },
-    options: [
-      { text: { en: "Cross-platform package managers for installing and integrating C++ libraries", fr: "Des gestionnaires de paquets multiplateformes pour installer des bibliothèques C++" }, correct: true },
-      { text: { en: "Alternative C++ compilers", fr: "Des compilateurs C++ alternatifs" }, correct: false },
-      { text: { en: "IDE text editors", fr: "Des éditeurs de texte" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The hexadecimal memory address where variable x is located in RAM",
+          "fr": "L'adresse mémoire hexadécimale où se trouve la variable x en RAM"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The value stored inside x",
+          "fr": "La valeur stockée dans x"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "A duplicate copy of x",
+          "fr": "Une copie identique de x"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "vcpkg and Conan automate downloading, building, and linking third-party C++ libraries with CMake.",
-      fr: "vcpkg et Conan automatisent le téléchargement, la compilation et l'intégration des dépendances C++ avec CMake."
+    "explanation": {
+      "en": "&x gives the memory address location where the variable resides in memory.",
+      "fr": "&x donne l'emplacement physique en mémoire où réside la variable."
     }
   },
   {
-    id: 44,
-    subject: "Pro Dev",
-    question: {
-      en: "What do the flags '-Wall -Wextra -Wpedantic' do when compiling with GCC/Clang?",
-      fr: "Que font les options '-Wall -Wextra -Wpedantic' lors de la compilation avec GCC/Clang ?"
+    "id": 44,
+    "subject": "Memory",
+    "question": {
+      "en": "Why does passing by reference (void swap(int& a, int& b)) allow modifying the original variables?",
+      "fr": "Pourquoi le passage par référence permet-il de modifier les variables originales ?"
     },
-    options: [
-      { text: { en: "Enable strict compiler diagnostic warnings to catch dangerous code bugs early", fr: "Activent les avertissements stricts du compilateur pour détecter les bugs au plus tôt" }, correct: true },
-      { text: { en: "Disable all warnings", fr: "Désactivent tous les avertissements" }, correct: false },
-      { text: { en: "Produce a WebAssembly bundle", fr: "Produisent un fichier WebAssembly" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "References alias the caller's actual memory addresses instead of creating copies",
+          "fr": "Les références sont des alias directs de la mémoire originale sans copie"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "References create global variables",
+          "fr": "Les références créent des variables globales"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Because reference parameters run on a different thread",
+          "fr": "Car elles tournent sur un thread séparé"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Enabling comprehensive warnings is the first line of defense in professional C++ development.",
-      fr: "Activer un niveau d'avertissement maximal est la règle d'or en développement C++ professionnel."
+    "explanation": {
+      "en": "A reference is an immutable alias; any read or write operates directly on the caller's variable.",
+      "fr": "Une référence est un alias direct ; toute lecture ou écriture modifie la variable source."
     }
   },
   {
-    id: 45,
-    subject: "Pro Dev",
-    question: {
-      en: "When should you use std::atomic<T> instead of a std::mutex?",
-      fr: "Quand faut-il utiliser std::atomic<T> plutôt qu'un std::mutex ?"
+    "id": 45,
+    "subject": "Memory",
+    "question": {
+      "en": "What is the main benefit of declaring a parameter as 'const std::string& str'?",
+      "fr": "Quel est le bénéfice majeur de déclarer un paramètre comme 'const std::string& str' ?"
     },
-    options: [
-      { text: { en: "For simple fundamental types (ints, flags, pointers) requiring lock-free atomic operations", fr: "Pour des types simples (entiers, booléens, pointeurs) nécessitant des opérations atomiques sans verrou" }, correct: true },
-      { text: { en: "For protecting complex multi-variable transactions", fr: "Pour protéger des transactions complexes sur plusieurs variables" }, correct: false },
-      { text: { en: "When memory usage does not matter", fr: "Quand la consommation mémoire n'a pas d'importance" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Zero-copy performance combined with read-only safety",
+          "fr": "Performance sans copie combinée à la sécurité de la lecture seule"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Allows the function to alter the caller's string",
+          "fr": "Permet de modifier la chaîne appelante"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Converts strings to integer hashes automatically",
+          "fr": "Convertit automatiquement en hash entier"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::atomic provides hardware-level lock-free instructions without the overhead of thread context switches.",
-      fr: "std::atomic exploite les instructions matérielles sans verrou (lock-free) évitant les changements de contexte."
+    "explanation": {
+      "en": "const Type& prevents deep copying large objects while strictly preventing accidental modifications.",
+      "fr": "const Type& évite les copies coûteuses tout en interdisant toute modification accidentelle."
     }
   },
   {
-    id: 46,
-    subject: "Concurrency",
-    question: {
-      en: "What critical problem does std::jthread (C++20) resolve compared to std::thread?",
-      fr: "Quel problème critique std::jthread (C++20) résout-il par rapport à std::thread ?"
+    "id": 46,
+    "subject": "Memory",
+    "question": {
+      "en": "In the Credit Card Validator, how do you convert an ASCII digit character '7' to numeric int 7?",
+      "fr": "Dans le validateur de carte bancaire, comment convertir le caractère '7' en entier 7 ?"
     },
-    options: [
-      { text: { en: "It automatically joins on destruction instead of calling std::terminate()", fr: "Il s'auto-joint à sa destruction au lieu d'appeler std::terminate()" }, correct: true },
-      { text: { en: "It eliminates all CPU thread context switches", fr: "Il élimine tout changement de contexte processeur" }, correct: false },
-      { text: { en: "It makes all shared variables thread-safe without locks", fr: "Il rend toutes les variables thread-safe sans verrous" }, correct: false },
-      { text: { en: "It allows threads to run without an operating system", fr: "Il permet aux threads de tourner sans système d'exploitation" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "charDigit - '0'",
+          "fr": "charDigit - '0'"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "static_cast<int>(charDigit)",
+          "fr": "static_cast<int>(charDigit)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "charDigit * 10",
+          "fr": "charDigit * 10"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::thread crashes the entire process via std::terminate() if destroyed while joinable; std::jthread joins automatically.",
-      fr: "std::thread crashe le processus avec std::terminate() s'il est détruit sans join() ; std::jthread s'auto-joint proprement."
+    "explanation": {
+      "en": "Subtracting '0' (ASCII 48) gives the exact numeric offset: '7' - '0' = 55 - 48 = 7.",
+      "fr": "Soustraire '0' (ASCII 48) calcule la valeur numérique exacte : '7' - '0' = 55 - 48 = 7."
     }
   },
   {
-    id: 47,
-    subject: "Concurrency",
-    question: {
-      en: "How does std::scoped_lock (C++17) prevent deadlocks when locking multiple mutexes?",
-      fr: "Comment std::scoped_lock (C++17) prévient-il les interblocages lors du verrouillage de plusieurs mutex ?"
+    "id": 47,
+    "subject": "Memory",
+    "question": {
+      "en": "What is the dereference operator (*) used for with a pointer?",
+      "fr": "À quoi sert l'opérateur de déréférencement (*) appliqué à un pointeur ?"
     },
-    options: [
-      { text: { en: "It uses a deadlock-avoidance algorithm to lock all mutexes in a single atomic-like step", fr: "Il utilise un algorithme anti-deadlock pour verrouiller tous les mutex sans ordre conflictuel" }, correct: true },
-      { text: { en: "It converts all mutexes into spinlocks", fr: "Il convertit tous les mutex en spinlocks" }, correct: false },
-      { text: { en: "It runs each thread on a separate CPU core", fr: "Il force chaque thread sur un cœur CPU différent" }, correct: false },
-      { text: { en: "It disables hardware interrupts", fr: "Il désactive les interruptions matérielles" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To read or write the actual value stored at the address pointed to",
+          "fr": "À lire ou modifier la valeur stockée à l'adresse pointée"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To obtain the pointer's own address",
+          "fr": "À obtenir l'adresse du pointeur lui-même"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To multiply the pointer by 2",
+          "fr": "À multiplier le pointeur par 2"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::scoped_lock acquires all passed mutexes simultaneously without deadlock hazard, replacing std::lock.",
-      fr: "std::scoped_lock acquiert tous les mutex fournis simultanément avec un algorithme évitant les interblocages."
+    "explanation": {
+      "en": "*ptr dereferences the pointer, allowing direct access to the pointed-to object.",
+      "fr": "*ptr déréférence le pointeur et donne un accès direct à la valeur ciblée."
     }
   },
   {
-    id: 48,
-    subject: "Concurrency",
-    question: {
-      en: "Why is a predicate loop (e.g. cv.wait(lock, []{ return ready; });) mandatory with std::condition_variable?",
-      fr: "Pourquoi un prédicat en boucle (ex. cv.wait(lock, []{ return ready; });) est-il obligatoire avec std::condition_variable ?"
+    "id": 48,
+    "subject": "Memory",
+    "question": {
+      "en": "Why should unassigned pointers always be initialized to 'nullptr' in modern C++?",
+      "fr": "Pourquoi un pointeur non assigné doit-il toujours être initialisé à 'nullptr' ?"
     },
-    options: [
-      { text: { en: "To protect against spurious wakeups where the OS unblocks a thread without a signal", fr: "Pour se prémunir des réveils spontanés (spurious wakeups) où l'OS réveille un thread sans signal" }, correct: true },
-      { text: { en: "To convert condition variables into semaphores", fr: "Pour convertir les variables de condition en sémaphores" }, correct: false },
-      { text: { en: "To avoid creating mutex locks", fr: "Pour éviter de créer des verrous mutex" }, correct: false },
-      { text: { en: "To speed up floating point arithmetic", fr: "Pour accélérer les calculs à virgule flottante" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To prevent wild / dangling pointers containing random garbage memory addresses",
+          "fr": "Pour éviter les pointeurs fous contenant des adresses mémoires aléatoires"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "nullptr allocates 4 bytes on the heap",
+          "fr": "nullptr alloue 4 octets sur le tas"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Modern C++ does not allow declaring pointers without nullptr",
+          "fr": "C++ moderne interdit de déclarer un pointeur sans nullptr"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Operating systems can wake sleeping threads spuriously; the predicate ensures the condition actually holds before continuing.",
-      fr: "L'OS peut réveiller un thread de façon intempestive ; le prédicat garantit que la condition voulue est réellement vérifiée."
+    "explanation": {
+      "en": "Initializing to nullptr allows safe checking (if (ptr != nullptr)) before dereferencing.",
+      "fr": "Initialiser à nullptr permet de tester la validité (if (ptr != nullptr)) avant utilisation."
     }
   },
   {
-    id: 49,
-    subject: "Concurrency",
-    question: {
-      en: "What happens if an asynchronous task executed via std::async throws an unhandled exception?",
-      fr: "Que se passe-t-il si une tâche lancée avec std::async lève une exception non interceptée ?"
+    "id": 49,
+    "subject": "Memory",
+    "question": {
+      "en": "How many winning line configurations exist on a standard 3x3 Tic-Tac-Toe grid?",
+      "fr": "Combien de configurations gagnantes existent sur une grille de Morpion 3x3 ?"
     },
-    options: [
-      { text: { en: "The exception is captured and re-thrown on the calling thread when future.get() is called", fr: "L'exception est capturée et relancée sur le thread appelant lors de l'appel à future.get()" }, correct: true },
-      { text: { en: "The entire application terminates immediately with SIGABRT", fr: "L'application plante immédiatement avec SIGABRT" }, correct: false },
-      { text: { en: "The exception is silently ignored and returns zero", fr: "L'exception est silencieusement ignorée et renvoie zéro" }, correct: false },
-      { text: { en: "The background thread restarts from main()", fr: "Le thread d'arrière-plan redémarre depuis main()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "8 (3 rows, 3 columns, 2 diagonals)",
+          "fr": "8 (3 lignes, 3 colonnes, 2 diagonales)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "6 (3 rows, 3 columns)",
+          "fr": "6 (3 lignes, 3 colonnes)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "9",
+          "fr": "9"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::future acts as an exception transport channel, faithfully re-throwing exceptions across thread boundaries upon .get().",
-      fr: "std::future transporte les exceptions entre threads et les relance fidèlement lors de l'appel à .get()."
+    "explanation": {
+      "en": "A 3x3 board has 3 horizontal rows, 3 vertical columns, and 2 diagonals = 8 winning combinations.",
+      "fr": "Un plateau 3x3 comporte 3 lignes, 3 colonnes et 2 diagonales, soit 8 combinaisons gagnantes."
     }
   },
   {
-    id: 50,
-    subject: "Concurrency",
-    question: {
-      en: "What is False Sharing in multithreaded systems and how do you prevent it?",
-      fr: "Qu'est-ce que le False Sharing en multithreading et comment l'éliminer ?"
+    "id": 50,
+    "subject": "Memory",
+    "question": {
+      "en": "What happens if you allocate heap memory with 'new' but forget to call 'delete'?",
+      "fr": "Que se passe-t-il si vous allouez de la mémoire avec 'new' sans jamais appeler 'delete' ?"
     },
-    options: [
-      { text: { en: "Different threads modifying variables on the same 64-byte cache line; prevent it with alignas(64)", fr: "Des threads modifiant des variables distinctes sur la même ligne de cache de 64 octets ; évité avec alignas(64)" }, correct: true },
-      { text: { en: "Multiple threads sharing a network socket; prevent it with TCP", fr: "Des threads partageant une socket réseau ; évité avec TCP" }, correct: false },
-      { text: { en: "A race condition on global variables; prevent it with volatile", fr: "Une condition de course sur variables globales ; évitée avec volatile" }, correct: false },
-      { text: { en: "Using new and delete on the same pointer; prevent it with smart pointers", fr: "Utiliser new et delete sur le même pointeur ; évité avec des pointeurs intelligents" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "A memory leak occurs; RAM remains consumed until program termination",
+          "fr": "Une fuite de mémoire survient ; la RAM reste occupée jusqu'à la fin du programme"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The memory is automatically deleted on function return",
+          "fr": "La mémoire est libérée automatiquement à la fin de la fonction"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The CPU triggers an immediate hardware reset",
+          "fr": "Le processeur redémarre la machine"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "When variables share a 64-byte CPU cache line, updates by one core invalidate other cores' caches. Aligning to 64 bytes prevents this.",
-      fr: "Si des variables partagent la même ligne de cache de 64 octets, une mise à jour invalide les caches des autres cœurs. alignas(64) isole chaque variable."
+    "explanation": {
+      "en": "Heap memory allocated with 'new' must be explicitly freed with 'delete' to prevent leaks.",
+      "fr": "La mémoire allouée avec 'new' doit être libérée manuellement avec 'delete' pour éviter les fuites."
     }
   },
   {
-    id: 51,
-    subject: "Concurrency",
-    question: {
-      en: "What is the primary operational difference between std::latch and std::barrier (C++20)?",
-      fr: "Quelle est la principale différence opérationnelle entre std::latch et std::barrier (C++20) ?"
+    "id": 51,
+    "subject": "Advanced",
+    "question": {
+      "en": "What must every recursive function have to prevent infinite recursion and stack overflow?",
+      "fr": "Que doit posséder toute fonction récursive pour éviter un débordement de pile (stack overflow) ?"
     },
-    options: [
-      { text: { en: "std::latch is single-use, whereas std::barrier can be reused across repeated synchronization phases", fr: "std::latch est à usage unique, tandis que std::barrier est réutilisable à travers des phases répétées" }, correct: true },
-      { text: { en: "std::latch runs on GPU while std::barrier runs on CPU", fr: "std::latch tourne sur GPU tandis que std::barrier tourne sur CPU" }, correct: false },
-      { text: { en: "std::barrier requires mutex locks but std::latch does not", fr: "std::barrier requiert des verrous mutex mais pas std::latch" }, correct: false },
-      { text: { en: "std::latch is deprecated in modern C++", fr: "std::latch est obsolète en C++ moderne" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "A base case that stops recursion without making further recursive calls",
+          "fr": "Un cas de base qui arrête la récursion sans nouvel appel"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "A loop counter",
+          "fr": "Un compteur de boucle for"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "A global variable",
+          "fr": "Une variable globale"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::latch countdowns once and remains open; std::barrier resets its counter for subsequent phases.",
-      fr: "std::latch effectue un compte à rebours unique puis reste ouvert ; std::barrier se réinitialise pour des phases successives."
+    "explanation": {
+      "en": "The base case halts recursion; without it, function calls consume all call stack space.",
+      "fr": "Le cas de base arrête la récursion ; sans lui, la pile d'appels sature et fait planter le programme."
     }
   },
   {
-    id: 52,
-    subject: "Architecture",
-    question: {
-      en: "What major advantage do C++20 Concepts provide over traditional SFINAE (std::enable_if)?",
-      fr: "Quel avantage majeur les Concepts C++20 apportent-ils par rapport à SFINAE (std::enable_if) ?"
+    "id": 52,
+    "subject": "Advanced",
+    "question": {
+      "en": "How do function templates (template <typename T>) work under the hood during compilation?",
+      "fr": "Comment les patrons de fonctions (template <typename T>) fonctionnent-ils lors de la compilation ?"
     },
-    options: [
-      { text: { en: "Clean, human-readable compiler diagnostics and direct signature constraints (e.g. template<Numeric T>)", fr: "Des diagnostics d'erreur clairs et lisibles et des contraintes directes (ex. template<Numeric T>)" }, correct: true },
-      { text: { en: "Automatic runtime garbage collection", fr: "Un ramasse-miettes automatique à l'exécution" }, correct: false },
-      { text: { en: "Compiles without an actual C++ compiler", fr: "Compile sans compilateur C++" }, correct: false },
-      { text: { en: "Converts all virtual functions into static variables", fr: "Convertit toutes les fonctions virtuelles en variables statiques" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The compiler generates concrete function overloads for each invoked data type",
+          "fr": "Le compilateur génère les surcharges concrètes pour chaque type utilisé"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "They convert all variables into generic void* pointers at runtime",
+          "fr": "Ils convertissent tout en pointeurs void* à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "They interpret types at runtime like Python",
+          "fr": "Ils interprètent les types dynamiquement comme Python"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Concepts express requirements directly in template signatures and output clear, readable error messages instead of walls of cryptic template errors.",
-      fr: "Les concepts expriment les contraintes directement et génèrent des erreurs courtes et compréhensibles au lieu d'interminables pavés."
+    "explanation": {
+      "en": "C++ templates are zero-cost abstractions instantiated at compile-time with full type safety.",
+      "fr": "Les templates C++ sont instanciés à la compilation sans aucun surcoût d'exécution."
     }
   },
   {
-    id: 53,
-    subject: "Architecture",
-    question: {
-      en: "Why do C++20 Ranges pipelines (std::views) have zero heap allocation overhead?",
-      fr: "Pourquoi les pipelines de Ranges C++20 (std::views) n'allouent-ils aucune mémoire sur le tas ?"
+    "id": 53,
+    "subject": "Advanced",
+    "question": {
+      "en": "What is the default access level for members declared inside a C++ 'struct'?",
+      "fr": "Quel est le niveau d'accès par défaut des membres d'une 'struct' en C++ ?"
     },
-    options: [
-      { text: { en: "They are non-owning, lazy wrappers that transform elements on the fly during iteration", fr: "Ce sont des vues non-propriétaires et paresseuses qui transforment les éléments à la volée pendant l'itération" }, correct: true },
-      { text: { en: "They compress data into 32-bit registers", fr: "Ils compressent les données dans des registres 32 bits" }, correct: false },
-      { text: { en: "They force the compiler to allocate everything on the stack", fr: "Ils forcent le compilateur à tout allouer sur la pile" }, correct: false },
-      { text: { en: "They can only be used with arrays of size 10 or less", fr: "Ils ne fonctionnent qu'avec des tableaux de taille 10 ou moins" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "public",
+          "fr": "public"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "private",
+          "fr": "private"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "protected",
+          "fr": "protected"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::views wrap iterators without storing elements, evaluating transformations strictly on demand.",
-      fr: "std::views enveloppe des itérateurs sans stocker de copie, évaluant les transformations à la volée."
+    "explanation": {
+      "en": "Members of a struct are public by default, whereas members of a class are private by default.",
+      "fr": "Les membres d'une struct sont publics par défaut, alors que ceux d'une class sont privés."
     }
   },
   {
-    id: 54,
-    subject: "Architecture",
-    question: {
-      en: "Which keyword is used in a C++20 coroutine to suspend execution and yield an intermediate value to the caller?",
-      fr: "Quel mot-clé est utilisé dans une coroutine C++20 pour suspendre l'exécution et produire une valeur intermédiaire ?"
+    "id": 54,
+    "subject": "Advanced",
+    "question": {
+      "en": "Why is it best practice to pass a large struct to a read-only function as 'const StructName&'?",
+      "fr": "Pourquoi passer une grande structure en 'const StructName&' pour une lecture seule ?"
     },
-    options: [
-      { text: { en: "co_yield", fr: "co_yield" }, correct: true },
-      { text: { en: "co_await", fr: "co_await" }, correct: false },
-      { text: { en: "co_return", fr: "co_return" }, correct: false },
-      { text: { en: "yield_break", fr: "yield_break" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It avoids copying all member variables while protecting them from modification",
+          "fr": "Cela évite de copier tous les membres tout en empêchant toute altération"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Structs cannot be passed by value in C++",
+          "fr": "Les structs ne peuvent pas être passées par valeur"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It frees the struct memory automatically",
+          "fr": "Cela libère automatiquement la mémoire de la struct"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "co_yield yields a value and pauses the coroutine frame; co_await waits for completion; co_return finishes.",
-      fr: "co_yield produit une valeur et suspend la coroutine ; co_await attend une tâche ; co_return termine la coroutine."
+    "explanation": {
+      "en": "Passing large structs by value copies every single member field; const reference is zero-copy.",
+      "fr": "Passer par valeur copie chaque membre ; la référence constante évite tout surcoût."
     }
   },
   {
-    id: 55,
-    subject: "Architecture",
-    question: {
-      en: "Why is Data-Oriented Design (Structure of Arrays - SoA) preferred over Array of Structures (AoS) in game engines and simulation loops?",
-      fr: "Pourquoi la conception orientée données (Structure of Arrays - SoA) est-elle préférée en moteur de jeu par rapport à Array of Structures (AoS) ?"
+    "id": 55,
+    "subject": "Advanced",
+    "question": {
+      "en": "What underlying type represents enum values by default in C++?",
+      "fr": "Quel type sous-jacent représente les valeurs d'un enum par défaut en C++ ?"
     },
-    options: [
-      { text: { en: "It packs homogeneous fields contiguously, maximizing CPU cache line hit rate and SIMD auto-vectorization", fr: "Elle regroupe les champs contigus en mémoire, maximisant le taux de succès du cache CPU et la vectorisation SIMD" }, correct: true },
-      { text: { en: "It eliminates all memory deallocation", fr: "Elle élimine toute libération mémoire" }, correct: false },
-      { text: { en: "It prevents compilation errors in templates", fr: "Elle empêche les erreurs de compilation sur les templates" }, correct: false },
-      { text: { en: "It automatically creates multiple threads", fr: "Elle crée automatiquement plusieurs threads" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Integers (int), starting at 0",
+          "fr": "Des entiers (int), débutant à 0"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Strings",
+          "fr": "Des chaînes de caractères"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Floating-point numbers",
+          "fr": "Des nombres décimaux"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "SoA allows CPUs to load only the memory needed for a loop into 64-byte cache lines, enabling hardware vector registers (AVX/SSE).",
-      fr: "SoA charge uniquement les données nécessaires dans les lignes de cache de 64 octets, permettant l'auto-vectorisation SIMD."
+    "explanation": {
+      "en": "Enum enumerators are assigned consecutive integer values starting from 0 by default.",
+      "fr": "Les valeurs d'un enum sont associées à des entiers consécutifs démarrant à 0."
     }
   },
   {
-    id: 56,
-    subject: "Architecture",
-    question: {
-      en: "What is the primary benefit of CRTP (Curiously Recurring Template Pattern) over virtual functions?",
-      fr: "Quel est le bénéfice principal du CRTP par rapport aux fonctions virtuelles ?"
+    "id": 56,
+    "subject": "OOP",
+    "question": {
+      "en": "What is the difference between a class and an object in Object-Oriented Programming?",
+      "fr": "Quelle est la différence entre une classe et un objet en Programmation Orientée Objet ?"
     },
-    options: [
-      { text: { en: "Static compile-time dispatch with zero vtable pointer overhead, enabling compiler inlining", fr: "Polymorphisme statique à la compilation sans surcoût de table virtuelle (vtable), permettant l'inlining" }, correct: true },
-      { text: { en: "Allows multiple inheritance from non-template classes", fr: "Permet l'héritage multiple de classes non templates" }, correct: false },
-      { text: { en: "Allocates all derived classes in stack memory only", fr: "Alloue toutes les classes dérivées uniquement sur la pile" }, correct: false },
-      { text: { en: "Automatically creates thread-safe destructors", fr: "Crée automatiquement des destructeurs thread-safe" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "A class is the blueprint; an object is a concrete instance of that blueprint",
+          "fr": "La classe est le modèle ; l'objet est une instance concrète de ce modèle"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "An object is a blueprint; a class is the instance",
+          "fr": "L'objet est le modèle ; la classe est l'instance"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Classes and objects are identical concepts",
+          "fr": "Classes et objets sont des termes strictement synonymes"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "CRTP resolves polymorphic calls at compile-time via static_cast<Derived*>(this), removing vpointer indirections.",
-      fr: "Le CRTP résout les appels polymorphiques dès la compilation via static_cast, éliminant les pointeurs de vtable."
+    "explanation": {
+      "en": "A class defines properties and methods; objects are instantiated instances in memory.",
+      "fr": "La classe définit la structure et les méthodes ; l'objet est l'entité concrète en mémoire."
     }
   },
   {
-    id: 57,
-    subject: "Architecture",
-    question: {
-      en: "What standard modern C++ utility provides compile-time checked pattern matching across a std::variant?",
-      fr: "Quel utilitaire C++ standard moderne offre un filtrage par motif (pattern matching) vérifié à la compilation sur std::variant ?"
+    "id": 57,
+    "subject": "OOP",
+    "question": {
+      "en": "When is a constructor method called in C++?",
+      "fr": "Quand la méthode constructeur est-elle appelée en C++ ?"
     },
-    options: [
-      { text: { en: "std::visit with overloaded lambdas", fr: "std::visit avec des lambdas surchargées" }, correct: true },
-      { text: { en: "dynamic_cast in a switch statement", fr: "dynamic_cast dans une instruction switch" }, correct: false },
-      { text: { en: "reinterpret_cast on unions", fr: "reinterpret_cast sur des unions" }, correct: false },
-      { text: { en: "std::any_cast with try-catch blocks", fr: "std::any_cast avec des blocs try-catch" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Automatically whenever a new object of that class is instantiated",
+          "fr": "Automatiquement dès qu'un nouvel objet de la classe est instancié"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Only when explicitly invoked with object.Constructor()",
+          "fr": "Seulement si on l'appelle avec objet.Constructeur()"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "When the program exits main()",
+          "fr": "À la fermeture du programme"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::visit ensures at compile-time that all possible types held by a std::variant have a matching handler.",
-      fr: "std::visit garantit à la compilation que chaque type possible contenu dans un std::variant possède un gestionnaire valide."
+    "explanation": {
+      "en": "Constructors run automatically at instantiation to set up the object's initial state.",
+      "fr": "Le constructeur s'exécute automatiquement à l'instanciation pour initialiser l'objet."
+    }
+  },
+  {
+    "id": 58,
+    "subject": "OOP",
+    "question": {
+      "en": "What allows constructor overloading to work in C++?",
+      "fr": "Qu'est-ce qui permet la surcharge de constructeurs en C++ ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Providing multiple constructors with different parameter lists",
+          "fr": "Fournir plusieurs constructeurs avec des listes de paramètres différentes"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Giving different names to each constructor",
+          "fr": "Donner un nom différent à chaque constructeur"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Specifying different return types",
+          "fr": "Spécifier des types de retour différents"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Constructors must share the class name; they are overloaded via distinct parameter counts and types.",
+      "fr": "Tous les constructeurs portent le nom de la classe ; ils diffèrent par leurs paramètres."
+    }
+  },
+  {
+    "id": 59,
+    "subject": "OOP",
+    "question": {
+      "en": "What OOP principle is achieved by making member variables private and providing public getters/setters?",
+      "fr": "Quel principe de la POO réalise-t-on en rendant les variables privées avec accesseurs publics ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Encapsulation (Data Hiding)",
+          "fr": "L'Encapsulation (Masquage des données)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Polymorphism",
+          "fr": "Le Polymorphisme"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Multiple Inheritance",
+          "fr": "L'Héritage Multiple"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Encapsulation hides sensitive data from direct tampering and validates mutations via setters.",
+      "fr": "L'encapsulation protège les attributs internes et filtre leurs modifications par les setters."
+    }
+  },
+  {
+    "id": 60,
+    "subject": "OOP",
+    "question": {
+      "en": "What syntax establishes that class Dog inherits publicly from class Animal?",
+      "fr": "Quelle syntaxe déclare que la classe Dog hérite publiquement de la classe Animal ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "class Dog : public Animal { ... };",
+          "fr": "class Dog : public Animal { ... };"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "class Dog extends Animal { ... };",
+          "fr": "class Dog extends Animal { ... };"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "class Dog inherits Animal { ... };",
+          "fr": "class Dog inherits Animal { ... };"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "In C++, inheritance is specified using a colon followed by access specifier (class Dog : public Animal).",
+      "fr": "En C++, l'héritage s'écrit avec un deux-points suivi du mode d'accès (: public Animal)."
+    }
+  },
+  {
+    "id": 61,
+    "subject": "Intermediate",
+    "question": {
+      "en": "Which method appends a new element to the end of a std::vector dynamic array?",
+      "fr": "Quelle méthode ajoute un nouvel élément à la fin d'un tableau dynamique std::vector ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "push_back(element)",
+          "fr": "push_back(element)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "append(element)",
+          "fr": "append(element)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "add(element)",
+          "fr": "add(element)"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::vector::push_back(val) inserts val at the end and reallocates memory dynamically if capacity is full.",
+      "fr": "std::vector::push_back(val) insère à la fin et réalloue la mémoire dynamiquement si nécessaire."
+    }
+  },
+  {
+    "id": 62,
+    "subject": "Intermediate",
+    "question": {
+      "en": "Why MUST base classes with virtual methods always declare a virtual destructor (virtual ~Base() = default;)?",
+      "fr": "Pourquoi une classe de base polymorphe DOIT-ELLE toujours avoir un destructeur virtuel ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "To ensure derived class destructors run when deleting an object through a base pointer",
+          "fr": "Pour garantir l'appel du destructeur dérivé lors de la destruction via pointeur de base"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To make constructors run faster",
+          "fr": "Pour accélérer les constructeurs"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It prevents compilation errors in main",
+          "fr": "Pour éviter une erreur de compilation dans main"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Deleting a derived object via Base* without a virtual destructor causes undefined behavior and leaks.",
+      "fr": "Supprimer un objet dérivé via Base* sans destructeur virtuel entraîne fuites et comportement indéfini."
+    }
+  },
+  {
+    "id": 63,
+    "subject": "Intermediate",
+    "question": {
+      "en": "What is the primary advantage of std::unique_ptr over a raw pointer with 'new'?",
+      "fr": "Quel est l'avantage majeur de std::unique_ptr par rapport à un pointeur brut 'new' ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Automatic RAII cleanup: memory is deleted automatically when the unique_ptr leaves scope",
+          "fr": "Nettoyage RAII automatique : la mémoire est libérée dès que l'unique_ptr sort de portée"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "unique_ptr can be shared by multiple threads simultaneously without locks",
+          "fr": "unique_ptr est partagé entre threads sans verrous"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "unique_ptr uses no memory at all",
+          "fr": "unique_ptr n'occupe aucune mémoire"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::unique_ptr exclusively owns heap memory and frees it automatically on destruction, preventing leaks.",
+      "fr": "std::unique_ptr possède la ressource en exclusivité et la détruit automatiquement, éliminant les fuites."
+    }
+  },
+  {
+    "id": 64,
+    "subject": "Intermediate",
+    "question": {
+      "en": "What data structure does std::map use under the hood to maintain sorted key-value pairs?",
+      "fr": "Quelle structure de données std::map utilise-t-il pour conserver les paires clé-valeur triées ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Self-balancing Red-Black Tree (O(log N) lookup)",
+          "fr": "Arbre rouge-noir équilibré (recherche en O(log N))"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Unsorted contiguous array",
+          "fr": "Tableau contigu non trié"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Singly linked list",
+          "fr": "Liste simplement chaînée"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::map keeps elements sorted by key with logarithmic O(log N) insertions, removals, and searches.",
+      "fr": "std::map maintient ses clés ordonnées dans un arbre binaire de recherche équilibré en O(log N)."
+    }
+  },
+  {
+    "id": 65,
+    "subject": "Intermediate",
+    "question": {
+      "en": "Why should you use std::lock_guard<std::mutex> when synchronizing threads?",
+      "fr": "Pourquoi utiliser std::lock_guard<std::mutex> lors de la synchronisation de threads ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "It locks the mutex upon construction and unlocks automatically when exiting scope (RAII)",
+          "fr": "Il verrouille à la création et déverrouille automatiquement en sortie de portée (RAII)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It creates a new thread automatically",
+          "fr": "Il crée un nouveau thread automatiquement"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It prevents threads from needing mutexes",
+          "fr": "Il dispense d'utiliser des mutexes"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::lock_guard guarantees mutex release even if an exception is thrown, preventing deadlocks.",
+      "fr": "std::lock_guard garantit la libération du mutex même en cas d'exception, évitant les blocages."
     }
   }
 ];
 
-// Helper: Fisher-Yates array shuffler
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-// Per-Lesson Quick Check Quizzes for ALL 35 Lessons
 const LESSON_QUIZZES = {
-  1: {
-    question: {
-      en: "What stream object is used to output text to the console in C++?",
-      fr: "Quel objet de flux est utilisé pour afficher du texte dans la console en C++ ?"
+  "1": {
+    "question": {
+      "en": "What stream object is used to output text to the console in C++?",
+      "fr": "Quel objet de flux est utilisé pour afficher du texte dans la console en C++ ?"
     },
-    options: [
-      { text: { en: "std::cout", fr: "std::cout" }, correct: true },
-      { text: { en: "std::cin", fr: "std::cin" }, correct: false },
-      { text: { en: "console.log()", fr: "console.log()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "std::cout",
+          "fr": "std::cout"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "std::cin",
+          "fr": "std::cin"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "printf_s",
+          "fr": "printf_s"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::cout (character output) defined in <iostream> sends data to the standard console.",
-      fr: "std::cout (character output) défini dans <iostream> envoie les données à la console standard."
+    "explanation": {
+      "en": "std::cout (character output) in <iostream> sends formatted text to the standard console.",
+      "fr": "std::cout (character output) dans <iostream> envoie le texte formaté vers la console standard."
     }
   },
-  2: {
-    question: {
-      en: "Which C++ data type should you use to store a single ASCII character?",
-      fr: "Quel type de données C++ doit-on utiliser pour stocker un unique caractère ASCII ?"
+  "2": {
+    "question": {
+      "en": "Which C++ data type should you use to store a single ASCII character?",
+      "fr": "Quel type de données C++ doit-on utiliser pour stocker un unique caractère ASCII ?"
     },
-    options: [
-      { text: { en: "char", fr: "char" }, correct: true },
-      { text: { en: "std::string", fr: "std::string" }, correct: false },
-      { text: { en: "byte", fr: "byte" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "char",
+          "fr": "char"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "std::string",
+          "fr": "std::string"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "byte",
+          "fr": "byte"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "char uses single quotes like 'A' and represents an 8-bit character in memory.",
-      fr: "char utilise des guillemets simples comme 'A' et occupe 1 octet en mémoire."
+    "explanation": {
+      "en": "char uses single quotes like 'A' and represents an 8-bit character in memory.",
+      "fr": "char utilise des guillemets simples comme 'A' et occupe 1 octet en mémoire."
     }
   },
-  3: {
-    question: {
-      en: "What happens if you try to reassign a variable declared with 'const'?",
-      fr: "Que se passe-t-il si vous tentez de réassigner une variable déclarée avec 'const' ?"
+  "3": {
+    "question": {
+      "en": "What happens if you try to reassign a variable declared with 'const'?",
+      "fr": "Que se passe-t-il si vous tentez de réassigner une variable déclarée avec 'const' ?"
     },
-    options: [
-      { text: { en: "Compile-time error", fr: "Erreur de compilation" }, correct: true },
-      { text: { en: "Runtime warning", fr: "Avertissement à l'exécution" }, correct: false },
-      { text: { en: "The value silently changes", fr: "La valeur change silencieusement" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Compile-time error",
+          "fr": "Erreur de compilation"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Runtime warning",
+          "fr": "Avertissement à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The value silently changes",
+          "fr": "La valeur change silencieusement"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The compiler rejects assignments to read-only const variables at compile time.",
-      fr: "Le compilateur rejette toute assignation à une variable const en lecture seule dès la compilation."
+    "explanation": {
+      "en": "The compiler rejects assignments to read-only const variables at compile time.",
+      "fr": "Le compilateur rejette les affectations aux variables const en lecture seule dès la compilation."
     }
   },
-  4: {
-    question: {
-      en: "What operator is used to access entities inside a namespace (e.g., first::x)?",
-      fr: "Quel opérateur permet d'accéder aux entités dans un espace de noms (ex. first::x) ?"
+  "4": {
+    "question": {
+      "en": "Which operator is used to access an entity inside a specific namespace?",
+      "fr": "Quel opérateur permet d'accéder à une entité située dans un espace de noms spécifique ?"
     },
-    options: [
-      { text: { en: ":: (Scope Resolution Operator)", fr: ":: (Opérateur de résolution de portée)" }, correct: true },
-      { text: { en: ". (Dot operator)", fr: ". (Opérateur point)" }, correct: false },
-      { text: { en: "-> (Arrow operator)", fr: "-> (Opérateur flèche)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Scope resolution operator (::)",
+          "fr": "Opérateur de résolution de portée (::)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Member access dot (.)",
+          "fr": "Point d'accès membre (.)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Pointer arrow (->)",
+          "fr": "Flèche de pointeur (->)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The scope resolution operator (::) designates which namespace an identifier belongs to.",
-      fr: "L'opérateur de résolution de portée (::) indique à quel espace de noms appartient un identifiant."
+    "explanation": {
+      "en": "The scope resolution operator (::) tells the compiler which namespace to look inside.",
+      "fr": "L'opérateur de résolution de portée (::) indique au compilateur dans quel namespace chercher."
     }
   },
-  5: {
-    question: {
-      en: "Which syntax is the modern C++ standard recommendation for creating a type alias?",
-      fr: "Quelle syntaxe est recommandée par le standard C++ moderne pour créer un alias de type ?"
+  "5": {
+    "question": {
+      "en": "What is the preferred modern C++ keyword to define type aliases instead of 'typedef'?",
+      "fr": "Quel mot-clé moderne en C++ est recommandé pour définir un alias de type plutôt que 'typedef' ?"
     },
-    options: [
-      { text: { en: "using text_t = std::string;", fr: "using text_t = std::string;" }, correct: true },
-      { text: { en: "typedef std::string text_t;", fr: "typedef std::string text_t;" }, correct: false },
-      { text: { en: "#define text_t std::string", fr: "#define text_t std::string" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "using",
+          "fr": "using"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "alias",
+          "fr": "alias"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "rename",
+          "fr": "rename"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The 'using' alias syntax is preferred in modern C++ because it supports template aliasing cleanly.",
-      fr: "La syntaxe 'using' est préférée en C++ moderne car elle supporte directement les templates."
+    "explanation": {
+      "en": "'using new_name = old_type;' is clearer and supports template aliases cleanly.",
+      "fr": "'using nom = type;' est plus lisible et supporte directement les alias de templates."
     }
   },
-  6: {
-    question: {
-      en: "What does the modulus operator '%' calculate in C++?",
-      fr: "Que calcule l'opérateur modulo '%' en C++ ?"
+  "6": {
+    "question": {
+      "en": "What does the modulus operator (%) return in integer arithmetic?",
+      "fr": "Que renvoie l'opérateur modulo (%) en arithmétique entière ?"
     },
-    options: [
-      { text: { en: "The integer remainder of a division", fr: "Le reste de la division entière" }, correct: true },
-      { text: { en: "A percentage value (e.g. 50%)", fr: "Un pourcentage (ex. 50%)" }, correct: false },
-      { text: { en: "The power exponent", fr: "Une élévation à la puissance" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The remainder of the division",
+          "fr": "Le reste de la division entière"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The floating-point quotient",
+          "fr": "Le quotient en virgule flottante"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The percentage proportion",
+          "fr": "Le pourcentage proportionnel"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The modulus operator (%) returns the remainder when an integer is divided by another integer.",
-      fr: "L'opérateur modulo (%) renvoie le reste d'une division entière entre deux entiers."
+    "explanation": {
+      "en": "For example, 14 % 4 evaluates to 2 because 14 divided by 4 leaves a remainder of 2.",
+      "fr": "Par exemple, 14 % 4 donne 2 car 14 divisé par 4 donne un reste de 2."
     }
   },
-  7: {
-    question: {
-      en: "Why is 'static_cast<double>(val)' preferred over '(double)val' in C++?",
-      fr: "Pourquoi 'static_cast<double>(val)' est-il préféré à '(double)val' en C++ ?"
+  "7": {
+    "question": {
+      "en": "Why is static_cast<double>(intVal) preferred over C-style (double)intVal?",
+      "fr": "Pourquoi static_cast<double>(val) est-il préféré au cast à la C (double)val ?"
     },
-    options: [
-      { text: { en: "It provides compile-time type checking and makes intent explicit", fr: "Il offre une vérification à la compilation et explicite l'intention" }, correct: true },
-      { text: { en: "It is faster at runtime", fr: "Il s'exécute plus vite" }, correct: false },
-      { text: { en: "C-style casts are completely disabled in C++", fr: "Les casts C sont interdits par le compilateur" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It is checked by the compiler and explicit in intent",
+          "fr": "Il est vérifié par le compilateur et explicite d'intention"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It runs faster at runtime",
+          "fr": "Il s'exécute plus vite à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "C-style cast is deprecated and illegal in C++20",
+          "fr": "Le cast C est déprécié et illégal en C++20"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Named C++ casts prevent accidental unsafe conversions and are easily searchable in codebases.",
-      fr: "Les casts nommés évitent les conversions accidentelles dangereuses et se recherchent facilement dans le code."
+    "explanation": {
+      "en": "static_cast prevents unintended dangerous type conversions at compile-time.",
+      "fr": "static_cast évite les conversions de types dangereuses et accidentelles dès la compilation."
     }
   },
-  8: {
-    question: {
-      en: "What function should you use to read a string containing spaces from user input?",
-      fr: "Quelle fonction doit-on utiliser pour lire une chaîne contenant des espaces depuis l'utilisateur ?"
+  "8": {
+    "question": {
+      "en": "Why does std::cin >> fail when reading a full name like 'Bro Code'?",
+      "fr": "Pourquoi std::cin >> échoue-t-il lors de la saisie d'un nom complet comme 'Bro Code' ?"
     },
-    options: [
-      { text: { en: "std::getline(std::cin, str)", fr: "std::getline(std::cin, str)" }, correct: true },
-      { text: { en: "std::cin >> str", fr: "std::cin >> str" }, correct: false },
-      { text: { en: "std::cin.read(str)", fr: "std::cin.read(str)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It stops reading at whitespace (spaces, tabs, newlines)",
+          "fr": "Il s'arrête dès le premier espace blanc (espace, tabulation, saut de ligne)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "std::cin cannot read std::string",
+          "fr": "std::cin ne peut pas lire de std::string"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Strings cannot exceed 4 characters",
+          "fr": "Les chaînes ne peuvent pas dépasser 4 caractères"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::getline reads until the newline character, preserving spaces within the line.",
-      fr: "std::getline lit jusqu'au retour à la ligne, conservant ainsi tous les espaces."
+    "explanation": {
+      "en": "std::cin extraction stops at whitespace. Use std::getline(std::cin, str) to read full lines.",
+      "fr": "L'extraction std::cin s'arrête au premier espace. Utilisez std::getline(std::cin, str) pour lire toute la ligne."
     }
   },
-  9: {
-    question: {
-      en: "Which standard header must be included to use functions like pow(), sqrt(), and round()?",
-      fr: "Quel en-tête standard doit être inclus pour utiliser pow(), sqrt() et round() ?"
+  "9": {
+    "question": {
+      "en": "Which standard header must be included to use sqrt(), pow(), and round()?",
+      "fr": "Quel en-tête standard doit-on inclure pour utiliser sqrt(), pow() et round() ?"
     },
-    options: [
-      { text: { en: "<cmath>", fr: "<cmath>" }, correct: true },
-      { text: { en: "<math.h>", fr: "<math.h>" }, correct: false },
-      { text: { en: "<algorithm>", fr: "<algorithm>" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "<cmath>",
+          "fr": "<cmath>"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "<maths>",
+          "fr": "<maths>"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "<algorithm>",
+          "fr": "<algorithm>"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "<cmath> provides standard mathematical functions in the std:: namespace.",
-      fr: "<cmath> fournit les fonctions mathématiques standard dans l'espace de noms std::."
+    "explanation": {
+      "en": "#include <cmath> provides standard mathematical functions.",
+      "fr": "#include <cmath> fournit les fonctions mathématiques standard."
     }
   },
-  10: {
-    question: {
-      en: "What mathematical theorem calculates the hypotenuse: c = sqrt(a^2 + b^2)?",
-      fr: "Quel théorème mathématique calcule l'hypoténuse : c = sqrt(a^2 + b^2) ?"
+  "10": {
+    "question": {
+      "en": "Which mathematical formula calculates the hypotenuse c given sides a and b?",
+      "fr": "Quelle formule mathématique calcule l'hypoténuse c à partir des côtés a et b ?"
     },
-    options: [
-      { text: { en: "Pythagorean Theorem", fr: "Théorème de Pythagore" }, correct: true },
-      { text: { en: "Fermat's Theorem", fr: "Théorème de Fermat" }, correct: false },
-      { text: { en: "Euler's Identity", fr: "Identité d'Euler" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "c = std::sqrt(a*a + b*b)",
+          "fr": "c = std::sqrt(a*a + b*b)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "c = a + b",
+          "fr": "c = a + b"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "c = (a * b) / 2",
+          "fr": "c = (a * b) / 2"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "In right triangles, the square of the hypotenuse equals the sum of the squares of the other two sides.",
-      fr: "Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme des carrés des deux autres côtés."
+    "explanation": {
+      "en": "By the Pythagorean theorem, hypotenuse c equals the square root of (a² + b²).",
+      "fr": "D'après le théorème de Pythagore, l'hypoténuse c est égale à la racine carrée de (a² + b²)."
     }
   },
-  11: {
-    question: {
-      en: "What does an if condition evaluate to in C++?",
-      fr: "À quel type d'expression s'évalue une condition dans un if en C++ ?"
+  "11": {
+    "question": {
+      "en": "What happens if all conditions in an if - else if chain evaluate to false and there is an else block?",
+      "fr": "Que se passe-t-il si toutes les conditions d'un if - else if sont fausses et qu'il y a un bloc else ?"
     },
-    options: [
-      { text: { en: "A boolean expression (true or false)", fr: "Une expression booléenne (vrai ou faux)" }, correct: true },
-      { text: { en: "A string description", fr: "Une chaîne de caractères descriptive" }, correct: false },
-      { text: { en: "A void return", fr: "Un retour void" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The else block executes",
+          "fr": "Le bloc else s'exécute"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The program crashes",
+          "fr": "Le programme plante"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The first if block re-executes",
+          "fr": "Le premier bloc if s'exécute à nouveau"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "C++ conditional statements evaluate expressions to boolean true or false (non-zero is true, 0 is false).",
-      fr: "Les conditions s'évaluent en booléen vrai/faux (toute valeur non nulle est vraie, 0 est faux)."
+    "explanation": {
+      "en": "The else block acts as the fallback default when no preceding conditions match.",
+      "fr": "Le bloc else fait office d'alternative par défaut lorsque aucune condition précédente n'est remplie."
     }
   },
-  12: {
-    question: {
-      en: "Which keyword executes when none of the 'case' statements match in a switch?",
-      fr: "Quel mot-clé s'exécute si aucun des 'case' d'un switch ne correspond ?"
+  "12": {
+    "question": {
+      "en": "Why is the 'break;' statement essential inside each case of a switch statement?",
+      "fr": "Pourquoi l'instruction 'break;' est-elle essentielle à la fin de chaque case d'un switch ?"
     },
-    options: [
-      { text: { en: "default:", fr: "default:" }, correct: true },
-      { text: { en: "else:", fr: "else:" }, correct: false },
-      { text: { en: "fallback:", fr: "fallback:" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To prevent falling through to execute subsequent cases",
+          "fr": "Pour empêcher l'exécution en cascade des cases suivants (fall-through)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To reset the variable value",
+          "fr": "Pour réinitialiser la valeur de la variable"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To return from the enclosing function",
+          "fr": "Pour quitter la fonction appelante"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "default: handles all unmatched values in a switch statement.",
-      fr: "default: intercepte toutes les valeurs non appariées dans un switch."
+    "explanation": {
+      "en": "Without break;, execution continues down through all remaining cases regardless of condition.",
+      "fr": "Sans break;, l'exécution continue sans interruption dans les blocs case suivants."
     }
   },
-  13: {
-    question: {
-      en: "What operator in C++ performs division?",
-      fr: "Quel opérateur en C++ effectue une division ?"
+  "13": {
+    "question": {
+      "en": "Why must you check if the divisor is zero before performing division in a calculator?",
+      "fr": "Pourquoi doit-on vérifier si le diviseur est nul avant d'effectuer une division dans une calculatrice ?"
     },
-    options: [
-      { text: { en: "/", fr: "/" }, correct: true },
-      { text: { en: "\\", fr: "\\" }, correct: false },
-      { text: { en: "div", fr: "div" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Division by zero causes undefined behavior or runtime crash",
+          "fr": "La division par zéro provoque un plantage ou comportement indéfini"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It produces the number zero automatically",
+          "fr": "Elle produit automatiquement le nombre zéro"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The compiler will delete the executable",
+          "fr": "Le compilateur supprime l'exécutable"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The forward slash (/) is the arithmetic division operator.",
-      fr: "La barre oblique (/) est l'opérateur de division arithmétique."
+    "explanation": {
+      "en": "Dividing by zero in integer arithmetic causes an immediate program crash / SIGFPE signal.",
+      "fr": "La division par zéro en arithmétique entière déclenche un plantage immédiat."
     }
   },
-  14: {
-    question: {
-      en: "What is the return value of '(5 > 3) ? 100 : 200'?",
-      fr: "Quelle est la valeur de retour de '(5 > 3) ? 100 : 200' ?"
+  "14": {
+    "question": {
+      "en": "What is the return value of (grade >= 60) ? \"Pass\" : \"Fail\" when grade = 75?",
+      "fr": "Quelle est la valeur de retour de (grade >= 60) ? \"Pass\" : \"Fail\" quand grade = 75 ?"
     },
-    options: [
-      { text: { en: "100", fr: "100" }, correct: true },
-      { text: { en: "200", fr: "200" }, correct: false },
-      { text: { en: "true", fr: "true" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "\"Pass\"",
+          "fr": "\"Pass\""
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "\"Fail\"",
+          "fr": "\"Fail\""
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "true",
+          "fr": "true"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Since 5 > 3 is true, the first operand (100) is returned.",
-      fr: "Puisque 5 > 3 est vrai, le premier opérande (100) est renvoyé."
+    "explanation": {
+      "en": "Since (75 >= 60) is true, the ternary operator evaluates and returns the first expression: \"Pass\".",
+      "fr": "Puisque (75 >= 60) est vrai, l'opérateur ternaire évalue et renvoie la première expression : \"Pass\"."
     }
   },
-  15: {
-    question: {
-      en: "What operator represents logical OR in C++?",
-      fr: "Quel opérateur représente le OU logique en C++ ?"
+  "15": {
+    "question": {
+      "en": "In the expression 'if (A && B)', when is expression B NOT evaluated?",
+      "fr": "Dans l'expression 'if (A && B)', quand l'expression B n'est-elle PAS évaluée ?"
     },
-    options: [
-      { text: { en: "||", fr: "||" }, correct: true },
-      { text: { en: "&&", fr: "&&" }, correct: false },
-      { text: { en: "!", fr: "!" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "When A is false (short-circuit evaluation)",
+          "fr": "Quand A est faux (évaluation en court-circuit)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "When A is true",
+          "fr": "Quand A est vrai"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Expression B is always evaluated",
+          "fr": "L'expression B est toujours évaluée"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The double pipe (||) is the logical OR operator in C++.",
-      fr: "Le double trait vertical (||) représente l'opérateur OU logique en C++."
+    "explanation": {
+      "en": "Logical AND (&&) short-circuits: if the first operand is false, the result is guaranteed false.",
+      "fr": "Le ET logique (&&) fonctionne en court-circuit : si le premier terme est faux, le second n'est pas évalué."
     }
   },
-  16: {
-    question: {
-      en: "What is the mathematical formula to convert Celsius to Fahrenheit?",
-      fr: "Quelle est la formule mathématique pour convertir les Celsius en Fahrenheit ?"
+  "16": {
+    "question": {
+      "en": "Which formula accurately converts degrees Fahrenheit to Celsius in C++?",
+      "fr": "Quelle formule convertit précisément les degrés Fahrenheit en Celsius en C++ ?"
     },
-    options: [
-      { text: { en: "(celsius * 1.8) + 32", fr: "(celsius * 1.8) + 32" }, correct: true },
-      { text: { en: "celsius + 273.15", fr: "celsius + 273.15" }, correct: false },
-      { text: { en: "celsius * 0.5", fr: "celsius * 0.5" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "(temp - 32.0) / 1.8",
+          "fr": "(temp - 32.0) / 1.8"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "(temp * 1.8) + 32.0",
+          "fr": "(temp * 1.8) + 32.0"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "temp / 100.0",
+          "fr": "temp / 100.0"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Multiply Celsius by 1.8 (9/5) and add 32 to get Fahrenheit.",
-      fr: "On multiplie les Celsius par 1.8 (ou 9/5) puis on ajoute 32."
+    "explanation": {
+      "en": "Celsius = (Fahrenheit - 32) / 1.8. Using 1.8 or 32.0 ensures floating point arithmetic.",
+      "fr": "Celsius = (Fahrenheit - 32) / 1.8. L'utilisation de décimaux garantit le calcul flottant."
     }
   },
-  17: {
-    question: {
-      en: "Which method checks if a std::string contains no characters?",
-      fr: "Quelle méthode vérifie si un std::string ne contient aucun caractère ?"
+  "17": {
+    "question": {
+      "en": "What does string.find(char) return if the character is not found in the string?",
+      "fr": "Que renvoie string.find(char) si le caractère recherché n'est pas présent dans la chaîne ?"
     },
-    options: [
-      { text: { en: "str.empty()", fr: "str.empty()" }, correct: true },
-      { text: { en: "str.isNull()", fr: "str.isNull()" }, correct: false },
-      { text: { en: "str.clear()", fr: "str.clear()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "std::string::npos",
+          "fr": "std::string::npos"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "-1",
+          "fr": "-1"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "0",
+          "fr": "0"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "str.empty() returns true if str.length() == 0.",
-      fr: "str.empty() renvoie vrai si la taille de la chaîne est égale à 0."
+    "explanation": {
+      "en": "std::string::npos is the standard sentinel value representing 'no position / not found'.",
+      "fr": "std::string::npos est la valeur sentinelle standard indiquant l'absence de correspondance."
     }
   },
-  43: {
-    question: {
-      en: "What format is typically used when printing memory addresses?",
-      fr: "Quel format est classiquement utilisé pour afficher les adresses mémoire ?"
+  "18": {
+    "question": {
+      "en": "What causes an infinite loop in a while loop statement?",
+      "fr": "Qu'est-ce qui provoque une boucle infinie dans une instruction while ?"
     },
-    options: [
-      { text: { en: "Hexadecimal (e.g. 0x7ffd...)", fr: "Hexadécimal (ex. 0x7ffd...)" }, correct: true },
-      { text: { en: "Binary (e.g. 0b1011)", fr: "Binaire (ex. 0b1011)" }, correct: false },
-      { text: { en: "Roman numerals", fr: "Chiffres romains" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The loop condition never evaluates to false",
+          "fr": "La condition de boucle ne devient jamais fausse"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Using semicolons inside braces",
+          "fr": "L'utilisation de points-virgules entre accolades"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Declaring variables inside main",
+          "fr": "La déclaration de variables dans main"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "RAM addresses are natively represented in hexadecimal base-16 notation.",
-      fr: "Les adresses RAM sont représentées en notation hexadécimale (base 16)."
+    "explanation": {
+      "en": "A while loop will repeat forever unless its condition is eventually modified to false or broken.",
+      "fr": "Une boucle while se répète indéfiniment si sa condition ne devient jamais fausse."
     }
   },
-  44: {
-    question: {
-      en: "If a function modifies a parameter passed by reference (&), does the original change?",
-      fr: "Si une fonction modifie un paramètre passé par référence (&), l'original change-t-il ?"
+  "19": {
+    "question": {
+      "en": "What is the primary difference between a while loop and a do-while loop?",
+      "fr": "Quelle est la différence fondamentale entre une boucle while et do-while ?"
     },
-    options: [
-      { text: { en: "Yes, references modify the caller's actual variable", fr: "Oui, les références modifient directement la variable originale" }, correct: true },
-      { text: { en: "No, a local copy is always created", fr: "Non, une copie locale est toujours créée" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "do-while always executes the body at least once",
+          "fr": "do-while exécute toujours le corps au moins une fois"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "while is faster at runtime",
+          "fr": "while est plus rapide à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "do-while does not check conditions",
+          "fr": "do-while ne teste pas de condition"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "A reference is an alias to the original variable, so modifications affect the original.",
-      fr: "Une référence est un alias vers la variable d'origine, toute modification l'affecte donc."
+    "explanation": {
+      "en": "A do-while loop tests its condition at the bottom, guaranteeing at least one execution pass.",
+      "fr": "La boucle do-while teste sa condition en fin de bloc, garantissant au moins un passage."
     }
   },
-  47: {
-    question: {
-      en: "Given 'int* ptr = &val;', what does '*ptr' evaluate to?",
-      fr: "Soit 'int* ptr = &val;', à quoi correspond '*ptr' ?"
+  "20": {
+    "question": {
+      "en": "What are the three components inside a standard for loop header: for(A; B; C)?",
+      "fr": "Quels sont les trois éléments de l'en-tête for(A; B; C) ?"
     },
-    options: [
-      { text: { en: "The actual value stored inside val", fr: "La valeur réelle stockée dans val" }, correct: true },
-      { text: { en: "The memory address of val", fr: "L'adresse mémoire de val" }, correct: false },
-      { text: { en: "A null pointer", fr: "Un pointeur nul" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Initialization; Condition; Update/Increment",
+          "fr": "Initialisation ; Condition ; Mise à jour/Incrément"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Condition; Body; Break",
+          "fr": "Condition ; Corps ; Interruption"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Start; Finish; Output",
+          "fr": "Début ; Fin ; Affichage"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "The dereference operator (*) retrieves the value stored at the memory address pointed to.",
-      fr: "L'opérateur de déréférencement (*) lit la valeur située à l'adresse pointée."
+    "explanation": {
+      "en": "for (int i = 0; i < N; i++) sets initial counter, checks continuation, and increments.",
+      "fr": "for (int i = 0; i < N; i++) initialise le compteur, vérifie la poursuite et incrémente."
     }
   },
-  48: {
-    question: {
-      en: "What should you check before dereferencing any raw pointer?",
-      fr: "Que devez-vous vérifier avant de déréférencer un pointeur brut ?"
+  "21": {
+    "question": {
+      "en": "What is the effect of the 'continue;' statement inside a loop?",
+      "fr": "Quel est l'effet de l'instruction 'continue;' dans une boucle ?"
     },
-    options: [
-      { text: { en: "if (ptr != nullptr)", fr: "if (ptr != nullptr)" }, correct: true },
-      { text: { en: "if (ptr > 0)", fr: "if (ptr > 0)" }, correct: false },
-      { text: { en: "if (sizeof(ptr) > 0)", fr: "if (sizeof(ptr) > 0)" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Skips the rest of the current iteration and jumps to the next iteration",
+          "fr": "Ignore le reste du tour actuel et passe immédiatement au tour suivant"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Terminates the loop completely",
+          "fr": "Termine la boucle définitivement"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Restarts the loop from index 0",
+          "fr": "Recommence la boucle à l'index 0"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Always ensure a pointer is non-null to prevent segmentation fault crashes.",
-      fr: "Assurez-vous toujours que le pointeur n'est pas nul pour éviter un crash par défaut de segmentation."
+    "explanation": {
+      "en": "continue immediately bypasses remaining statements in the current iteration step.",
+      "fr": "continue saute les instructions restantes de l'itération courante sans quitter la boucle."
     }
   },
-  50: {
-    question: {
-      en: "What keyword in C++ releases memory allocated on the heap via 'new'?",
-      fr: "Quel mot-clé C++ libère la mémoire allouée sur le tas (heap) avec 'new' ?"
+  "22": {
+    "question": {
+      "en": "If an outer loop runs 4 times and an inner nested loop runs 5 times, how many total times does the inner body execute?",
+      "fr": "Si une boucle externe s'exécute 4 fois et une boucle imbriquée 5 fois, combien de fois le corps s'exécute-t-il au total ?"
     },
-    options: [
-      { text: { en: "delete", fr: "delete" }, correct: true },
-      { text: { en: "free", fr: "free" }, correct: false },
-      { text: { en: "remove", fr: "remove" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "20 times",
+          "fr": "20 fois"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "9 times",
+          "fr": "9 fois"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "4 times",
+          "fr": "4 fois"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "In C++, memory allocated with 'new' must be released with 'delete' (or 'delete[]' for arrays).",
-      fr: "En C++, la mémoire allouée avec 'new' doit être libérée avec 'delete' (ou 'delete[]' pour les tableaux)."
+    "explanation": {
+      "en": "Total iterations = outer_iterations * inner_iterations (4 * 5 = 20).",
+      "fr": "Nombre total d'itérations = itérations_externes * itérations_internes (4 * 5 = 20)."
     }
   },
-  61: {
-    question: {
-      en: "Does std::string_view allocate dynamic memory when constructed from a string literal?",
-      fr: "std::string_view alloue-t-il de la mémoire dynamique lorsqu'il est créé depuis un littéral ?"
+  "23": {
+    "question": {
+      "en": "Why should you call srand(time(nullptr)) before calling rand()?",
+      "fr": "Pourquoi doit-on appeler srand(time(nullptr)) avant d'utiliser rand() ?"
     },
-    options: [
-      { text: { en: "No, it is a non-owning pointer and length view (zero allocation)", fr: "Non, c'est une vue non-propriétaire (zéro allocation)" }, correct: true },
-      { text: { en: "Yes, it creates a heap copy of the string", fr: "Oui, il crée une copie sur le tas" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To seed the generator with the current time so numbers change on each run",
+          "fr": "Pour initialiser le générateur avec l'heure courante afin de varier les tirages"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To make rand() return floating-point numbers",
+          "fr": "Pour que rand() renvoie des nombres décimaux"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It is required for compilation",
+          "fr": "C'est obligatoire pour compiler"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::string_view is designed specifically for zero-allocation string passing.",
-      fr: "std::string_view a été conçu spécifiquement pour éviter toute allocation mémoire."
+    "explanation": {
+      "en": "Without a changing seed, rand() will generate the exact same sequence on every launch.",
+      "fr": "Sans graine (seed) dynamique, rand() reproduira exactement la même séquence à chaque lancement."
     }
   },
-  62: {
-    question: {
-      en: "Can a std::unique_ptr be copied to another std::unique_ptr?",
-      fr: "Un std::unique_ptr peut-il être copié vers un autre std::unique_ptr ?"
+  "24": {
+    "question": {
+      "en": "How do you restrict (rand() % 6) to generate numbers between 1 and 6 inclusive?",
+      "fr": "Comment ajuster (rand() % 6) pour obtenir un nombre entre 1 et 6 inclus ?"
     },
-    options: [
-      { text: { en: "No, its copy constructor is deleted; it can only be moved", fr: "Non, son constructeur de copie est supprimé ; il ne peut qu'être déplacé" }, correct: true },
-      { text: { en: "Yes, copying creates a shared reference", fr: "Oui, la copie crée une référence partagée" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "(rand() % 6) + 1",
+          "fr": "(rand() % 6) + 1"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "rand() % 7",
+          "fr": "rand() % 7"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "rand(1, 6)",
+          "fr": "rand(1, 6)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::unique_ptr guarantees unique exclusive ownership, so copying is strictly disallowed.",
-      fr: "std::unique_ptr garantit la propriété exclusive, la copie est donc rigoureusement interdite."
+    "explanation": {
+      "en": "rand() % 6 produces 0, 1, 2, 3, 4, or 5. Adding 1 shifts the range to 1 through 6.",
+      "fr": "rand() % 6 donne un résultat de 0 à 5. Ajouter 1 décale la plage de 1 à 6."
     }
   },
-  63: {
-    question: {
-      en: "How do you access the value inside std::optional<T> safely with a fallback?",
-      fr: "Comment accède-t-on de façon sûre à la valeur d'un std::optional<T> avec repli ?"
+  "25": {
+    "question": {
+      "en": "In a number guessing game, which condition terminates the guessing loop?",
+      "fr": "Dans un jeu de devinette, quelle condition met fin à la boucle de jeu ?"
     },
-    options: [
-      { text: { en: "opt.value_or(defaultValue)", fr: "opt.value_or(valeurParDefaut)" }, correct: true },
-      { text: { en: "*opt", fr: "*opt" }, correct: false },
-      { text: { en: "opt.get()", fr: "opt.get()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "When the player's guess equals the secret number",
+          "fr": "Lorsque la proposition du joueur égale le nombre secret"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "When guess is greater than 100",
+          "fr": "Quand la proposition dépasse 100"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "After exactly 3 tries automatically",
+          "fr": "Après exactement 3 essais automatiquement"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "value_or() guarantees safety by returning the fallback if empty without throwing an exception.",
-      fr: "value_or() garantit la sécurité en renvoyant la valeur de repli sans lever d'exception si l'optionnel est vide."
+    "explanation": {
+      "en": "The game loop terminates with a win when the player guesses correctly (guess == secret).",
+      "fr": "La boucle de jeu se termine par une victoire lorsque le joueur devine le nombre exact."
     }
   },
-  64: {
-    question: {
-      en: "What syntax specifies a capture-all-by-reference in a C++ lambda?",
-      fr: "Quelle syntaxe spécifie une capture par référence de toutes les variables dans une lambda ?"
+  "26": {
+    "question": {
+      "en": "What does a function return type of 'void' indicate?",
+      "fr": "Que signifie un type de retour 'void' pour une fonction ?"
     },
-    options: [
-      { text: { en: "[&]", fr: "[&]" }, correct: true },
-      { text: { en: "[=]", fr: "[=]" }, correct: false },
-      { text: { en: "[]", fr: "[]" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The function does not return any value to the caller",
+          "fr": "La fonction ne renvoie aucune valeur au point d'appel"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The function returns an integer 0",
+          "fr": "La fonction renvoie l'entier 0"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The function accepts zero parameters",
+          "fr": "La fonction n'accepte aucun paramètre"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "[&] captures all automatic variables from outer scope by reference.",
-      fr: "[&] capture toutes les variables de la portée englobante par référence."
+    "explanation": {
+      "en": "void means the function performs an action (like printing or modifying state) without returning data.",
+      "fr": "void indique que la fonction effectue une action sans renvoyer de données."
     }
   },
-  65: {
-    question: {
-      en: "In the Rule of 5, if you define a custom destructor, why should you define move operations?",
-      fr: "Dans la règle des 5, si vous définissez un destructeur manuel, pourquoi définir les opérations de déplacement ?"
+  "27": {
+    "question": {
+      "en": "What happens to remaining code inside a function after a 'return' statement is executed?",
+      "fr": "Qu'arrive-t-il au code situé après une instruction 'return' dans une fonction ?"
     },
-    options: [
-      { text: { en: "Because defining a destructor suppresses automatic compiler generation of move operations", fr: "Parce que définir un destructeur empêche la génération automatique des déplacements par le compilateur" }, correct: true },
-      { text: { en: "Move operations are required by the OS", fr: "Les déplacements sont imposés par l'OS" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It is skipped; the function immediately exits",
+          "fr": "Il est ignoré ; la fonction se termine immédiatement"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It executes in the background",
+          "fr": "Il s'exécute en tâche de fond"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It causes a compiler warning",
+          "fr": "Il génère un avertissement de compilation"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Declaring a destructor disables default move constructor/assignment generation.",
-      fr: "Déclarer un destructeur désactive la synthèse automatique du constructeur et de l'assignation de déplacement."
+    "explanation": {
+      "en": "Executing 'return' hands back control to the caller immediately, ignoring any remaining lines.",
+      "fr": "L'instruction 'return' rend immédiatement la main à l'appelant en ignorant les lignes suivantes."
     }
   },
-  66: {
-    question: {
-      en: "Which stream method checks if an IO stream encountered the end-of-file?",
-      fr: "Quelle méthode de flux vérifie si la fin de fichier (EOF) a été atteinte ?"
+  "28": {
+    "question": {
+      "en": "Can two functions in C++ share the same name if they only differ by return type?",
+      "fr": "Deux fonctions peuvent-elles porter le même nom si seul leur type de retour est différent ?"
     },
-    options: [
-      { text: { en: "stream.eof()", fr: "stream.eof()" }, correct: true },
-      { text: { en: "stream.fail()", fr: "stream.fail()" }, correct: false },
-      { text: { en: "stream.bad()", fr: "stream.bad()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "No, C++ overload resolution requires different parameter types or counts",
+          "fr": "Non, la surcharge en C++ exige des types ou un nombre de paramètres différents"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Yes, return type overloading is fully supported",
+          "fr": "Oui, la surcharge par type de retour est permise"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Only if declared static",
+          "fr": "Seulement si elles sont déclarées static"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "stream.eof() returns true when the stream has attempted to read past end of file.",
-      fr: "stream.eof() renvoie vrai lorsque le flux a tenté de lire au-delà de la fin de fichier."
+    "explanation": {
+      "en": "Function overloading in C++ requires distinct parameter signatures; return type alone is not enough.",
+      "fr": "La surcharge exige des paramètres différents ; le type de retour seul ne suffit pas."
     }
   },
-  67: {
-    question: {
-      en: "Which file is the standard configuration file read by CMake to build a project?",
-      fr: "Quel fichier de configuration standard est lu par CMake pour construire un projet ?"
+  "29": {
+    "question": {
+      "en": "How can you access a global variable 'x' if a local variable also named 'x' is in scope?",
+      "fr": "Comment accéder à une variable globale 'x' masquée par une variable locale portant le même nom ?"
     },
-    options: [
-      { text: { en: "CMakeLists.txt", fr: "CMakeLists.txt" }, correct: true },
-      { text: { en: "Makefile.cmake", fr: "Makefile.cmake" }, correct: false },
-      { text: { en: "project.json", fr: "project.json" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Using the unary scope resolution operator: ::x",
+          "fr": "En utilisant l'opérateur unaire de portée : ::x"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Using global.x",
+          "fr": "En écrivant global.x"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It is impossible; the global variable is deleted",
+          "fr": "C'est impossible ; la variable globale est détruite"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "CMakeLists.txt contains the build instructions, targets, and dependencies for CMake.",
-      fr: "CMakeLists.txt contient les instructions de compilation, cibles et dépendances pour CMake."
+    "explanation": {
+      "en": "Prefixing with :: (unary scope resolution) accesses the global variable in global scope.",
+      "fr": "Le préfixe :: (résolution de portée globale unaire) permet d'accéder à la variable globale."
     }
   },
-  68: {
-    question: {
-      en: "What type of bugs does Google AddressSanitizer (-fsanitize=address) detect?",
-      fr: "Quel type de bugs Google AddressSanitizer (-fsanitize=address) détecte-t-il ?"
+  "30": {
+    "question": {
+      "en": "In a banking simulation, why should deposit() and withdraw() check that amounts are positive (> 0)?",
+      "fr": "Dans un programme bancaire, pourquoi vérifier que les montants de dépôt/retrait sont strictement positifs ?"
     },
-    options: [
-      { text: { en: "Out-of-bounds memory accesses, buffer overflows, and use-after-free", fr: "Accès mémoire hors limites, débordements de tampon et use-after-free" }, correct: true },
-      { text: { en: "HTML syntax errors", fr: "Erreurs de syntaxe HTML" }, correct: false },
-      { text: { en: "Slow network latencies only", fr: "Latences réseau uniquement" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To prevent negative transaction fraud or unintended state corruption",
+          "fr": "Pour empêcher les transactions négatives ou la corruption du solde"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Because C++ does not support negative doubles",
+          "fr": "Car C++ ne supporte pas les doubles négatifs"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To speed up floating point calculations",
+          "fr": "Pour accélérer les calculs flottants"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "ASan instruments pointers to catch memory safety violations immediately as they occur.",
-      fr: "ASan instrumente les pointeurs pour intercepter immédiatement les violations de sécurité mémoire."
+    "explanation": {
+      "en": "Input validation is essential business logic in robust software.",
+      "fr": "La validation des entrées utilisateur est une règle métier fondamentale."
     }
   },
-  69: {
-    question: {
-      en: "What command in GDB prints the complete call stack trace of a crash?",
-      fr: "Quelle commande dans GDB affiche la trace complète de la pile d'appels (stack trace) lors d'un crash ?"
+  "31": {
+    "question": {
+      "en": "In Rock-Paper-Scissors, what operator combination evaluates whether player beats computer?",
+      "fr": "Au chifoumi, quelle combinaison logique évalue si le joueur bat l'ordinateur ?"
     },
-    options: [
-      { text: { en: "backtrace (or bt)", fr: "backtrace (ou bt)" }, correct: true },
-      { text: { en: "print", fr: "print" }, correct: false },
-      { text: { en: "continue", fr: "continue" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')",
+          "fr": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "p > c",
+          "fr": "p > c"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "p == c",
+          "fr": "p == c"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "'bt' or 'backtrace' prints the stack frames leading up to the current instruction or crash.",
-      fr: "'bt' ou 'backtrace' affiche l'ensemble des trames d'appels de la pile jusqu'au crash."
+    "explanation": {
+      "en": "Grouping each winning pair with && and combining all winning scenarios with ||.",
+      "fr": "En regroupant chaque paire gagnante avec && et en combinant les cas avec ||."
     }
   },
-  70: {
-    question: {
-      en: "In GoogleTest, which macro defines an individual unit test case?",
-      fr: "Dans GoogleTest, quelle macro définit un cas de test unitaire individuel ?"
+  "32": {
+    "question": {
+      "en": "What is the index of the first element in a C++ array?",
+      "fr": "Quel est l'index du premier élément d'un tableau en C++ ?"
     },
-    options: [
-      { text: { en: "TEST(TestSuite, TestName)", fr: "TEST(TestSuite, TestName)" }, correct: true },
-      { text: { en: "UNIT_TEST()", fr: "UNIT_TEST()" }, correct: false },
-      { text: { en: "CHECK_EQUAL()", fr: "CHECK_EQUAL()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "0",
+          "fr": "0"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "1",
+          "fr": "1"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "-1",
+          "fr": "-1"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "TEST(SuiteName, TestName) registers a test function within GoogleTest's runner.",
-      fr: "TEST(SuiteName, TestName) enregistre un cas de test auprès de l'exécuteur GoogleTest."
+    "explanation": {
+      "en": "C++ arrays are strictly 0-indexed; array[0] refers to the first element.",
+      "fr": "Les tableaux C++ commencent strictement à l'indice 0 ; array[0] est le premier élément."
     }
   },
-  71: {
-    question: {
-      en: "Which command in vcpkg integrates installed packages automatically with Visual Studio and CMake?",
-      fr: "Quelle commande dans vcpkg intègre automatiquement les paquets installés avec Visual Studio et CMake ?"
+  "33": {
+    "question": {
+      "en": "How do you calculate the number of elements in a raw array 'int arr[10]' using sizeof?",
+      "fr": "Comment calculer le nombre d'éléments d'un tableau 'int arr[10]' avec sizeof ?"
     },
-    options: [
-      { text: { en: "vcpkg integrate install", fr: "vcpkg integrate install" }, correct: true },
-      { text: { en: "vcpkg link-all", fr: "vcpkg link-all" }, correct: false },
-      { text: { en: "vcpkg setup-cmake", fr: "vcpkg setup-cmake" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "sizeof(arr) / sizeof(arr[0])",
+          "fr": "sizeof(arr) / sizeof(arr[0])"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "sizeof(arr)",
+          "fr": "sizeof(arr)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "arr.length()",
+          "fr": "arr.length()"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "'vcpkg integrate install' hooks vcpkg into user-wide MSBuild and CMake toolchain paths.",
-      fr: "'vcpkg integrate install' configure automatiquement la chaîne d'outils CMake et MSBuild."
+    "explanation": {
+      "en": "Total byte size divided by the byte size of a single element yields the element count.",
+      "fr": "La taille totale en octets divisée par la taille d'un seul élément donne le nombre d'éléments."
     }
   },
-  72: {
-    question: {
-      en: "Why is std::jthread in C++20 superior to std::thread for multi-threading?",
-      fr: "Pourquoi std::jthread en C++20 est-il supérieur à std::thread pour le multithreading ?"
+  "34": {
+    "question": {
+      "en": "What condition should an index loop use to iterate through an array of 'size' elements?",
+      "fr": "Quelle condition de boucle for indexée doit-on utiliser pour un tableau de 'size' éléments ?"
     },
-    options: [
-      { text: { en: "It automatically joins on destruction and supports cooperative stop tokens", fr: "Il appelle join() automatiquement à la destruction et gère l'annulation par jeton d'arrêt" }, correct: true },
-      { text: { en: "It runs without a CPU core", fr: "Il tourne sans cœur processeur" }, correct: false },
-      { text: { en: "It automatically locks all variables", fr: "Il verrouille automatiquement toutes les variables" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "i < size",
+          "fr": "i < size"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "i <= size",
+          "fr": "i <= size"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "i == size",
+          "fr": "i == size"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::jthread solves the notorious terminate() crash bug of forgotten std::thread::join() calls.",
-      fr: "std::jthread élimine les crashs std::terminate() provoqués par les oublis de std::thread::join()."
+    "explanation": {
+      "en": "Valid indices are 0 through size - 1. Using i <= size accesses invalid memory beyond bounds.",
+      "fr": "Les index valides vont de 0 à size - 1. Utiliser i <= size lit en dehors du tableau."
     }
   },
-  73: {
-    question: {
-      en: "What is the key advantage of the Pimpl (Pointer to Implementation) idiom in C++?",
-      fr: "Quel est l'avantage clé de l'idiome Pimpl (Pointer to Implementation) en C++ ?"
+  "35": {
+    "question": {
+      "en": "Why should you prefer 'const auto& item' in a range-based for loop over 'auto item' for large objects?",
+      "fr": "Pourquoi préférer 'const auto& item' dans une boucle for-each pour de gros objets ?"
     },
-    options: [
-      { text: { en: "Preserves ABI binary stability and drastically speeds up compile times", fr: "Préserve la stabilité binaire ABI et accélère considérablement la compilation" }, correct: true },
-      { text: { en: "Eliminates all pointer dereferences", fr: "Élimine tout déréférencement de pointeur" }, correct: false },
-      { text: { en: "Makes classes automatically thread-safe", fr: "Rend les classes automatiquement thread-safe" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "It avoids expensive copies while guaranteeing read-only safety",
+          "fr": "Elle évite les copies coûteuses tout en garantissant la lecture seule"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It allows modifying the original elements",
+          "fr": "Elle permet de modifier les originaux"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Range-based for requires references to compile",
+          "fr": "La boucle for-each l'exige pour compiler"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Pimpl confines private headers to .cpp files, preventing recompilation cascading when internals change.",
-      fr: "Pimpl isole les en-têtes privés dans les .cpp, évitant les recompilations en cascade."
+    "explanation": {
+      "en": "const auto& binds a read-only reference directly to the container element without copying.",
+      "fr": "const auto& lie une référence en lecture seule à chaque élément sans aucune copie."
     }
   },
-  74: {
-    question: {
-      en: "Why does std::jthread automatically prevent application crashes on scope exit?",
-      fr: "Pourquoi std::jthread prévient-il automatiquement les crashs de l'application en sortie de portée ?"
+  "36": {
+    "question": {
+      "en": "What happens when you pass a raw array to a function parameter (e.g. void fn(int arr[]))?",
+      "fr": "Que se produit-il lorsqu'on passe un tableau brut en paramètre de fonction ?"
     },
-    options: [
-      { text: { en: "Its destructor automatically calls request_stop() and join()", fr: "Son destructeur appelle automatiquement request_stop() et join()" }, correct: true },
-      { text: { en: "It forces the operating system to pause", fr: "Il force le système d'exploitation à se mettre en pause" }, correct: false },
-      { text: { en: "It converts multithreaded code into single-threaded code", fr: "Il convertit le code multithread en code mono-thread" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The array decays into a pointer (int*), losing its size information",
+          "fr": "Le tableau dégénère en pointeur (int*) et perd sa taille"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The entire array is cloned on the stack",
+          "fr": "Le tableau entier est cloné sur la pile"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The compiler throws an error",
+          "fr": "Le compilateur signale une erreur"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::jthread joins automatically in its destructor, avoiding the fatal std::terminate() triggered by std::thread.",
-      fr: "std::jthread fait un join automatique dans son destructeur, évitant le redouté crash std::terminate() de std::thread."
+    "explanation": {
+      "en": "Array decay converts the array to a pointer to its first element; always pass size separately.",
+      "fr": "La dégénérescence convertit le tableau en pointeur vers le 1er élément ; la taille doit être passée."
     }
   },
-  75: {
-    question: {
-      en: "Which RAII lock wrapper should you use to lock multiple mutexes simultaneously without deadlocks?",
-      fr: "Quel wrapper RAII devez-vous utiliser pour verrouiller plusieurs mutex simultanément sans risque d'interblocage ?"
+  "37": {
+    "question": {
+      "en": "What is the average time complexity of Linear Search on an unsorted array of N elements?",
+      "fr": "Quelle est la complexité temporelle moyenne d'une recherche linéaire sur un tableau de N éléments ?"
     },
-    options: [
-      { text: { en: "std::scoped_lock (C++17)", fr: "std::scoped_lock (C++17)" }, correct: true },
-      { text: { en: "std::lock_guard", fr: "std::lock_guard" }, correct: false },
-      { text: { en: "raw mtx.lock() calls in sequence", fr: "des appels manuels successifs à mtx.lock()" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "O(N)",
+          "fr": "O(N)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "O(1)",
+          "fr": "O(1)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "O(log N)",
+          "fr": "O(log N)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::scoped_lock accepts any number of mutexes and uses a deadlock-avoidance algorithm to lock them all safely.",
-      fr: "std::scoped_lock accepte plusieurs mutex et utilise un algorithme anti-deadlock pour les verrouiller en toute sécurité."
+    "explanation": {
+      "en": "Linear search checks each element one by one, requiring up to N comparisons in the worst case.",
+      "fr": "La recherche linéaire inspecte les éléments un par un, nécessitant jusqu'à N étapes au pire."
     }
   },
-  76: {
-    question: {
-      en: "Why should you always pass a predicate lambda to cv.wait()?",
-      fr: "Pourquoi doit-on toujours passer un prédicat lambda à cv.wait() ?"
+  "38": {
+    "question": {
+      "en": "How does Bubble Sort arrange elements into ascending order?",
+      "fr": "Comment le tri à bulles (Bubble Sort) ordonne-t-il les éléments en ordre croissant ?"
     },
-    options: [
-      { text: { en: "To prevent spurious wakeups from executing code before the condition is truly met", fr: "Pour empêcher les réveils spontanés (spurious wakeups) d'exécuter du code sans condition valide" }, correct: true },
-      { text: { en: "To enable compilation on 32-bit systems", fr: "Pour permettre la compilation sur architectures 32 bits" }, correct: false },
-      { text: { en: "To unlock the mutex permanently", fr: "Pour déverrouiller définitivement le mutex" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Repeatedly compares adjacent pairs and swaps them if out of order",
+          "fr": "Compare les paires adjacentes et les échange si elles sont dans le désordre"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Divides the array into halves recursively",
+          "fr": "Divise récursivement le tableau en deux"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Inserts elements into a binary search tree",
+          "fr": "Insère les éléments dans un arbre binaire"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "cv.wait(lock, []{ return condition; }); re-checks the condition whenever the thread wakes, ignoring false wakeups.",
-      fr: "cv.wait avec prédicat réévalue la condition à chaque réveil et se rendort si elle n'est pas encore satisfaite."
+    "explanation": {
+      "en": "Bubble Sort bubbles the largest remaining value to the end of the array each pass.",
+      "fr": "Le tri à bulles fait remonter le plus grand élément restant à la fin du tableau à chaque tour."
     }
   },
-  77: {
-    question: {
-      en: "Which policy flag ensures std::async runs on a separate asynchronous OS thread?",
-      fr: "Quel flag de politique garantit que std::async s'exécute sur un thread d'arrière-plan distinct ?"
+  "39": {
+    "question": {
+      "en": "What header is required to use the std::fill algorithm in C++?",
+      "fr": "Quel en-tête est requis pour utiliser l'algorithme std::fill en C++ ?"
     },
-    options: [
-      { text: { en: "std::launch::async", fr: "std::launch::async" }, correct: true },
-      { text: { en: "std::launch::deferred", fr: "std::launch::deferred" }, correct: false },
-      { text: { en: "std::launch::sync", fr: "std::launch::sync" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "<algorithm>",
+          "fr": "<algorithm>"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "<vector>",
+          "fr": "<vector>"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "<array>",
+          "fr": "<array>"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::launch::async guarantees a dedicated background thread; std::launch::deferred delays execution until .get().",
-      fr: "std::launch::async force un thread dédié ; std::launch::deferred retarde l'exécution synchrone jusqu'à .get()."
+    "explanation": {
+      "en": "std::fill is defined inside <algorithm>.",
+      "fr": "std::fill est défini dans <algorithm>."
     }
   },
-  78: {
-    question: {
-      en: "What alignment attribute should you use to prevent False Sharing on modern CPU cache lines?",
-      fr: "Quel attribut d'alignement devez-vous utiliser pour éliminer le False Sharing sur les lignes de cache CPU modernes ?"
+  "40": {
+    "question": {
+      "en": "When populating an array with user input, why must you track current count against maximum capacity?",
+      "fr": "Lors du remplissage d'un tableau par saisie utilisateur, pourquoi surveiller la capacité maximale ?"
     },
-    options: [
-      { text: { en: "alignas(64) (or std::hardware_destructive_interference_size)", fr: "alignas(64) (ou std::hardware_destructive_interference_size)" }, correct: true },
-      { text: { en: "alignas(4)", fr: "alignas(4)" }, correct: false },
-      { text: { en: "inline", fr: "inline" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "To prevent writing past the array bounds and causing buffer overflows",
+          "fr": "Pour éviter d'écrire hors limites et provoquer un débordement de tampon"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "C++ arrays automatically double when full",
+          "fr": "Les tableaux C++ doublent automatiquement quand ils sont pleins"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The compiler requires it",
+          "fr": "Le compilateur l'exige"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "Standard CPU cache lines are 64 bytes; aligning atomic variables to 64 bytes isolates them into their own cache lines.",
-      fr: "Les lignes de cache CPU mesurent 64 octets ; aligner à 64 octets isole chaque variable atomique dans sa propre ligne."
+    "explanation": {
+      "en": "Fixed-size arrays cannot expand; writing beyond bounds leads to memory corruption.",
+      "fr": "Les tableaux bruts ont une taille fixe ; dépasser leur capacité corrompt la mémoire."
     }
   },
-  79: {
-    question: {
-      en: "What synchronization primitive allows controlling a pool of N concurrent resources in C++20?",
-      fr: "Quel outil de synchronisation permet de contrôler un pool de N ressources concurrentes en C++20 ?"
+  "41": {
+    "question": {
+      "en": "How do you access the element in row 1, column 2 of a 2D array 'grid'?",
+      "fr": "Comment accéder à l'élément de la ligne 1, colonne 2 d'une matrice 2D 'grid' ?"
     },
-    options: [
-      { text: { en: "std::counting_semaphore", fr: "std::counting_semaphore" }, correct: true },
-      { text: { en: "std::mutex", fr: "std::mutex" }, correct: false },
-      { text: { en: "std::latch", fr: "std::latch" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "grid[1][2]",
+          "fr": "grid[1][2]"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "grid[1, 2]",
+          "fr": "grid[1, 2]"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "grid.at(1, 2)",
+          "fr": "grid.at(1, 2)"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::counting_semaphore manages a counter of available resources, permitting acquire() when count > 0.",
-      fr: "std::counting_semaphore gère un compteur d'accès simultanés, autorisant acquire() tant que le compteur est supérieur à 0."
+    "explanation": {
+      "en": "2D arrays use chained brackets: array[rowIndex][columnIndex].",
+      "fr": "Les tableaux 2D utilisent des crochets successifs : tab[indexLigne][indexColonne]."
     }
   },
-  80: {
-    question: {
-      en: "How do you constrain a function template using a C++20 concept?",
-      fr: "Comment contraint-on un template de fonction à l'aide d'un concept C++20 ?"
+  "42": {
+    "question": {
+      "en": "In the console Quiz Game program, how are questions, options, and answer keys synchronized?",
+      "fr": "Dans le jeu de quiz en console, comment synchroniser questions, options et réponses ?"
     },
-    options: [
-      { text: { en: "template<MyConcept T> void func(T x) or using 'requires MyConcept<T>'", fr: "template<MyConcept T> void func(T x) ou avec 'requires MyConcept<T>'" }, correct: true },
-      { text: { en: "using try-catch blocks at runtime", fr: "avec des blocs try-catch à l'exécution" }, correct: false },
-      { text: { en: "by casting T to void*", fr: "en castant T en void*" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Using a shared loop index (i) across all parallel arrays",
+          "fr": "En utilisant le même index de boucle (i) sur tous les tableaux parallèles"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "By merging them into a single string",
+          "fr": "En les fusionnant en une chaîne unique"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Through random matching",
+          "fr": "Par correspondance aléatoire"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "C++20 concepts can be used directly as type constraints in template brackets or following a 'requires' clause.",
-      fr: "Les concepts C++20 s'utilisent directement à la place de typename/class ou après la clause 'requires'."
+    "explanation": {
+      "en": "Index i references question[i], options[i], and answerKey[i] simultaneously.",
+      "fr": "L'index i permet d'accéder en même temps à question[i], options[i] et answerKey[i]."
     }
   },
-  81: {
-    question: {
-      en: "What makes C++20 std::views highly efficient when transforming containers?",
-      fr: "Qu'est-ce qui rend les std::views C++20 extrêmement efficaces pour transformer des conteneurs ?"
+  "43": {
+    "question": {
+      "en": "What does the address-of operator (&x) return?",
+      "fr": "Que renvoie l'opérateur d'adresse (&x) ?"
     },
-    options: [
-      { text: { en: "They evaluate lazily on iteration with zero heap memory allocations", fr: "Ils sont évalués de façon paresseuse à l'itération sans aucune allocation mémoire sur le tas" }, correct: true },
-      { text: { en: "They clone the entire vector into GPU memory", fr: "Ils dupliquent tout le vecteur dans la mémoire GPU" }, correct: false },
-      { text: { en: "They delete the original vector", fr: "Ils suppriment le vecteur d'origine" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "The hexadecimal memory address where variable x is located in RAM",
+          "fr": "L'adresse mémoire hexadécimale où se trouve la variable x en RAM"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The value stored inside x",
+          "fr": "La valeur stockée dans x"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "A duplicate copy of x",
+          "fr": "Une copie identique de x"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "std::views are lightweight wrappers that calculate values on demand, eliminating temporary vector copies.",
-      fr: "std::views sont des vues légères calculant les valeurs à la volée, supprimant les copies temporaires."
+    "explanation": {
+      "en": "&x gives the memory address location where the variable resides in memory.",
+      "fr": "&x donne l'emplacement physique en mémoire où réside la variable."
     }
   },
-  82: {
-    question: {
-      en: "What does the 'co_yield' keyword do inside a C++20 coroutine?",
-      fr: "Que fait le mot-clé 'co_yield' dans une coroutine C++20 ?"
+  "44": {
+    "question": {
+      "en": "Why does passing by reference (void swap(int& a, int& b)) allow modifying the original variables?",
+      "fr": "Pourquoi le passage par référence permet-il de modifier les variables originales ?"
     },
-    options: [
-      { text: { en: "Suspends the coroutine and sends an intermediate value back to the caller", fr: "Suspend la coroutine et renvoie une valeur intermédiaire à l'appelant" }, correct: true },
-      { text: { en: "Destroys the coroutine stack frame", fr: "Détruit le cadre d'exécution de la coroutine" }, correct: false },
-      { text: { en: "Throws an exception to abort execution", fr: "Lève une exception pour interrompre l'exécution" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "References alias the caller's actual memory addresses instead of creating copies",
+          "fr": "Les références sont des alias directs de la mémoire originale sans copie"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "References create global variables",
+          "fr": "Les références créent des variables globales"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Because reference parameters run on a different thread",
+          "fr": "Car elles tournent sur un thread séparé"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "co_yield produces a value and pauses execution while preserving all local variables in the coroutine frame.",
-      fr: "co_yield émet une valeur et met en pause l'exécution tout en préservant l'état des variables locales."
+    "explanation": {
+      "en": "A reference is an immutable alias; any read or write operates directly on the caller's variable.",
+      "fr": "Une référence est un alias direct ; toute lecture ou écriture modifie la variable source."
     }
   },
-  83: {
-    question: {
-      en: "Why is Structure of Arrays (SoA) vastly faster in simulation loops than Array of Structures (AoS)?",
-      fr: "Pourquoi Structure of Arrays (SoA) est-elle bien plus rapide en boucle de calcul que Array of Structures (AoS) ?"
+  "45": {
+    "question": {
+      "en": "What is the main benefit of declaring a parameter as 'const std::string& str'?",
+      "fr": "Quel est le bénéfice majeur de déclarer un paramètre comme 'const std::string& str' ?"
     },
-    options: [
-      { text: { en: "Contiguous arrays maximize cache line hits and enable SIMD vectorization", fr: "La contiguïté mémoire maximise les succès de ligne de cache et permet la vectorisation SIMD" }, correct: true },
-      { text: { en: "SoA runs on 16 threads by default", fr: "SoA tourne par défaut sur 16 threads" }, correct: false },
-      { text: { en: "SoA does not use any RAM", fr: "SoA n'utilise pas de mémoire RAM" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "Zero-copy performance combined with read-only safety",
+          "fr": "Performance sans copie combinée à la sécurité de la lecture seule"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Allows the function to alter the caller's string",
+          "fr": "Permet de modifier la chaîne appelante"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Converts strings to integer hashes automatically",
+          "fr": "Convertit automatiquement en hash entier"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "CPUs fetch 64-byte chunks into L1 cache; SoA ensures 100% of fetched bytes belong to the data being processed.",
-      fr: "Le CPU charge des lignes de 64 octets dans le cache L1 ; SoA assure que chaque octet chargé est immédiatement utile."
+    "explanation": {
+      "en": "const Type& prevents deep copying large objects while strictly preventing accidental modifications.",
+      "fr": "const Type& évite les copies coûteuses tout en interdisant toute modification accidentelle."
     }
   },
-  84: {
-    question: {
-      en: "How does CRTP (Curiously Recurring Template Pattern) avoid the performance overhead of virtual functions?",
-      fr: "Comment le CRTP élimine-t-il le surcoût de performance des fonctions virtuelles ?"
+  "46": {
+    "question": {
+      "en": "In the Credit Card Validator, how do you convert an ASCII digit character '7' to numeric int 7?",
+      "fr": "Dans le validateur de carte bancaire, comment convertir le caractère '7' en entier 7 ?"
     },
-    options: [
-      { text: { en: "It resolves polymorphic calls statically at compile-time with no vtable pointer indirection", fr: "Il résout les appels polymorphiques dès la compilation sans aucune indirection de pointeur vtable" }, correct: true },
-      { text: { en: "It converts functions into assembly macros", fr: "Il convertit les fonctions en macros assembleur" }, correct: false },
-      { text: { en: "It runs all calculations in registers", fr: "Il exécute tous les calculs dans des registres" }, correct: false }
+    "options": [
+      {
+        "text": {
+          "en": "charDigit - '0'",
+          "fr": "charDigit - '0'"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "static_cast<int>(charDigit)",
+          "fr": "static_cast<int>(charDigit)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "charDigit * 10",
+          "fr": "charDigit * 10"
+        },
+        "correct": false
+      }
     ],
-    explanation: {
-      en: "CRTP uses static_cast<Derived*>(this) at compile time, enabling compiler inlining and zero vtable size penalty.",
-      fr: "Le CRTP utilise static_cast<Derived*>(this) à la compilation, permettant l'inlining et éliminant la vtable."
+    "explanation": {
+      "en": "Subtracting '0' (ASCII 48) gives the exact numeric offset: '7' - '0' = 55 - 48 = 7.",
+      "fr": "Soustraire '0' (ASCII 48) calcule la valeur numérique exacte : '7' - '0' = 55 - 48 = 7."
+    }
+  },
+  "47": {
+    "question": {
+      "en": "What is the dereference operator (*) used for with a pointer?",
+      "fr": "À quoi sert l'opérateur de déréférencement (*) appliqué à un pointeur ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "To read or write the actual value stored at the address pointed to",
+          "fr": "À lire ou modifier la valeur stockée à l'adresse pointée"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To obtain the pointer's own address",
+          "fr": "À obtenir l'adresse du pointeur lui-même"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To multiply the pointer by 2",
+          "fr": "À multiplier le pointeur par 2"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "*ptr dereferences the pointer, allowing direct access to the pointed-to object.",
+      "fr": "*ptr déréférence le pointeur et donne un accès direct à la valeur ciblée."
+    }
+  },
+  "48": {
+    "question": {
+      "en": "Why should unassigned pointers always be initialized to 'nullptr' in modern C++?",
+      "fr": "Pourquoi un pointeur non assigné doit-il toujours être initialisé à 'nullptr' ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "To prevent wild / dangling pointers containing random garbage memory addresses",
+          "fr": "Pour éviter les pointeurs fous contenant des adresses mémoires aléatoires"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "nullptr allocates 4 bytes on the heap",
+          "fr": "nullptr alloue 4 octets sur le tas"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Modern C++ does not allow declaring pointers without nullptr",
+          "fr": "C++ moderne interdit de déclarer un pointeur sans nullptr"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Initializing to nullptr allows safe checking (if (ptr != nullptr)) before dereferencing.",
+      "fr": "Initialiser à nullptr permet de tester la validité (if (ptr != nullptr)) avant utilisation."
+    }
+  },
+  "49": {
+    "question": {
+      "en": "How many winning line configurations exist on a standard 3x3 Tic-Tac-Toe grid?",
+      "fr": "Combien de configurations gagnantes existent sur une grille de Morpion 3x3 ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "8 (3 rows, 3 columns, 2 diagonals)",
+          "fr": "8 (3 lignes, 3 colonnes, 2 diagonales)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "6 (3 rows, 3 columns)",
+          "fr": "6 (3 lignes, 3 colonnes)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "9",
+          "fr": "9"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "A 3x3 board has 3 horizontal rows, 3 vertical columns, and 2 diagonals = 8 winning combinations.",
+      "fr": "Un plateau 3x3 comporte 3 lignes, 3 colonnes et 2 diagonales, soit 8 combinaisons gagnantes."
+    }
+  },
+  "50": {
+    "question": {
+      "en": "What happens if you allocate heap memory with 'new' but forget to call 'delete'?",
+      "fr": "Que se passe-t-il si vous allouez de la mémoire avec 'new' sans jamais appeler 'delete' ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "A memory leak occurs; RAM remains consumed until program termination",
+          "fr": "Une fuite de mémoire survient ; la RAM reste occupée jusqu'à la fin du programme"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "The memory is automatically deleted on function return",
+          "fr": "La mémoire est libérée automatiquement à la fin de la fonction"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "The CPU triggers an immediate hardware reset",
+          "fr": "Le processeur redémarre la machine"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Heap memory allocated with 'new' must be explicitly freed with 'delete' to prevent leaks.",
+      "fr": "La mémoire allouée avec 'new' doit être libérée manuellement avec 'delete' pour éviter les fuites."
+    }
+  },
+  "51": {
+    "question": {
+      "en": "What must every recursive function have to prevent infinite recursion and stack overflow?",
+      "fr": "Que doit posséder toute fonction récursive pour éviter un débordement de pile (stack overflow) ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "A base case that stops recursion without making further recursive calls",
+          "fr": "Un cas de base qui arrête la récursion sans nouvel appel"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "A loop counter",
+          "fr": "Un compteur de boucle for"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "A global variable",
+          "fr": "Une variable globale"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "The base case halts recursion; without it, function calls consume all call stack space.",
+      "fr": "Le cas de base arrête la récursion ; sans lui, la pile d'appels sature et fait planter le programme."
+    }
+  },
+  "52": {
+    "question": {
+      "en": "How do function templates (template <typename T>) work under the hood during compilation?",
+      "fr": "Comment les patrons de fonctions (template <typename T>) fonctionnent-ils lors de la compilation ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "The compiler generates concrete function overloads for each invoked data type",
+          "fr": "Le compilateur génère les surcharges concrètes pour chaque type utilisé"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "They convert all variables into generic void* pointers at runtime",
+          "fr": "Ils convertissent tout en pointeurs void* à l'exécution"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "They interpret types at runtime like Python",
+          "fr": "Ils interprètent les types dynamiquement comme Python"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "C++ templates are zero-cost abstractions instantiated at compile-time with full type safety.",
+      "fr": "Les templates C++ sont instanciés à la compilation sans aucun surcoût d'exécution."
+    }
+  },
+  "53": {
+    "question": {
+      "en": "What is the default access level for members declared inside a C++ 'struct'?",
+      "fr": "Quel est le niveau d'accès par défaut des membres d'une 'struct' en C++ ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "public",
+          "fr": "public"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "private",
+          "fr": "private"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "protected",
+          "fr": "protected"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Members of a struct are public by default, whereas members of a class are private by default.",
+      "fr": "Les membres d'une struct sont publics par défaut, alors que ceux d'une class sont privés."
+    }
+  },
+  "54": {
+    "question": {
+      "en": "Why is it best practice to pass a large struct to a read-only function as 'const StructName&'?",
+      "fr": "Pourquoi passer une grande structure en 'const StructName&' pour une lecture seule ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "It avoids copying all member variables while protecting them from modification",
+          "fr": "Cela évite de copier tous les membres tout en empêchant toute altération"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Structs cannot be passed by value in C++",
+          "fr": "Les structs ne peuvent pas être passées par valeur"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It frees the struct memory automatically",
+          "fr": "Cela libère automatiquement la mémoire de la struct"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Passing large structs by value copies every single member field; const reference is zero-copy.",
+      "fr": "Passer par valeur copie chaque membre ; la référence constante évite tout surcoût."
+    }
+  },
+  "55": {
+    "question": {
+      "en": "What underlying type represents enum values by default in C++?",
+      "fr": "Quel type sous-jacent représente les valeurs d'un enum par défaut en C++ ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Integers (int), starting at 0",
+          "fr": "Des entiers (int), débutant à 0"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Strings",
+          "fr": "Des chaînes de caractères"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Floating-point numbers",
+          "fr": "Des nombres décimaux"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Enum enumerators are assigned consecutive integer values starting from 0 by default.",
+      "fr": "Les valeurs d'un enum sont associées à des entiers consécutifs démarrant à 0."
+    }
+  },
+  "56": {
+    "question": {
+      "en": "What is the difference between a class and an object in Object-Oriented Programming?",
+      "fr": "Quelle est la différence entre une classe et un objet en Programmation Orientée Objet ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "A class is the blueprint; an object is a concrete instance of that blueprint",
+          "fr": "La classe est le modèle ; l'objet est une instance concrète de ce modèle"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "An object is a blueprint; a class is the instance",
+          "fr": "L'objet est le modèle ; la classe est l'instance"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Classes and objects are identical concepts",
+          "fr": "Classes et objets sont des termes strictement synonymes"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "A class defines properties and methods; objects are instantiated instances in memory.",
+      "fr": "La classe définit la structure et les méthodes ; l'objet est l'entité concrète en mémoire."
+    }
+  },
+  "57": {
+    "question": {
+      "en": "When is a constructor method called in C++?",
+      "fr": "Quand la méthode constructeur est-elle appelée en C++ ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Automatically whenever a new object of that class is instantiated",
+          "fr": "Automatiquement dès qu'un nouvel objet de la classe est instancié"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Only when explicitly invoked with object.Constructor()",
+          "fr": "Seulement si on l'appelle avec objet.Constructeur()"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "When the program exits main()",
+          "fr": "À la fermeture du programme"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Constructors run automatically at instantiation to set up the object's initial state.",
+      "fr": "Le constructeur s'exécute automatiquement à l'instanciation pour initialiser l'objet."
+    }
+  },
+  "58": {
+    "question": {
+      "en": "What allows constructor overloading to work in C++?",
+      "fr": "Qu'est-ce qui permet la surcharge de constructeurs en C++ ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Providing multiple constructors with different parameter lists",
+          "fr": "Fournir plusieurs constructeurs avec des listes de paramètres différentes"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Giving different names to each constructor",
+          "fr": "Donner un nom différent à chaque constructeur"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Specifying different return types",
+          "fr": "Spécifier des types de retour différents"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Constructors must share the class name; they are overloaded via distinct parameter counts and types.",
+      "fr": "Tous les constructeurs portent le nom de la classe ; ils diffèrent par leurs paramètres."
+    }
+  },
+  "59": {
+    "question": {
+      "en": "What OOP principle is achieved by making member variables private and providing public getters/setters?",
+      "fr": "Quel principe de la POO réalise-t-on en rendant les variables privées avec accesseurs publics ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Encapsulation (Data Hiding)",
+          "fr": "L'Encapsulation (Masquage des données)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Polymorphism",
+          "fr": "Le Polymorphisme"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Multiple Inheritance",
+          "fr": "L'Héritage Multiple"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Encapsulation hides sensitive data from direct tampering and validates mutations via setters.",
+      "fr": "L'encapsulation protège les attributs internes et filtre leurs modifications par les setters."
+    }
+  },
+  "60": {
+    "question": {
+      "en": "What syntax establishes that class Dog inherits publicly from class Animal?",
+      "fr": "Quelle syntaxe déclare que la classe Dog hérite publiquement de la classe Animal ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "class Dog : public Animal { ... };",
+          "fr": "class Dog : public Animal { ... };"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "class Dog extends Animal { ... };",
+          "fr": "class Dog extends Animal { ... };"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "class Dog inherits Animal { ... };",
+          "fr": "class Dog inherits Animal { ... };"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "In C++, inheritance is specified using a colon followed by access specifier (class Dog : public Animal).",
+      "fr": "En C++, l'héritage s'écrit avec un deux-points suivi du mode d'accès (: public Animal)."
+    }
+  },
+  "61": {
+    "question": {
+      "en": "Which method appends a new element to the end of a std::vector dynamic array?",
+      "fr": "Quelle méthode ajoute un nouvel élément à la fin d'un tableau dynamique std::vector ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "push_back(element)",
+          "fr": "push_back(element)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "append(element)",
+          "fr": "append(element)"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "add(element)",
+          "fr": "add(element)"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::vector::push_back(val) inserts val at the end and reallocates memory dynamically if capacity is full.",
+      "fr": "std::vector::push_back(val) insère à la fin et réalloue la mémoire dynamiquement si nécessaire."
+    }
+  },
+  "62": {
+    "question": {
+      "en": "Why MUST base classes with virtual methods always declare a virtual destructor (virtual ~Base() = default;)?",
+      "fr": "Pourquoi une classe de base polymorphe DOIT-ELLE toujours avoir un destructeur virtuel ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "To ensure derived class destructors run when deleting an object through a base pointer",
+          "fr": "Pour garantir l'appel du destructeur dérivé lors de la destruction via pointeur de base"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "To make constructors run faster",
+          "fr": "Pour accélérer les constructeurs"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It prevents compilation errors in main",
+          "fr": "Pour éviter une erreur de compilation dans main"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Deleting a derived object via Base* without a virtual destructor causes undefined behavior and leaks.",
+      "fr": "Supprimer un objet dérivé via Base* sans destructeur virtuel entraîne fuites et comportement indéfini."
+    }
+  },
+  "63": {
+    "question": {
+      "en": "What is the primary advantage of std::unique_ptr over a raw pointer with 'new'?",
+      "fr": "Quel est l'avantage majeur de std::unique_ptr par rapport à un pointeur brut 'new' ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Automatic RAII cleanup: memory is deleted automatically when the unique_ptr leaves scope",
+          "fr": "Nettoyage RAII automatique : la mémoire est libérée dès que l'unique_ptr sort de portée"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "unique_ptr can be shared by multiple threads simultaneously without locks",
+          "fr": "unique_ptr est partagé entre threads sans verrous"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "unique_ptr uses no memory at all",
+          "fr": "unique_ptr n'occupe aucune mémoire"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::unique_ptr exclusively owns heap memory and frees it automatically on destruction, preventing leaks.",
+      "fr": "std::unique_ptr possède la ressource en exclusivité et la détruit automatiquement, éliminant les fuites."
+    }
+  },
+  "64": {
+    "question": {
+      "en": "What data structure does std::map use under the hood to maintain sorted key-value pairs?",
+      "fr": "Quelle structure de données std::map utilise-t-il pour conserver les paires clé-valeur triées ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Self-balancing Red-Black Tree (O(log N) lookup)",
+          "fr": "Arbre rouge-noir équilibré (recherche en O(log N))"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Unsorted contiguous array",
+          "fr": "Tableau contigu non trié"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "Singly linked list",
+          "fr": "Liste simplement chaînée"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::map keeps elements sorted by key with logarithmic O(log N) insertions, removals, and searches.",
+      "fr": "std::map maintient ses clés ordonnées dans un arbre binaire de recherche équilibré en O(log N)."
+    }
+  },
+  "65": {
+    "question": {
+      "en": "Why should you use std::lock_guard<std::mutex> when synchronizing threads?",
+      "fr": "Pourquoi utiliser std::lock_guard<std::mutex> lors de la synchronisation de threads ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "It locks the mutex upon construction and unlocks automatically when exiting scope (RAII)",
+          "fr": "Il verrouille à la création et déverrouille automatiquement en sortie de portée (RAII)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It creates a new thread automatically",
+          "fr": "Il crée un nouveau thread automatiquement"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It prevents threads from needing mutexes",
+          "fr": "Il dispense d'utiliser des mutexes"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "std::lock_guard guarantees mutex release even if an exception is thrown, preventing deadlocks.",
+      "fr": "std::lock_guard garantit la libération du mutex même en cas d'exception, évitant les blocages."
     }
   }
 };
 
-// Module Master Quizzes (Big Quizzes per Module)
 const MODULE_QUIZZES = {
-  "mod-1": {
-    title: {
-      en: "Module 1 Master Quiz: C++ Basics & Fundamentals",
-      fr: "Grand Quiz Module 1 : Fondamentaux & Syntaxe C++"
+  "mod-1": [
+    {
+      "question": {
+        "en": "What stream object is used to output text to the console in C++?",
+        "fr": "Quel objet de flux est utilisé pour afficher du texte dans la console en C++ ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "std::cout",
+            "fr": "std::cout"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "std::cin",
+            "fr": "std::cin"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "printf_s",
+            "fr": "printf_s"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "std::cout (character output) in <iostream> sends formatted text to the standard console.",
+        "fr": "std::cout (character output) dans <iostream> envoie le texte formaté vers la console standard."
+      }
     },
-    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Basics")
-  },
-  "mod-5": {
-    title: {
-      en: "Module 5 Master Quiz: Pointers & Memory Management",
-      fr: "Grand Quiz Module 5 : Pointeurs & Gestion Mémoire"
+    {
+      "question": {
+        "en": "Which C++ data type should you use to store a single ASCII character?",
+        "fr": "Quel type de données C++ doit-on utiliser pour stocker un unique caractère ASCII ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "char",
+            "fr": "char"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "std::string",
+            "fr": "std::string"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "byte",
+            "fr": "byte"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "char uses single quotes like 'A' and represents an 8-bit character in memory.",
+        "fr": "char utilise des guillemets simples comme 'A' et occupe 1 octet en mémoire."
+      }
     },
-    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Memory")
-  },
-  "mod-7": {
-    title: {
-      en: "Module 7 Master Quiz: Modern C++ Features & Idioms",
-      fr: "Grand Quiz Module 7 : Fonctionnalités & Idiomes C++ Moderne"
+    {
+      "question": {
+        "en": "What happens if you try to reassign a variable declared with 'const'?",
+        "fr": "Que se passe-t-il si vous tentez de réassigner une variable déclarée avec 'const' ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Compile-time error",
+            "fr": "Erreur de compilation"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Runtime warning",
+            "fr": "Avertissement à l'exécution"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The value silently changes",
+            "fr": "La valeur change silencieusement"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The compiler rejects assignments to read-only const variables at compile time.",
+        "fr": "Le compilateur rejette les affectations aux variables const en lecture seule dès la compilation."
+      }
     },
-    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Modern C++")
-  },
-  "mod-8": {
-    title: {
-      en: "Module 8 Master Quiz: OOP & Advanced Language Details",
-      fr: "Grand Quiz Module 8 : POO & Détails Avancés"
+    {
+      "question": {
+        "en": "Which operator is used to access an entity inside a specific namespace?",
+        "fr": "Quel opérateur permet d'accéder à une entité située dans un espace de noms spécifique ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Scope resolution operator (::)",
+            "fr": "Opérateur de résolution de portée (::)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Member access dot (.)",
+            "fr": "Point d'accès membre (.)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Pointer arrow (->)",
+            "fr": "Flèche de pointeur (->)"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The scope resolution operator (::) tells the compiler which namespace to look inside.",
+        "fr": "L'opérateur de résolution de portée (::) indique au compilateur dans quel namespace chercher."
+      }
     },
-    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "OOP")
-  },
-  "mod-9": {
-    title: {
-      en: "Module 9 Master Quiz: Professional Developer Tooling",
-      fr: "Grand Quiz Module 9 : Outils du Développeur Professionnel"
+    {
+      "question": {
+        "en": "What does the modulus operator (%) return in integer arithmetic?",
+        "fr": "Que renvoie l'opérateur modulo (%) en arithmétique entière ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The remainder of the division",
+            "fr": "Le reste de la division entière"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The floating-point quotient",
+            "fr": "Le quotient en virgule flottante"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The percentage proportion",
+            "fr": "Le pourcentage proportionnel"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "For example, 14 % 4 evaluates to 2 because 14 divided by 4 leaves a remainder of 2.",
+        "fr": "Par exemple, 14 % 4 donne 2 car 14 divisé par 4 donne un reste de 2."
+      }
     },
-    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Pro Dev")
-  },
-  "mod-10": {
-    title: {
-      en: "Module 10 Master Quiz: Multithreading & High-Performance Concurrency",
-      fr: "Grand Quiz Module 10 : Multithreading & Concurrence Haute Performance"
+    {
+      "question": {
+        "en": "Why is static_cast<double>(intVal) preferred over C-style (double)intVal?",
+        "fr": "Pourquoi static_cast<double>(val) est-il préféré au cast à la C (double)val ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is checked by the compiler and explicit in intent",
+            "fr": "Il est vérifié par le compilateur et explicite d'intention"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It runs faster at runtime",
+            "fr": "Il s'exécute plus vite à l'exécution"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "C-style cast is deprecated and illegal in C++20",
+            "fr": "Le cast C est déprécié et illégal en C++20"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "static_cast prevents unintended dangerous type conversions at compile-time.",
+        "fr": "static_cast évite les conversions de types dangereuses et accidentelles dès la compilation."
+      }
     },
-    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Concurrency")
-  },
-  "mod-11": {
-    title: {
-      en: "Module 11 Master Quiz: Modern C++20/C++23 Architecture & Performance",
-      fr: "Grand Quiz Module 11 : Architecture C++20/C++23 & Haute Performance"
+    {
+      "question": {
+        "en": "Why does std::cin >> fail when reading a full name like 'Bro Code'?",
+        "fr": "Pourquoi std::cin >> échoue-t-il lors de la saisie d'un nom complet comme 'Bro Code' ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It stops reading at whitespace (spaces, tabs, newlines)",
+            "fr": "Il s'arrête dès le premier espace blanc (espace, tabulation, saut de ligne)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "std::cin cannot read std::string",
+            "fr": "std::cin ne peut pas lire de std::string"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Strings cannot exceed 4 characters",
+            "fr": "Les chaînes ne peuvent pas dépasser 4 caractères"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "std::cin extraction stops at whitespace. Use std::getline(std::cin, str) to read full lines.",
+        "fr": "L'extraction std::cin s'arrête au premier espace. Utilisez std::getline(std::cin, str) pour lire toute la ligne."
+      }
     },
-    questions: GRAND_EXAM_QUESTIONS.filter(q => q.subject === "Architecture")
-  }
+    {
+      "question": {
+        "en": "Which standard header must be included to use sqrt(), pow(), and round()?",
+        "fr": "Quel en-tête standard doit-on inclure pour utiliser sqrt(), pow() et round() ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "<cmath>",
+            "fr": "<cmath>"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "<maths>",
+            "fr": "<maths>"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "<algorithm>",
+            "fr": "<algorithm>"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "#include <cmath> provides standard mathematical functions.",
+        "fr": "#include <cmath> fournit les fonctions mathématiques standard."
+      }
+    }
+  ],
+  "mod-2": [
+    {
+      "question": {
+        "en": "What happens if all conditions in an if - else if chain evaluate to false and there is an else block?",
+        "fr": "Que se passe-t-il si toutes les conditions d'un if - else if sont fausses et qu'il y a un bloc else ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The else block executes",
+            "fr": "Le bloc else s'exécute"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The program crashes",
+            "fr": "Le programme plante"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The first if block re-executes",
+            "fr": "Le premier bloc if s'exécute à nouveau"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The else block acts as the fallback default when no preceding conditions match.",
+        "fr": "Le bloc else fait office d'alternative par défaut lorsque aucune condition précédente n'est remplie."
+      }
+    },
+    {
+      "question": {
+        "en": "Why is the 'break;' statement essential inside each case of a switch statement?",
+        "fr": "Pourquoi l'instruction 'break;' est-elle essentielle à la fin de chaque case d'un switch ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To prevent falling through to execute subsequent cases",
+            "fr": "Pour empêcher l'exécution en cascade des cases suivants (fall-through)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "To reset the variable value",
+            "fr": "Pour réinitialiser la valeur de la variable"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To return from the enclosing function",
+            "fr": "Pour quitter la fonction appelante"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without break;, execution continues down through all remaining cases regardless of condition.",
+        "fr": "Sans break;, l'exécution continue sans interruption dans les blocs case suivants."
+      }
+    },
+    {
+      "question": {
+        "en": "Why must you check if the divisor is zero before performing division in a calculator?",
+        "fr": "Pourquoi doit-on vérifier si le diviseur est nul avant d'effectuer une division dans une calculatrice ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Division by zero causes undefined behavior or runtime crash",
+            "fr": "La division par zéro provoque un plantage ou comportement indéfini"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It produces the number zero automatically",
+            "fr": "Elle produit automatiquement le nombre zéro"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The compiler will delete the executable",
+            "fr": "Le compilateur supprime l'exécutable"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Dividing by zero in integer arithmetic causes an immediate program crash / SIGFPE signal.",
+        "fr": "La division par zéro en arithmétique entière déclenche un plantage immédiat."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the return value of (grade >= 60) ? \"Pass\" : \"Fail\" when grade = 75?",
+        "fr": "Quelle est la valeur de retour de (grade >= 60) ? \"Pass\" : \"Fail\" quand grade = 75 ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "\"Pass\"",
+            "fr": "\"Pass\""
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "\"Fail\"",
+            "fr": "\"Fail\""
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "true",
+            "fr": "true"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Since (75 >= 60) is true, the ternary operator evaluates and returns the first expression: \"Pass\".",
+        "fr": "Puisque (75 >= 60) est vrai, l'opérateur ternaire évalue et renvoie la première expression : \"Pass\"."
+      }
+    },
+    {
+      "question": {
+        "en": "In the expression 'if (A && B)', when is expression B NOT evaluated?",
+        "fr": "Dans l'expression 'if (A && B)', quand l'expression B n'est-elle PAS évaluée ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "When A is false (short-circuit evaluation)",
+            "fr": "Quand A est faux (évaluation en court-circuit)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "When A is true",
+            "fr": "Quand A est vrai"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Expression B is always evaluated",
+            "fr": "L'expression B est toujours évaluée"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Logical AND (&&) short-circuits: if the first operand is false, the result is guaranteed false.",
+        "fr": "Le ET logique (&&) fonctionne en court-circuit : si le premier terme est faux, le second n'est pas évalué."
+      }
+    },
+    {
+      "question": {
+        "en": "What does string.find(char) return if the character is not found in the string?",
+        "fr": "Que renvoie string.find(char) si le caractère recherché n'est pas présent dans la chaîne ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "std::string::npos",
+            "fr": "std::string::npos"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "-1",
+            "fr": "-1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "0",
+            "fr": "0"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "std::string::npos is the standard sentinel value representing 'no position / not found'.",
+        "fr": "std::string::npos est la valeur sentinelle standard indiquant l'absence de correspondance."
+      }
+    }
+  ],
+  "mod-3": [
+    {
+      "question": {
+        "en": "What causes an infinite loop in a while loop statement?",
+        "fr": "Qu'est-ce qui provoque une boucle infinie dans une instruction while ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The loop condition never evaluates to false",
+            "fr": "La condition de boucle ne devient jamais fausse"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Using semicolons inside braces",
+            "fr": "L'utilisation de points-virgules entre accolades"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Declaring variables inside main",
+            "fr": "La déclaration de variables dans main"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A while loop will repeat forever unless its condition is eventually modified to false or broken.",
+        "fr": "Une boucle while se répète indéfiniment si sa condition ne devient jamais fausse."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the primary difference between a while loop and a do-while loop?",
+        "fr": "Quelle est la différence fondamentale entre une boucle while et do-while ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "do-while always executes the body at least once",
+            "fr": "do-while exécute toujours le corps au moins une fois"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "while is faster at runtime",
+            "fr": "while est plus rapide à l'exécution"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "do-while does not check conditions",
+            "fr": "do-while ne teste pas de condition"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A do-while loop tests its condition at the bottom, guaranteeing at least one execution pass.",
+        "fr": "La boucle do-while teste sa condition en fin de bloc, garantissant au moins un passage."
+      }
+    },
+    {
+      "question": {
+        "en": "What are the three components inside a standard for loop header: for(A; B; C)?",
+        "fr": "Quels sont les trois éléments de l'en-tête for(A; B; C) ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Initialization; Condition; Update/Increment",
+            "fr": "Initialisation ; Condition ; Mise à jour/Incrément"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Condition; Body; Break",
+            "fr": "Condition ; Corps ; Interruption"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Start; Finish; Output",
+            "fr": "Début ; Fin ; Affichage"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "for (int i = 0; i < N; i++) sets initial counter, checks continuation, and increments.",
+        "fr": "for (int i = 0; i < N; i++) initialise le compteur, vérifie la poursuite et incrémente."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the effect of the 'continue;' statement inside a loop?",
+        "fr": "Quel est l'effet de l'instruction 'continue;' dans une boucle ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Skips the rest of the current iteration and jumps to the next iteration",
+            "fr": "Ignore le reste du tour actuel et passe immédiatement au tour suivant"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Terminates the loop completely",
+            "fr": "Termine la boucle définitivement"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Restarts the loop from index 0",
+            "fr": "Recommence la boucle à l'index 0"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "continue immediately bypasses remaining statements in the current iteration step.",
+        "fr": "continue saute les instructions restantes de l'itération courante sans quitter la boucle."
+      }
+    },
+    {
+      "question": {
+        "en": "If an outer loop runs 4 times and an inner nested loop runs 5 times, how many total times does the inner body execute?",
+        "fr": "Si une boucle externe s'exécute 4 fois et une boucle imbriquée 5 fois, combien de fois le corps s'exécute-t-il au total ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "20 times",
+            "fr": "20 fois"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "9 times",
+            "fr": "9 fois"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "4 times",
+            "fr": "4 fois"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Total iterations = outer_iterations * inner_iterations (4 * 5 = 20).",
+        "fr": "Nombre total d'itérations = itérations_externes * itérations_internes (4 * 5 = 20)."
+      }
+    },
+    {
+      "question": {
+        "en": "Why should you call srand(time(nullptr)) before calling rand()?",
+        "fr": "Pourquoi doit-on appeler srand(time(nullptr)) avant d'utiliser rand() ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To seed the generator with the current time so numbers change on each run",
+            "fr": "Pour initialiser le générateur avec l'heure courante afin de varier les tirages"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "To make rand() return floating-point numbers",
+            "fr": "Pour que rand() renvoie des nombres décimaux"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is required for compilation",
+            "fr": "C'est obligatoire pour compiler"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Without a changing seed, rand() will generate the exact same sequence on every launch.",
+        "fr": "Sans graine (seed) dynamique, rand() reproduira exactement la même séquence à chaque lancement."
+      }
+    },
+    {
+      "question": {
+        "en": "In a number guessing game, which condition terminates the guessing loop?",
+        "fr": "Dans un jeu de devinette, quelle condition met fin à la boucle de jeu ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "When the player's guess equals the secret number",
+            "fr": "Lorsque la proposition du joueur égale le nombre secret"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "When guess is greater than 100",
+            "fr": "Quand la proposition dépasse 100"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "After exactly 3 tries automatically",
+            "fr": "Après exactement 3 essais automatiquement"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The game loop terminates with a win when the player guesses correctly (guess == secret).",
+        "fr": "La boucle de jeu se termine par une victoire lorsque le joueur devine le nombre exact."
+      }
+    }
+  ],
+  "mod-4": [
+    {
+      "question": {
+        "en": "What does a function return type of 'void' indicate?",
+        "fr": "Que signifie un type de retour 'void' pour une fonction ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The function does not return any value to the caller",
+            "fr": "La fonction ne renvoie aucune valeur au point d'appel"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The function returns an integer 0",
+            "fr": "La fonction renvoie l'entier 0"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The function accepts zero parameters",
+            "fr": "La fonction n'accepte aucun paramètre"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "void means the function performs an action (like printing or modifying state) without returning data.",
+        "fr": "void indique que la fonction effectue une action sans renvoyer de données."
+      }
+    },
+    {
+      "question": {
+        "en": "What happens to remaining code inside a function after a 'return' statement is executed?",
+        "fr": "Qu'arrive-t-il au code situé après une instruction 'return' dans une fonction ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It is skipped; the function immediately exits",
+            "fr": "Il est ignoré ; la fonction se termine immédiatement"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It executes in the background",
+            "fr": "Il s'exécute en tâche de fond"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It causes a compiler warning",
+            "fr": "Il génère un avertissement de compilation"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Executing 'return' hands back control to the caller immediately, ignoring any remaining lines.",
+        "fr": "L'instruction 'return' rend immédiatement la main à l'appelant en ignorant les lignes suivantes."
+      }
+    },
+    {
+      "question": {
+        "en": "Can two functions in C++ share the same name if they only differ by return type?",
+        "fr": "Deux fonctions peuvent-elles porter le même nom si seul leur type de retour est différent ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "No, C++ overload resolution requires different parameter types or counts",
+            "fr": "Non, la surcharge en C++ exige des types ou un nombre de paramètres différents"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Yes, return type overloading is fully supported",
+            "fr": "Oui, la surcharge par type de retour est permise"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Only if declared static",
+            "fr": "Seulement si elles sont déclarées static"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Function overloading in C++ requires distinct parameter signatures; return type alone is not enough.",
+        "fr": "La surcharge exige des paramètres différents ; le type de retour seul ne suffit pas."
+      }
+    },
+    {
+      "question": {
+        "en": "How can you access a global variable 'x' if a local variable also named 'x' is in scope?",
+        "fr": "Comment accéder à une variable globale 'x' masquée par une variable locale portant le même nom ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Using the unary scope resolution operator: ::x",
+            "fr": "En utilisant l'opérateur unaire de portée : ::x"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Using global.x",
+            "fr": "En écrivant global.x"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It is impossible; the global variable is deleted",
+            "fr": "C'est impossible ; la variable globale est détruite"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Prefixing with :: (unary scope resolution) accesses the global variable in global scope.",
+        "fr": "Le préfixe :: (résolution de portée globale unaire) permet d'accéder à la variable globale."
+      }
+    },
+    {
+      "question": {
+        "en": "In a banking simulation, why should deposit() and withdraw() check that amounts are positive (> 0)?",
+        "fr": "Dans un programme bancaire, pourquoi vérifier que les montants de dépôt/retrait sont strictement positifs ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To prevent negative transaction fraud or unintended state corruption",
+            "fr": "Pour empêcher les transactions négatives ou la corruption du solde"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Because C++ does not support negative doubles",
+            "fr": "Car C++ ne supporte pas les doubles négatifs"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To speed up floating point calculations",
+            "fr": "Pour accélérer les calculs flottants"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Input validation is essential business logic in robust software.",
+        "fr": "La validation des entrées utilisateur est une règle métier fondamentale."
+      }
+    },
+    {
+      "question": {
+        "en": "In Rock-Paper-Scissors, what operator combination evaluates whether player beats computer?",
+        "fr": "Au chifoumi, quelle combinaison logique évalue si le joueur bat l'ordinateur ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')",
+            "fr": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "p > c",
+            "fr": "p > c"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "p == c",
+            "fr": "p == c"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Grouping each winning pair with && and combining all winning scenarios with ||.",
+        "fr": "En regroupant chaque paire gagnante avec && et en combinant les cas avec ||."
+      }
+    }
+  ],
+  "mod-5": [
+    {
+      "question": {
+        "en": "What is the index of the first element in a C++ array?",
+        "fr": "Quel est l'index du premier élément d'un tableau en C++ ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "0",
+            "fr": "0"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "1",
+            "fr": "1"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "-1",
+            "fr": "-1"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "C++ arrays are strictly 0-indexed; array[0] refers to the first element.",
+        "fr": "Les tableaux C++ commencent strictement à l'indice 0 ; array[0] est le premier élément."
+      }
+    },
+    {
+      "question": {
+        "en": "How do you calculate the number of elements in a raw array 'int arr[10]' using sizeof?",
+        "fr": "Comment calculer le nombre d'éléments d'un tableau 'int arr[10]' avec sizeof ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "sizeof(arr) / sizeof(arr[0])",
+            "fr": "sizeof(arr) / sizeof(arr[0])"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "sizeof(arr)",
+            "fr": "sizeof(arr)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "arr.length()",
+            "fr": "arr.length()"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Total byte size divided by the byte size of a single element yields the element count.",
+        "fr": "La taille totale en octets divisée par la taille d'un seul élément donne le nombre d'éléments."
+      }
+    },
+    {
+      "question": {
+        "en": "Why should you prefer 'const auto& item' in a range-based for loop over 'auto item' for large objects?",
+        "fr": "Pourquoi préférer 'const auto& item' dans une boucle for-each pour de gros objets ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It avoids expensive copies while guaranteeing read-only safety",
+            "fr": "Elle évite les copies coûteuses tout en garantissant la lecture seule"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It allows modifying the original elements",
+            "fr": "Elle permet de modifier les originaux"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Range-based for requires references to compile",
+            "fr": "La boucle for-each l'exige pour compiler"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "const auto& binds a read-only reference directly to the container element without copying.",
+        "fr": "const auto& lie une référence en lecture seule à chaque élément sans aucune copie."
+      }
+    },
+    {
+      "question": {
+        "en": "What happens when you pass a raw array to a function parameter (e.g. void fn(int arr[]))?",
+        "fr": "Que se produit-il lorsqu'on passe un tableau brut en paramètre de fonction ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The array decays into a pointer (int*), losing its size information",
+            "fr": "Le tableau dégénère en pointeur (int*) et perd sa taille"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The entire array is cloned on the stack",
+            "fr": "Le tableau entier est cloné sur la pile"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The compiler throws an error",
+            "fr": "Le compilateur signale une erreur"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Array decay converts the array to a pointer to its first element; always pass size separately.",
+        "fr": "La dégénérescence convertit le tableau en pointeur vers le 1er élément ; la taille doit être passée."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the average time complexity of Linear Search on an unsorted array of N elements?",
+        "fr": "Quelle est la complexité temporelle moyenne d'une recherche linéaire sur un tableau de N éléments ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "O(N)",
+            "fr": "O(N)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "O(1)",
+            "fr": "O(1)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "O(log N)",
+            "fr": "O(log N)"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Linear search checks each element one by one, requiring up to N comparisons in the worst case.",
+        "fr": "La recherche linéaire inspecte les éléments un par un, nécessitant jusqu'à N étapes au pire."
+      }
+    },
+    {
+      "question": {
+        "en": "How does Bubble Sort arrange elements into ascending order?",
+        "fr": "Comment le tri à bulles (Bubble Sort) ordonne-t-il les éléments en ordre croissant ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Repeatedly compares adjacent pairs and swaps them if out of order",
+            "fr": "Compare les paires adjacentes et les échange si elles sont dans le désordre"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Divides the array into halves recursively",
+            "fr": "Divise récursivement le tableau en deux"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Inserts elements into a binary search tree",
+            "fr": "Insère les éléments dans un arbre binaire"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Bubble Sort bubbles the largest remaining value to the end of the array each pass.",
+        "fr": "Le tri à bulles fait remonter le plus grand élément restant à la fin du tableau à chaque tour."
+      }
+    },
+    {
+      "question": {
+        "en": "How do you access the element in row 1, column 2 of a 2D array 'grid'?",
+        "fr": "Comment accéder à l'élément de la ligne 1, colonne 2 d'une matrice 2D 'grid' ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "grid[1][2]",
+            "fr": "grid[1][2]"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "grid[1, 2]",
+            "fr": "grid[1, 2]"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "grid.at(1, 2)",
+            "fr": "grid.at(1, 2)"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "2D arrays use chained brackets: array[rowIndex][columnIndex].",
+        "fr": "Les tableaux 2D utilisent des crochets successifs : tab[indexLigne][indexColonne]."
+      }
+    }
+  ],
+  "mod-6": [
+    {
+      "question": {
+        "en": "What does the address-of operator (&x) return?",
+        "fr": "Que renvoie l'opérateur d'adresse (&x) ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The hexadecimal memory address where variable x is located in RAM",
+            "fr": "L'adresse mémoire hexadécimale où se trouve la variable x en RAM"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The value stored inside x",
+            "fr": "La valeur stockée dans x"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A duplicate copy of x",
+            "fr": "Une copie identique de x"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "&x gives the memory address location where the variable resides in memory.",
+        "fr": "&x donne l'emplacement physique en mémoire où réside la variable."
+      }
+    },
+    {
+      "question": {
+        "en": "Why does passing by reference (void swap(int& a, int& b)) allow modifying the original variables?",
+        "fr": "Pourquoi le passage par référence permet-il de modifier les variables originales ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "References alias the caller's actual memory addresses instead of creating copies",
+            "fr": "Les références sont des alias directs de la mémoire originale sans copie"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "References create global variables",
+            "fr": "Les références créent des variables globales"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Because reference parameters run on a different thread",
+            "fr": "Car elles tournent sur un thread séparé"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A reference is an immutable alias; any read or write operates directly on the caller's variable.",
+        "fr": "Une référence est un alias direct ; toute lecture ou écriture modifie la variable source."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the main benefit of declaring a parameter as 'const std::string& str'?",
+        "fr": "Quel est le bénéfice majeur de déclarer un paramètre comme 'const std::string& str' ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Zero-copy performance combined with read-only safety",
+            "fr": "Performance sans copie combinée à la sécurité de la lecture seule"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Allows the function to alter the caller's string",
+            "fr": "Permet de modifier la chaîne appelante"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Converts strings to integer hashes automatically",
+            "fr": "Convertit automatiquement en hash entier"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "const Type& prevents deep copying large objects while strictly preventing accidental modifications.",
+        "fr": "const Type& évite les copies coûteuses tout en interdisant toute modification accidentelle."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the dereference operator (*) used for with a pointer?",
+        "fr": "À quoi sert l'opérateur de déréférencement (*) appliqué à un pointeur ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To read or write the actual value stored at the address pointed to",
+            "fr": "À lire ou modifier la valeur stockée à l'adresse pointée"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "To obtain the pointer's own address",
+            "fr": "À obtenir l'adresse du pointeur lui-même"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "To multiply the pointer by 2",
+            "fr": "À multiplier le pointeur par 2"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "*ptr dereferences the pointer, allowing direct access to the pointed-to object.",
+        "fr": "*ptr déréférence le pointeur et donne un accès direct à la valeur ciblée."
+      }
+    },
+    {
+      "question": {
+        "en": "Why should unassigned pointers always be initialized to 'nullptr' in modern C++?",
+        "fr": "Pourquoi un pointeur non assigné doit-il toujours être initialisé à 'nullptr' ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To prevent wild / dangling pointers containing random garbage memory addresses",
+            "fr": "Pour éviter les pointeurs fous contenant des adresses mémoires aléatoires"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "nullptr allocates 4 bytes on the heap",
+            "fr": "nullptr alloue 4 octets sur le tas"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Modern C++ does not allow declaring pointers without nullptr",
+            "fr": "C++ moderne interdit de déclarer un pointeur sans nullptr"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Initializing to nullptr allows safe checking (if (ptr != nullptr)) before dereferencing.",
+        "fr": "Initialiser à nullptr permet de tester la validité (if (ptr != nullptr)) avant utilisation."
+      }
+    },
+    {
+      "question": {
+        "en": "What happens if you allocate heap memory with 'new' but forget to call 'delete'?",
+        "fr": "Que se passe-t-il si vous allouez de la mémoire avec 'new' sans jamais appeler 'delete' ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A memory leak occurs; RAM remains consumed until program termination",
+            "fr": "Une fuite de mémoire survient ; la RAM reste occupée jusqu'à la fin du programme"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "The memory is automatically deleted on function return",
+            "fr": "La mémoire est libérée automatiquement à la fin de la fonction"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "The CPU triggers an immediate hardware reset",
+            "fr": "Le processeur redémarre la machine"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Heap memory allocated with 'new' must be explicitly freed with 'delete' to prevent leaks.",
+        "fr": "La mémoire allouée avec 'new' doit être libérée manuellement avec 'delete' pour éviter les fuites."
+      }
+    }
+  ],
+  "mod-7": [
+    {
+      "question": {
+        "en": "What must every recursive function have to prevent infinite recursion and stack overflow?",
+        "fr": "Que doit posséder toute fonction récursive pour éviter un débordement de pile (stack overflow) ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A base case that stops recursion without making further recursive calls",
+            "fr": "Un cas de base qui arrête la récursion sans nouvel appel"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "A loop counter",
+            "fr": "Un compteur de boucle for"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "A global variable",
+            "fr": "Une variable globale"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "The base case halts recursion; without it, function calls consume all call stack space.",
+        "fr": "Le cas de base arrête la récursion ; sans lui, la pile d'appels sature et fait planter le programme."
+      }
+    },
+    {
+      "question": {
+        "en": "How do function templates (template <typename T>) work under the hood during compilation?",
+        "fr": "Comment les patrons de fonctions (template <typename T>) fonctionnent-ils lors de la compilation ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "The compiler generates concrete function overloads for each invoked data type",
+            "fr": "Le compilateur génère les surcharges concrètes pour chaque type utilisé"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "They convert all variables into generic void* pointers at runtime",
+            "fr": "Ils convertissent tout en pointeurs void* à l'exécution"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "They interpret types at runtime like Python",
+            "fr": "Ils interprètent les types dynamiquement comme Python"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "C++ templates are zero-cost abstractions instantiated at compile-time with full type safety.",
+        "fr": "Les templates C++ sont instanciés à la compilation sans aucun surcoût d'exécution."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the default access level for members declared inside a C++ 'struct'?",
+        "fr": "Quel est le niveau d'accès par défaut des membres d'une 'struct' en C++ ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "public",
+            "fr": "public"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "private",
+            "fr": "private"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "protected",
+            "fr": "protected"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Members of a struct are public by default, whereas members of a class are private by default.",
+        "fr": "Les membres d'une struct sont publics par défaut, alors que ceux d'une class sont privés."
+      }
+    },
+    {
+      "question": {
+        "en": "Why is it best practice to pass a large struct to a read-only function as 'const StructName&'?",
+        "fr": "Pourquoi passer une grande structure en 'const StructName&' pour une lecture seule ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It avoids copying all member variables while protecting them from modification",
+            "fr": "Cela évite de copier tous les membres tout en empêchant toute altération"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Structs cannot be passed by value in C++",
+            "fr": "Les structs ne peuvent pas être passées par valeur"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It frees the struct memory automatically",
+            "fr": "Cela libère automatiquement la mémoire de la struct"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Passing large structs by value copies every single member field; const reference is zero-copy.",
+        "fr": "Passer par valeur copie chaque membre ; la référence constante évite tout surcoût."
+      }
+    },
+    {
+      "question": {
+        "en": "What underlying type represents enum values by default in C++?",
+        "fr": "Quel type sous-jacent représente les valeurs d'un enum par défaut en C++ ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Integers (int), starting at 0",
+            "fr": "Des entiers (int), débutant à 0"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Strings",
+            "fr": "Des chaînes de caractères"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Floating-point numbers",
+            "fr": "Des nombres décimaux"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Enum enumerators are assigned consecutive integer values starting from 0 by default.",
+        "fr": "Les valeurs d'un enum sont associées à des entiers consécutifs démarrant à 0."
+      }
+    }
+  ],
+  "mod-8": [
+    {
+      "question": {
+        "en": "What is the difference between a class and an object in Object-Oriented Programming?",
+        "fr": "Quelle est la différence entre une classe et un objet en Programmation Orientée Objet ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "A class is the blueprint; an object is a concrete instance of that blueprint",
+            "fr": "La classe est le modèle ; l'objet est une instance concrète de ce modèle"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "An object is a blueprint; a class is the instance",
+            "fr": "L'objet est le modèle ; la classe est l'instance"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Classes and objects are identical concepts",
+            "fr": "Classes et objets sont des termes strictement synonymes"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "A class defines properties and methods; objects are instantiated instances in memory.",
+        "fr": "La classe définit la structure et les méthodes ; l'objet est l'entité concrète en mémoire."
+      }
+    },
+    {
+      "question": {
+        "en": "When is a constructor method called in C++?",
+        "fr": "Quand la méthode constructeur est-elle appelée en C++ ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Automatically whenever a new object of that class is instantiated",
+            "fr": "Automatiquement dès qu'un nouvel objet de la classe est instancié"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Only when explicitly invoked with object.Constructor()",
+            "fr": "Seulement si on l'appelle avec objet.Constructeur()"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "When the program exits main()",
+            "fr": "À la fermeture du programme"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Constructors run automatically at instantiation to set up the object's initial state.",
+        "fr": "Le constructeur s'exécute automatiquement à l'instanciation pour initialiser l'objet."
+      }
+    },
+    {
+      "question": {
+        "en": "What allows constructor overloading to work in C++?",
+        "fr": "Qu'est-ce qui permet la surcharge de constructeurs en C++ ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Providing multiple constructors with different parameter lists",
+            "fr": "Fournir plusieurs constructeurs avec des listes de paramètres différentes"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Giving different names to each constructor",
+            "fr": "Donner un nom différent à chaque constructeur"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Specifying different return types",
+            "fr": "Spécifier des types de retour différents"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Constructors must share the class name; they are overloaded via distinct parameter counts and types.",
+        "fr": "Tous les constructeurs portent le nom de la classe ; ils diffèrent par leurs paramètres."
+      }
+    },
+    {
+      "question": {
+        "en": "What OOP principle is achieved by making member variables private and providing public getters/setters?",
+        "fr": "Quel principe de la POO réalise-t-on en rendant les variables privées avec accesseurs publics ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Encapsulation (Data Hiding)",
+            "fr": "L'Encapsulation (Masquage des données)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Polymorphism",
+            "fr": "Le Polymorphisme"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Multiple Inheritance",
+            "fr": "L'Héritage Multiple"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Encapsulation hides sensitive data from direct tampering and validates mutations via setters.",
+        "fr": "L'encapsulation protège les attributs internes et filtre leurs modifications par les setters."
+      }
+    },
+    {
+      "question": {
+        "en": "What syntax establishes that class Dog inherits publicly from class Animal?",
+        "fr": "Quelle syntaxe déclare que la classe Dog hérite publiquement de la classe Animal ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "class Dog : public Animal { ... };",
+            "fr": "class Dog : public Animal { ... };"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "class Dog extends Animal { ... };",
+            "fr": "class Dog extends Animal { ... };"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "class Dog inherits Animal { ... };",
+            "fr": "class Dog inherits Animal { ... };"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "In C++, inheritance is specified using a colon followed by access specifier (class Dog : public Animal).",
+        "fr": "En C++, l'héritage s'écrit avec un deux-points suivi du mode d'accès (: public Animal)."
+      }
+    }
+  ],
+  "mod-9": [
+    {
+      "question": {
+        "en": "Which method appends a new element to the end of a std::vector dynamic array?",
+        "fr": "Quelle méthode ajoute un nouvel élément à la fin d'un tableau dynamique std::vector ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "push_back(element)",
+            "fr": "push_back(element)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "append(element)",
+            "fr": "append(element)"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "add(element)",
+            "fr": "add(element)"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "std::vector::push_back(val) inserts val at the end and reallocates memory dynamically if capacity is full.",
+        "fr": "std::vector::push_back(val) insère à la fin et réalloue la mémoire dynamiquement si nécessaire."
+      }
+    },
+    {
+      "question": {
+        "en": "Why MUST base classes with virtual methods always declare a virtual destructor (virtual ~Base() = default;)?",
+        "fr": "Pourquoi une classe de base polymorphe DOIT-ELLE toujours avoir un destructeur virtuel ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "To ensure derived class destructors run when deleting an object through a base pointer",
+            "fr": "Pour garantir l'appel du destructeur dérivé lors de la destruction via pointeur de base"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "To make constructors run faster",
+            "fr": "Pour accélérer les constructeurs"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prevents compilation errors in main",
+            "fr": "Pour éviter une erreur de compilation dans main"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "Deleting a derived object via Base* without a virtual destructor causes undefined behavior and leaks.",
+        "fr": "Supprimer un objet dérivé via Base* sans destructeur virtuel entraîne fuites et comportement indéfini."
+      }
+    },
+    {
+      "question": {
+        "en": "What is the primary advantage of std::unique_ptr over a raw pointer with 'new'?",
+        "fr": "Quel est l'avantage majeur de std::unique_ptr par rapport à un pointeur brut 'new' ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Automatic RAII cleanup: memory is deleted automatically when the unique_ptr leaves scope",
+            "fr": "Nettoyage RAII automatique : la mémoire est libérée dès que l'unique_ptr sort de portée"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "unique_ptr can be shared by multiple threads simultaneously without locks",
+            "fr": "unique_ptr est partagé entre threads sans verrous"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "unique_ptr uses no memory at all",
+            "fr": "unique_ptr n'occupe aucune mémoire"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "std::unique_ptr exclusively owns heap memory and frees it automatically on destruction, preventing leaks.",
+        "fr": "std::unique_ptr possède la ressource en exclusivité et la détruit automatiquement, éliminant les fuites."
+      }
+    },
+    {
+      "question": {
+        "en": "What data structure does std::map use under the hood to maintain sorted key-value pairs?",
+        "fr": "Quelle structure de données std::map utilise-t-il pour conserver les paires clé-valeur triées ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "Self-balancing Red-Black Tree (O(log N) lookup)",
+            "fr": "Arbre rouge-noir équilibré (recherche en O(log N))"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "Unsorted contiguous array",
+            "fr": "Tableau contigu non trié"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "Singly linked list",
+            "fr": "Liste simplement chaînée"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "std::map keeps elements sorted by key with logarithmic O(log N) insertions, removals, and searches.",
+        "fr": "std::map maintient ses clés ordonnées dans un arbre binaire de recherche équilibré en O(log N)."
+      }
+    },
+    {
+      "question": {
+        "en": "Why should you use std::lock_guard<std::mutex> when synchronizing threads?",
+        "fr": "Pourquoi utiliser std::lock_guard<std::mutex> lors de la synchronisation de threads ?"
+      },
+      "options": [
+        {
+          "text": {
+            "en": "It locks the mutex upon construction and unlocks automatically when exiting scope (RAII)",
+            "fr": "Il verrouille à la création et déverrouille automatiquement en sortie de portée (RAII)"
+          },
+          "correct": true
+        },
+        {
+          "text": {
+            "en": "It creates a new thread automatically",
+            "fr": "Il crée un nouveau thread automatiquement"
+          },
+          "correct": false
+        },
+        {
+          "text": {
+            "en": "It prevents threads from needing mutexes",
+            "fr": "Il dispense d'utiliser des mutexes"
+          },
+          "correct": false
+        }
+      ],
+      "explanation": {
+        "en": "std::lock_guard guarantees mutex release even if an exception is thrown, preventing deadlocks.",
+        "fr": "std::lock_guard garantit la libération du mutex même en cas d'exception, évitant les blocages."
+      }
+    }
+  ]
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { FLASHCARDS_DATA, GRAND_EXAM_QUESTIONS, MODULE_QUIZZES, LESSON_QUIZZES, shuffleArray };
-}
