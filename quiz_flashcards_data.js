@@ -2778,35 +2778,35 @@ const LESSON_QUIZZES = {
   },
   "10": {
     "question": {
-      "en": "Which mathematical formula calculates the hypotenuse c given sides a and b?",
-      "fr": "Quelle formule mathématique calcule l'hypoténuse c à partir des côtés a et b ?"
+      "en": "What does C++ return when calculating the square root of a negative float using std::sqrt(-1.0)?",
+      "fr": "Que renvoie C++ lors du calcul de la racine carrée d'un flottant négatif avec std::sqrt(-1.0) ?"
     },
     "options": [
       {
         "text": {
-          "en": "c = std::sqrt(a*a + b*b)",
-          "fr": "c = std::sqrt(a*a + b*b)"
+          "en": "NaN (Not-a-Number, checked with std::isnan)",
+          "fr": "NaN (Not-a-Number, vérifiable avec std::isnan)"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "c = a + b",
-          "fr": "c = a + b"
+          "en": "Throws an immediate std::runtime_error exception",
+          "fr": "Déclenche une exception std::runtime_error"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "c = (a * b) / 2",
-          "fr": "c = (a * b) / 2"
+          "en": "Returns 0.0 silently",
+          "fr": "Renvoie silencieusement 0.0"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "By the Pythagorean theorem, hypotenuse c equals the square root of (a² + b²).",
-      "fr": "D'après le théorème de Pythagore, l'hypoténuse c est égale à la racine carrée de (a² + b²)."
+      "en": "In C++, taking the square root of a negative float does not throw an exception; it returns NaN, which should be validated using std::isnan().",
+      "fr": "std::sqrt d'un nombre négatif ne lève pas d'exception mais produit NaN, vérifiable avec std::isnan()."
     }
   },
   "11": {
@@ -2976,35 +2976,35 @@ const LESSON_QUIZZES = {
   },
   "16": {
     "question": {
-      "en": "Which formula accurately converts degrees Fahrenheit to Celsius in C++?",
-      "fr": "Quelle formule convertit précisément les degrés Fahrenheit en Celsius en C++ ?"
+      "en": "In C++, what is the exact evaluated result of 'double result = 5 / 9;'?",
+      "fr": "En C++, quel est le résultat exact de l'instruction 'double result = 5 / 9;' ?"
     },
     "options": [
       {
         "text": {
-          "en": "(temp - 32.0) / 1.8",
-          "fr": "(temp - 32.0) / 1.8"
+          "en": "0.0 (integer division truncates before assigning to double)",
+          "fr": "0.0 (la division entière tronque avant l'assignation au double)"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "(temp * 1.8) + 32.0",
-          "fr": "(temp * 1.8) + 32.0"
+          "en": "0.555555...",
+          "fr": "0.555555..."
         },
         "correct": false
       },
       {
         "text": {
-          "en": "temp / 100.0",
-          "fr": "temp / 100.0"
+          "en": "Compiler error: type mismatch",
+          "fr": "Erreur de compilation : types incompatibles"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "Celsius = (Fahrenheit - 32) / 1.8. Using 1.8 or 32.0 ensures floating point arithmetic.",
-      "fr": "Celsius = (Fahrenheit - 32) / 1.8. L'utilisation de décimaux garantit le calcul flottant."
+      "en": "When both operands are integer literals, C++ performs integer division, discarding the remainder before assigning. Use '5.0 / 9' to get floating-point division.",
+      "fr": "Deux opérandes entiers produisent une division entière tronquée à 0. Écrivez '5.0 / 9' pour un résultat décimal."
     }
   },
   "17": {
@@ -3207,101 +3207,101 @@ const LESSON_QUIZZES = {
   },
   "23": {
     "question": {
-      "en": "Why should you call srand(time(nullptr)) before calling rand()?",
-      "fr": "Pourquoi doit-on appeler srand(time(nullptr)) avant d'utiliser rand() ?"
+      "en": "Why is the legacy C-style rand() function discouraged in modern production C++?",
+      "fr": "Pourquoi la fonction C traditionnelle rand() est-elle déconseillée en C++ moderne ?"
     },
     "options": [
       {
         "text": {
-          "en": "To seed the generator with the current time so numbers change on each run",
-          "fr": "Pour initialiser le générateur avec l'heure courante afin de varier les tirages"
+          "en": "It has poor statistical distribution (modulo bias) and uses global state, making it not thread-safe",
+          "fr": "Elle a une mauvaise distribution statistique (biais de modulo) et n'est pas thread-safe"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "To make rand() return floating-point numbers",
-          "fr": "Pour que rand() renvoie des nombres décimaux"
+          "en": "It cannot generate numbers greater than 100",
+          "fr": "Elle ne peut pas générer de nombres supérieurs à 100"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "It is required for compilation",
-          "fr": "C'est obligatoire pour compiler"
+          "en": "It requires the heavy <iostream> header to compile",
+          "fr": "Elle nécessite obligatoirement <iostream>"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "Without a changing seed, rand() will generate the exact same sequence on every launch.",
-      "fr": "Sans graine (seed) dynamique, rand() reproduira exactement la même séquence à chaque lancement."
+      "en": "std::rand() has low entropy, causes modulo bias with %, and uses shared global state. Modern C++ uses <random> (std::mt19937 and distributions) instead.",
+      "fr": "std::rand() souffre de biais statistiques et d'état global non thread-safe. Utilisez <random> en C++ moderne."
     }
   },
   "24": {
     "question": {
-      "en": "How do you restrict (rand() % 6) to generate numbers between 1 and 6 inclusive?",
-      "fr": "Comment ajuster (rand() % 6) pour obtenir un nombre entre 1 et 6 inclus ?"
+      "en": "Which modern C++ standard library component generates uniformly distributed random integers without modulo bias?",
+      "fr": "Quel composant moderne de la bibliothèque standard génère des entiers aléatoires uniformément sans biais ?"
     },
     "options": [
       {
         "text": {
-          "en": "(rand() % 6) + 1",
-          "fr": "(rand() % 6) + 1"
+          "en": "std::uniform_int_distribution<int> dist(1, 6);",
+          "fr": "std::uniform_int_distribution<int> dist(1, 6);"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "rand() % 7",
-          "fr": "rand() % 7"
+          "en": "(std::rand() % 6) + 1",
+          "fr": "(std::rand() % 6) + 1"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "rand(1, 6)",
-          "fr": "rand(1, 6)"
+          "en": "std::random_range(1, 6)",
+          "fr": "std::random_range(1, 6)"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "rand() % 6 produces 0, 1, 2, 3, 4, or 5. Adding 1 shifts the range to 1 through 6.",
-      "fr": "rand() % 6 donne un résultat de 0 à 5. Ajouter 1 décale la plage de 1 à 6."
+      "en": "std::uniform_int_distribution completely eliminates modulo bias and guarantees uniform probability across the closed interval [min, max].",
+      "fr": "std::uniform_int_distribution élimine tout biais de reste de division et garantit une probabilité uniforme."
     }
   },
   "25": {
     "question": {
-      "en": "In a number guessing game, which condition terminates the guessing loop?",
-      "fr": "Dans un jeu de devinette, quelle condition met fin à la boucle de jeu ?"
+      "en": "In modern C++, what is the role of 'std::random_device' when initializing a Mersenne Twister engine?",
+      "fr": "En C++ moderne, quel est le rôle de 'std::random_device' pour initialiser un moteur Mersenne Twister ?"
     },
     "options": [
       {
         "text": {
-          "en": "When the player's guess equals the secret number",
-          "fr": "Lorsque la proposition du joueur égale le nombre secret"
+          "en": "It provides non-deterministic hardware-based entropy to seed the pseudo-random engine",
+          "fr": "Il fournit de l'entropie matérielle non déterministe pour initialiser le générateur"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "When guess is greater than 100",
-          "fr": "Quand la proposition dépasse 100"
+          "en": "It prints random bytes to standard output",
+          "fr": "Il affiche des octets aléatoires dans la console"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "After exactly 3 tries automatically",
-          "fr": "Après exactement 3 essais automatiquement"
+          "en": "It speeds up integer multiplication",
+          "fr": "Il accélère les multiplications d'entiers"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "The game loop terminates with a win when the player guesses correctly (guess == secret).",
-      "fr": "La boucle de jeu se termine par une victoire lorsque le joueur devine le nombre exact."
+      "en": "std::random_device queries hardware entropy (e.g. CPU thermal noise) to produce a non-deterministic seed for fast generators like std::mt19937.",
+      "fr": "std::random_device exploite l'entropie matérielle pour créer une graine non déterministe supérieure à time(nullptr)."
     }
   },
   "26": {
@@ -3438,68 +3438,68 @@ const LESSON_QUIZZES = {
   },
   "30": {
     "question": {
-      "en": "In a banking simulation, why should deposit() and withdraw() check that amounts are positive (> 0)?",
-      "fr": "Dans un programme bancaire, pourquoi vérifier que les montants de dépôt/retrait sont strictement positifs ?"
+      "en": "Why should non-trivial objects (e.g. std::string, std::vector) be passed to functions as 'const Type&'?",
+      "fr": "Pourquoi passer les objets non triviaux (ex: std::string, std::vector) en 'const Type&' ?"
     },
     "options": [
       {
         "text": {
-          "en": "To prevent negative transaction fraud or unintended state corruption",
-          "fr": "Pour empêcher les transactions négatives ou la corruption du solde"
+          "en": "It avoids expensive deep memory copies while strictly guaranteeing read-only immutability",
+          "fr": "Cela évite les copies mémoires coûteuses tout en garantissant l'immuabilité en lecture seule"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "Because C++ does not support negative doubles",
-          "fr": "Car C++ ne supporte pas les doubles négatifs"
+          "en": "It automatically converts the object to a pointer so it can be mutated",
+          "fr": "Cela convertit l'objet en pointeur pour pouvoir le modifier"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "To speed up floating point calculations",
-          "fr": "Pour accélérer les calculs flottants"
+          "en": "Because C++ does not allow passing objects by value",
+          "fr": "Car C++ interdit le passage par valeur des objets"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "Input validation is essential business logic in robust software.",
-      "fr": "La validation des entrées utilisateur est une règle métier fondamentale."
+      "en": "Passing large objects by value invokes their copy constructor, which allocates heap memory. const Type& is zero-copy and compiler-enforced read-only.",
+      "fr": "Le passage par valeur déclenche le constructeur de copie et alloue la mémoire. const Type& est sans copie et en lecture seule."
     }
   },
   "31": {
     "question": {
-      "en": "In Rock-Paper-Scissors, what operator combination evaluates whether player beats computer?",
-      "fr": "Au chifoumi, quelle combinaison logique évalue si le joueur bat l'ordinateur ?"
+      "en": "Why is 'if (ptr != nullptr && ptr->isValid())' safe against crashes, whereas using '&' would crash?",
+      "fr": "Pourquoi 'if (ptr != nullptr && ptr->isValid())' est-il sûr, alors qu'utiliser '&' crasherait ?"
     },
     "options": [
       {
         "text": {
-          "en": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')",
-          "fr": "(p=='r' && c=='s') || (p=='p' && c=='r') || (p=='s' && c=='p')"
+          "en": "&& uses short-circuit evaluation: if the left operand is false, the right operand is never evaluated",
+          "fr": "&& utilise l'évaluation en court-circuit : si l'opérande gauche est faux, la droite n'est jamais évaluée"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "p > c",
-          "fr": "p > c"
+          "en": "&& converts null pointers into dummy temporary objects automatically",
+          "fr": "&& convertit automatiquement les pointeurs nuls en objets temporaires"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "p == c",
-          "fr": "p == c"
+          "en": "& is strictly prohibited in modern C++ if statements",
+          "fr": "& est strictement interdit dans les if en C++"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "Grouping each winning pair with && and combining all winning scenarios with ||.",
-      "fr": "En regroupant chaque paire gagnante avec && et en combinant les cas avec ||."
+      "en": "&& guarantees short-circuiting: when ptr == nullptr, evaluation halts immediately, safely avoiding dereferencing a null pointer.",
+      "fr": "&& garantit le court-circuit : si ptr est nul, la suite n'est pas exécutée, évitant un crash de déréférencement nul."
     }
   },
   "32": {
@@ -3834,35 +3834,35 @@ const LESSON_QUIZZES = {
   },
   "42": {
     "question": {
-      "en": "In the console Quiz Game program, how are questions, options, and answer keys synchronized?",
-      "fr": "Dans le jeu de quiz en console, comment synchroniser questions, options et réponses ?"
+      "en": "Why is an Array-of-Structs or class container preferred over multiple parallel arrays in C++?",
+      "fr": "Pourquoi préférer un tableau de structures à des tableaux parallèles en C++ ?"
     },
     "options": [
       {
         "text": {
-          "en": "Using a shared loop index (i) across all parallel arrays",
-          "fr": "En utilisant le même index de boucle (i) sur tous les tableaux parallèles"
+          "en": "It enforces data encapsulation and guarantees CPU cache spatial locality for related fields",
+          "fr": "Cela assure l'encapsulation et garantit la localité spatiale dans le cache CPU"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "By merging them into a single string",
-          "fr": "En les fusionnant en une chaîne unique"
+          "en": "Parallel arrays take 10x more physical RAM in 64-bit systems",
+          "fr": "Les tableaux parallèles occupent 10 fois plus de RAM"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "Through random matching",
-          "fr": "Par correspondance aléatoire"
+          "en": "C++ compilers limit functions to a maximum of two arrays",
+          "fr": "Les compilateurs C++ limitent le nombre de tableaux à deux"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "Index i references question[i], options[i], and answerKey[i] simultaneously.",
-      "fr": "L'index i permet d'accéder en même temps à question[i], options[i] et answerKey[i]."
+      "en": "Encapsulating related properties inside a struct/class keeps attributes contiguous in memory cache lines and avoids index-desynchronization bugs.",
+      "fr": "Regrouper les champs dans une structure maintient les données contiguës dans les lignes de cache CPU et évite les désynchronisations d'indices."
     }
   },
   "43": {
@@ -3966,35 +3966,35 @@ const LESSON_QUIZZES = {
   },
   "46": {
     "question": {
-      "en": "In the Credit Card Validator, how do you convert an ASCII digit character '7' to numeric int 7?",
-      "fr": "Dans le validateur de carte bancaire, comment convertir le caractère '7' en entier 7 ?"
+      "en": "When converting an ASCII digit character 'c' to its integer value, why is 'c - '0'' canonical and guaranteed safe in C++?",
+      "fr": "Pour convertir un caractère chiffre 'c' en entier, pourquoi 'c - '0'' est-il canonique et garanti par la norme C++ ?"
     },
     "options": [
       {
         "text": {
-          "en": "charDigit - '0'",
-          "fr": "charDigit - '0'"
+          "en": "The C++ standard guarantees that ASCII digit characters '0' through '9' have consecutive contiguous values",
+          "fr": "La norme C++ garantit que les caractères chiffres '0' à '9' ont des valeurs entières consécutives et contiguës"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "static_cast<int>(charDigit)",
-          "fr": "static_cast<int>(charDigit)"
+          "en": "Because '0' is automatically converted to nullptr",
+          "fr": "Car '0' est automatiquement converti en nullptr"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "charDigit * 10",
-          "fr": "charDigit * 10"
+          "en": "Because char is converted into a 64-bit float before subtraction",
+          "fr": "Car le char est converti en float 64-bit"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "Subtracting '0' (ASCII 48) gives the exact numeric offset: '7' - '0' = 55 - 48 = 7.",
-      "fr": "Soustraire '0' (ASCII 48) calcule la valeur numérique exacte : '7' - '0' = 55 - 48 = 7."
+      "en": "The C++ standard explicitly guarantees that digit characters '0' through '9' are contiguous in memory, making (c - '0') zero-cost and completely portable.",
+      "fr": "La norme C++ garantit la contiguïté des codes de '0' à '9'. (c - '0') est une opération optimale en coût zéro."
     }
   },
   "47": {
@@ -4065,35 +4065,35 @@ const LESSON_QUIZZES = {
   },
   "49": {
     "question": {
-      "en": "How many winning line configurations exist on a standard 3x3 Tic-Tac-Toe grid?",
-      "fr": "Combien de configurations gagnantes existent sur une grille de Morpion 3x3 ?"
+      "en": "How are 2D arrays (e.g. int grid[3][3]) organized in physical memory in C++?",
+      "fr": "Comment les tableaux 2D (ex: int grid[3][3]) sont-ils organisés en mémoire physique en C++ ?"
     },
     "options": [
       {
         "text": {
-          "en": "8 (3 rows, 3 columns, 2 diagonals)",
-          "fr": "8 (3 lignes, 3 colonnes, 2 diagonales)"
+          "en": "In contiguous row-major order: all elements of row 0, followed by row 1, then row 2",
+          "fr": "Dans l'ordre ligne par ligne (row-major) contigu : toute la ligne 0, puis la ligne 1, puis la ligne 2"
         },
         "correct": true
       },
       {
         "text": {
-          "en": "6 (3 rows, 3 columns)",
-          "fr": "6 (3 lignes, 3 colonnes)"
+          "en": "In column-major order: column 0 elements followed by column 1",
+          "fr": "Dans l'ordre colonne par colonne (column-major)"
         },
         "correct": false
       },
       {
         "text": {
-          "en": "9",
-          "fr": "9"
+          "en": "As scattered linked blocks allocated dynamically across RAM",
+          "fr": "Comme des blocs dispersés dans la RAM"
         },
         "correct": false
       }
     ],
     "explanation": {
-      "en": "A 3x3 board has 3 horizontal rows, 3 vertical columns, and 2 diagonals = 8 winning combinations.",
-      "fr": "Un plateau 3x3 comporte 3 lignes, 3 colonnes et 2 diagonales, soit 8 combinaisons gagnantes."
+      "en": "C++ stores multidimensional arrays in row-major order in a single contiguous memory block. Iterating row-by-row (grid[r][c]) maximizes CPU cache line hits.",
+      "fr": "C++ utilise l'ordre row-major contigu. Itérer ligne par ligne maximise l'efficacité du cache processeur."
     }
   },
   "50": {
@@ -4623,7 +4623,403 @@ const LESSON_QUIZZES = {
       "en": "std::lock_guard guarantees mutex release even if an exception is thrown, preventing deadlocks.",
       "fr": "std::lock_guard garantit la libération du mutex même en cas d'exception, évitant les blocages."
     }
-  }
+  },
+  "66": {
+    "question": {
+      "en": "Why does a dynamic array (like std::vector or MyVector) double its capacity (2x) when full rather than growing by +1?",
+      "fr": "Pourquoi un tableau dynamique double-t-il sa capacité (2x) quand il est plein plutôt que d'ajouter +1 ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "To achieve amortized O(1) insertion time; growing by +1 causes quadratic O(N²) reallocation overhead",
+          "fr": "Pour obtenir un coût amorti en O(1) ; grandir de +1 entraîne un coût quadratique en O(N²)"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Because computer memory can only be addressed in powers of 2",
+          "fr": "Car la mémoire ne s'adresse qu'en puissances de 2"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To store elements on the CPU stack instead of the heap",
+          "fr": "Pour allouer sur la pile CPU au lieu du tas"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Exponential capacity doubling guarantees that expensive heap reallocations occur exponentially less frequently, yielding amortized constant O(1) push_back time.",
+      "fr": "Le doublement de capacité garantit que les réallocations deviennent exponentiellement rares, assurant un temps amorti en O(1)."
+    }
+  },
+  "67": {
+    "question": {
+      "en": "Why must a unique ownership smart pointer (like std::unique_ptr or MyUniquePtr) declare its copy constructor as '= delete'?",
+      "fr": "Pourquoi un pointeur intelligent à possession exclusive doit-il marquer son constructeur de copie en '= delete' ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "To prevent two smart pointers from owning and double-freeing the same heap memory address",
+          "fr": "Pour empêcher deux pointeurs de posséder et détruire deux fois (double-free) la même adresse mémoire"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Because template classes cannot have copy constructors in C++",
+          "fr": "Car les classes modèles ne peuvent pas avoir de constructeur de copie"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "To force the compiler to convert all pointers into references",
+          "fr": "Pour forcer la conversion des pointeurs en références"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Exclusive ownership means exactly one pointer manages the resource. Copying would lead to a catastrophic double-free when both destructors execute. Ownership must be moved via std::move.",
+      "fr": "La possession exclusive interdit la copie pour éviter le double-free destructeur. Le transfert doit s'effectuer via std::move."
+    }
+  },
+  "68": {
+    "question": {
+      "en": "What is the primary systems engineering advantage of a Fixed-Block Memory Pool over repeated 'new' / 'malloc' calls?",
+      "fr": "Quel est l'avantage clé d'un pool de mémoire à blocs fixes par rapport aux appels répétés à 'new'/'malloc' ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "Deterministic O(1) allocation speed without OS syscall overhead, and zero heap fragmentation",
+          "fr": "Vitesse d'allocation déterministe en O(1) sans appel système OS, et zéro fragmentation du tas"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "It compresses data so objects take zero bytes in RAM",
+          "fr": "Il compresse les objets à 0 octet en mémoire"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "It allows deleting objects without running destructors",
+          "fr": "Il supprime les objets sans destructeur"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "General-purpose allocators suffer from system call locks and heap fragmentation. Fixed-block pools pop pre-allocated nodes from an intrusive free-list in deterministic O(1) time.",
+      "fr": "Les allocateurs généralistes génèrent de la fragmentation et des verrous noyau. Les pools à blocs fixes allouent en O(1) déterministe."
+    }
+  },
+  "69": {
+    "question": {
+      "en": "Why is 'std::condition_variable::wait(lock, predicate)' superior to a 'while (!taskReady) {}' spin-loop in worker threads?",
+      "fr": "Pourquoi 'std::condition_variable::wait(lock, predicate)' est-il supérieur à une boucle 'while (!taskReady) {}' dans un thread ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "It puts the waiting worker thread to sleep, yielding CPU cores to other processes and consuming 0% idle CPU",
+          "fr": "Il endort le thread travailleur, libérant les cœurs CPU et consommant 0% de processeur au repos"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "Spin-loops cause compilation errors in C++20",
+          "fr": "Les boucles actives génèrent des erreurs de compilation"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "condition_variable executes asynchronous tasks directly on GPU cores",
+          "fr": "condition_variable délègue au GPU"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Busy-waiting (spin-looping) burns 100% of a CPU core doing nothing. A condition_variable suspends thread execution until notified by producer threads.",
+      "fr": "L'attente active (spin-loop) sature un cœur CPU à 100%. condition_variable endort le thread jusqu'au réveil par notify."
+    }
+  },
+  "70": {
+    "question": {
+      "en": "Why is 'std::memcpy' the standard-mandated way to parse raw byte buffers into C++ structs rather than casting 'reinterpret_cast<Header*>(buf)'?",
+      "fr": "Pourquoi 'std::memcpy' est-il la méthode recommandée pour désérialiser des octets bruts en structure plutôt que 'reinterpret_cast' ?"
+    },
+    "options": [
+      {
+        "text": {
+          "en": "To avoid violating the Strict Aliasing Rule and avoid unaligned memory access hardware traps",
+          "fr": "Pour éviter de violer la règle d'aliasing strict et éviter les fautes matérielles d'alignement mémoire"
+        },
+        "correct": true
+      },
+      {
+        "text": {
+          "en": "reinterpret_cast cannot cast pointer types in C++",
+          "fr": "reinterpret_cast ne fonctionne pas sur les pointeurs"
+        },
+        "correct": false
+      },
+      {
+        "text": {
+          "en": "std::memcpy automatically encrypts network packets",
+          "fr": "std::memcpy chiffre automatiquement les paquets"
+        },
+        "correct": false
+      }
+    ],
+    "explanation": {
+      "en": "Casting raw byte pointers directly violates the C++ strict aliasing rule and can trigger alignment faults on CPUs requiring aligned access. Modern compilers optimize std::memcpy into a single register move without undefined behavior.",
+      "fr": "Le cast direct viole l'aliasing strict et peut causer des fautes d'alignement matériel. Les compilateurs modernes optimisent std::memcpy en une seule instruction sans comportement indéfini."
+    }
+  },
+  "71": {
+    "question": {
+        "en": "Why must std::forward<T> be called with an explicit template argument (e.g., std::forward<T>(arg)), whereas std::move does not require one?",
+        "fr": "Pourquoi std::forward<T> nécessite-t-il un argument de template explicite alors que std::move n'en a pas besoin ?"
+    },
+    "options": [
+        {
+            "text": {
+                "en": "Because std::forward relies on the deduced type T and reference collapsing rules to conditionally cast to an rvalue; std::move always unconditionally casts to an rvalue.",
+                "fr": "Parce que std::forward utilise le type déduit T et l'écrasement de référence pour caster conditionnellement en rvalue ; std::move caste inconditionnellement en rvalue."
+            },
+            "correct": true
+        },
+        {
+            "text": {
+                "en": "Because std::forward allocates heap memory for the forward buffer",
+                "fr": "Parce que std::forward alloue de la mémoire sur le tas pour le tampon"
+            },
+            "correct": false
+        },
+        {
+            "text": {
+                "en": "Because std::move only works on primitive types like int and double",
+                "fr": "Parce que std::move ne fonctionne que sur les types primitifs comme int et double"
+            },
+            "correct": false
+        }
+    ],
+    "explanation": {
+        "en": "std::move is an unconditional cast to an rvalue reference. std::forward<T> preserves the original value category (lvalue or rvalue) by inspecting T and applying reference collapsing (& + && -> &).",
+        "fr": "std::move caste inconditionnellement en rvalue. std::forward<T> préserve la catégorie d'origine (lvalue ou rvalue) en inspectant T et en appliquant l'écrasement de références."
+    }
+},
+  "72": {
+    "question": {
+        "en": "What occurs if a function declared with the C++20 'consteval' specifier cannot be evaluated at compile time in a particular call?",
+        "fr": "Que se passe-t-il si une fonction déclarée avec 'consteval' (C++20) ne peut pas être évaluée à la compilation ?"
+    },
+    "options": [
+        {
+            "text": {
+                "en": "The compiler will issue a compilation error; unlike constexpr, consteval functions can NEVER run at runtime.",
+                "fr": "Le compilateur émet une erreur de compilation ; contrairement à constexpr, les fonctions consteval ne s'exécutent JAMAIS à l'exécution."
+            },
+            "correct": true
+        },
+        {
+            "text": {
+                "en": "The compiler silently falls back to running the function at runtime",
+                "fr": "Le compilateur bascule silencieusement vers une exécution au runtime"
+            },
+            "correct": false
+        },
+        {
+            "text": {
+                "en": "The program enters an infinite loop at runtime",
+                "fr": "Le programme entre dans une boucle infinie à l'exécution"
+            },
+            "correct": false
+        }
+    ],
+    "explanation": {
+        "en": "consteval produces an 'immediate function'. Every call to a consteval function must produce a compile-time constant expression, or the program is ill-formed and fails to compile.",
+        "fr": "consteval définit une 'fonction immédiate'. Chaque appel doit produire une constante à la compilation, sinon la compilation échoue."
+    }
+},
+  "73": {
+    "question": {
+        "en": "What hidden memory overhead does a class incur when it declares at least one virtual member function?",
+        "fr": "Quel surcoût mémoire masqué une classe subit-elle lorsqu'elle déclare au moins une fonction membre virtuelle ?"
+    },
+    "options": [
+        {
+            "text": {
+                "en": "The compiler embeds a hidden pointer (__vptr) inside each object instance pointing to the class VTable, typically adding 8 bytes on 64-bit platforms.",
+                "fr": "Le compilateur insère un pointeur masqué (__vptr) dans chaque instance pointant vers la VTable de la classe, ajoutant généralement 8 octets sur 64 bits."
+            },
+            "correct": true
+        },
+        {
+            "text": {
+                "en": "The compiler duplicates the entire binary machine code of all methods inside each object instance",
+                "fr": "Le compilateur duplique l'intégralité du code machine de toutes les méthodes dans chaque instance"
+            },
+            "correct": false
+        },
+        {
+            "text": {
+                "en": "Virtual functions disable stack allocation, forcing all instances to be allocated on the heap",
+                "fr": "Les fonctions virtuelles interdisent l'allocation sur la pile, forçant l'allocation sur le tas"
+            },
+            "correct": false
+        }
+    ],
+    "explanation": {
+        "en": "Virtual dispatch requires a VTable containing function pointers and a __vptr inside each instance. Calling a virtual method requires dereferencing the vptr and indexing the table.",
+        "fr": "Le dispatch virtuel requiert une VTable de pointeurs de fonctions et un __vptr par instance. L'appel implique de déréférencer le vptr puis d'indexer la table."
+    }
+},
+  "74": {
+    "question": {
+        "en": "Why must C++ destructors never allow exceptions to escape (and are implicitly noexcept in modern C++)?",
+        "fr": "Pourquoi les destructeurs C++ ne doivent-ils jamais laisser échapper d'exceptions (et sont implicitement noexcept) ?"
+    },
+    "options": [
+        {
+            "text": {
+                "en": "If a destructor throws while another exception is already actively unwinding the stack, C++ immediately calls std::terminate, aborting the process.",
+                "fr": "Si un destructeur lève une exception alors qu'une autre déroule déjà la pile, C++ appelle immédiatement std::terminate et interrompt le processus."
+            },
+            "correct": true
+        },
+        {
+            "text": {
+                "en": "Because throwing an exception inside a destructor corrupts the CPU instruction cache",
+                "fr": "Parce que lever une exception dans un destructeur corrompt le cache d'instructions du CPU"
+            },
+            "correct": false
+        },
+        {
+            "text": {
+                "en": "Because destructors cannot have try-catch blocks inside their body",
+                "fr": "Parce que les destructeurs ne peuvent pas contenir de blocs try-catch"
+            },
+            "correct": false
+        }
+    ],
+    "explanation": {
+        "en": "During stack unwinding caused by an active exception, if any destructor throws a second exception, the C++ runtime cannot handle two concurrent active exceptions and immediately terminates.",
+        "fr": "Lors du déroulement de pile provoqué par une exception, si un destructeur lève une seconde exception, le runtime C++ ne peut gérer deux exceptions simultanées et appelle std::terminate()."
+    }
+},
+  "75": {
+    "question": {
+        "en": "Which of the following actions directly violates the C++ Strict Aliasing rule and produces Undefined Behavior (UB)?",
+        "fr": "Laquelle des actions suivantes viole directement la règle de Strict Aliasing en C++ et produit un comportement indéfini (UB) ?"
+    },
+    "options": [
+        {
+            "text": {
+                "en": "Reading or writing the memory of a float variable through a dereferenced int* pointer cast using reinterpret_cast.",
+                "fr": "Lire ou écrire la mémoire d'un float via un pointeur int* déréférencé après un reinterpret_cast."
+            },
+            "correct": true
+        },
+        {
+            "text": {
+                "en": "Using std::memcpy to copy raw bytes between two structs of identical size",
+                "fr": "Utiliser std::memcpy pour copier des octets bruts entre deux structures de taille identique"
+            },
+            "correct": false
+        },
+        {
+            "text": {
+                "en": "Passing a const reference to a pure function",
+                "fr": "Passer une référence constante à une fonction pure"
+            },
+            "correct": false
+        }
+    ],
+    "explanation": {
+        "en": "The strict aliasing rule allows the compiler to assume pointers to incompatible types never alias the same memory. Dereferencing an int* pointing to a float violates this and causes UB. Always use std::memcpy for type punning.",
+        "fr": "La règle de strict aliasing permet au compilateur de supposer que des pointeurs de types incompatibles ne pointent jamais vers la même mémoire. Déréférencer un int* sur un float viole cette règle. Utilisez std::memcpy."
+    }
+},
+  "76": {
+    "question": {
+        "en": "Why does Structure of Arrays (SoA) significantly outperform Array of Structures (AoS) in high-throughput data processing?",
+        "fr": "Pourquoi la Structure de Tableaux (SoA) surpasse-t-elle nettement le Tableau de Structures (AoS) lors de traitements de données intensifs ?"
+    },
+    "options": [
+        {
+            "text": {
+                "en": "SoA packs active contiguous fields sequentially, ensuring 100% of each 64-byte CPU cache line is utilized and enabling SIMD auto-vectorization.",
+                "fr": "La SoA regroupe les champs séquentiellement, garantissant que 100% de chaque ligne de cache CPU de 64 octets est exploitée et permet la vectorisation SIMD."
+            },
+            "correct": true
+        },
+        {
+            "text": {
+                "en": "Because SoA automatically runs on the GPU without any shader code",
+                "fr": "Parce que la SoA s'exécute automatiquement sur le GPU sans code shader"
+            },
+            "correct": false
+        },
+        {
+            "text": {
+                "en": "Because AoS structures cannot be passed by pointer",
+                "fr": "Parce que les structures AoS ne peuvent pas être transmises par pointeur"
+            },
+            "correct": false
+        }
+    ],
+    "explanation": {
+        "en": "CPUs fetch memory in 64-byte cache lines. In AoS, pulling one field loads unneeded adjacent fields into cache. SoA packs identical fields sequentially, maximizing cache hits and allowing SIMD (AVX/NEON) vector registers to process multiple elements per cycle.",
+        "fr": "Le processeur charge la mémoire par lignes de cache de 64 octets. En AoS, lire un champ charge aussi des champs inutiles. En SoA, les champs identiques sont contigus, maximisant les hits de cache et autorisant le calcul vectoriel SIMD."
+    }
+},
+  "77": {
+    "question": {
+        "en": "In a tree or graph with bidirectional connections, why should child nodes store a std::weak_ptr to their parent instead of std::shared_ptr?",
+        "fr": "Dans un arbre ou graphe avec liaisons bidirectionnelles, pourquoi les enfants doivent-ils stocker un std::weak_ptr vers leur parent plutôt qu'un std::shared_ptr ?"
+    },
+    "options": [
+        {
+            "text": {
+                "en": "To break circular references: two shared_ptrs referencing each other keep reference counts above zero permanently, causing an uncollectable memory leak.",
+                "fr": "Pour casser les références circulaires : deux shared_ptrs mutuels maintiennent le compteur au-dessus de zéro en permanence, provoquant une fuite mémoire irrémédiable."
+            },
+            "correct": true
+        },
+        {
+            "text": {
+                "en": "Because std::weak_ptr allows modifying the parent object without thread synchronization",
+                "fr": "Parce que std::weak_ptr permet de modifier le parent sans synchronisation de threads"
+            },
+            "correct": false
+        },
+        {
+            "text": {
+                "en": "Because std::shared_ptr can only be used on primitive data types",
+                "fr": "Parce que std::shared_ptr ne peut être utilisé que sur des types primitifs"
+            },
+            "correct": false
+        }
+    ],
+    "explanation": {
+        "en": "std::weak_ptr holds a non-owning reference and does not increment the strong reference count. This avoids cyclic dependency memory leaks and allows the parent to be safely destroyed when external owners release it.",
+        "fr": "std::weak_ptr détient une référence non-propriétaire et n'incrémente pas le compteur fort. Cela évite les fuites de dépendances cycliques et permet la destruction propre du parent."
+    }
+},
 };
 
 const MODULE_QUIZZES = {
@@ -6460,4 +6856,412 @@ const MODULE_QUIZZES = {
       }
     }
   ]
+,
+  "mod-10": [
+    {
+        "question": {
+            "en": "Why does a dynamic array (like std::vector or MyVector) double its capacity (2x) when full rather than growing by +1?",
+            "fr": "Pourquoi un tableau dynamique double-t-il sa capacité (2x) quand il est plein plutôt que d'ajouter +1 ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "To achieve amortized O(1) insertion time; growing by +1 causes quadratic O(N²) reallocation overhead",
+                    "fr": "Pour obtenir un coût amorti en O(1) ; grandir de +1 entraîne un coût quadratique en O(N²)"
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Because computer memory can only be addressed in powers of 2",
+                    "fr": "Car la mémoire ne s'adresse qu'en puissances de 2"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "To store elements on the CPU stack instead of the heap",
+                    "fr": "Pour allouer sur la pile CPU au lieu du tas"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "Exponential capacity doubling guarantees that expensive heap reallocations occur exponentially less frequently, yielding amortized constant O(1) push_back time.",
+            "fr": "Le doublement de capacité garantit que les réallocations deviennent exponentiellement rares, assurant un temps amorti en O(1)."
+        }
+    },
+    {
+        "question": {
+            "en": "Why must a unique ownership smart pointer (like std::unique_ptr or MyUniquePtr) declare its copy constructor as '= delete'?",
+            "fr": "Pourquoi un pointeur intelligent à possession exclusive doit-il marquer son constructeur de copie en '= delete' ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "To prevent two smart pointers from owning and double-freeing the same heap memory address",
+                    "fr": "Pour empêcher deux pointeurs de posséder et détruire deux fois (double-free) la même adresse mémoire"
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Because template classes cannot have copy constructors in C++",
+                    "fr": "Car les classes modèles ne peuvent pas avoir de constructeur de copie"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "To force the compiler to convert all pointers into references",
+                    "fr": "Pour forcer la conversion des pointeurs en références"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "Exclusive ownership means exactly one pointer manages the resource. Copying would lead to a catastrophic double-free when both destructors execute. Ownership must be moved via std::move.",
+            "fr": "La possession exclusive interdit la copie pour éviter le double-free destructeur. Le transfert doit s'effectuer via std::move."
+        }
+    },
+    {
+        "question": {
+            "en": "What is the primary systems engineering advantage of a Fixed-Block Memory Pool over repeated 'new' / 'malloc' calls?",
+            "fr": "Quel est l'avantage clé d'un pool de mémoire à blocs fixes par rapport aux appels répétés à 'new'/'malloc' ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "Deterministic O(1) allocation speed without OS syscall overhead, and zero heap fragmentation",
+                    "fr": "Vitesse d'allocation déterministe en O(1) sans appel système OS, et zéro fragmentation du tas"
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "It compresses data so objects take zero bytes in RAM",
+                    "fr": "Il compresse les objets à 0 octet en mémoire"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "It allows deleting objects without running destructors",
+                    "fr": "Il supprime les objets sans destructeur"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "General-purpose allocators suffer from system call locks and heap fragmentation. Fixed-block pools pop pre-allocated nodes from an intrusive free-list in deterministic O(1) time.",
+            "fr": "Les allocateurs généralistes génèrent de la fragmentation et des verrous noyau. Les pools à blocs fixes allouent en O(1) déterministe."
+        }
+    },
+    {
+        "question": {
+            "en": "Why is 'std::condition_variable::wait(lock, predicate)' superior to a 'while (!taskReady) {}' spin-loop in worker threads?",
+            "fr": "Pourquoi 'std::condition_variable::wait(lock, predicate)' est-il supérieur à une boucle 'while (!taskReady) {}' dans un thread ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "It puts the waiting worker thread to sleep, yielding CPU cores to other processes and consuming 0% idle CPU",
+                    "fr": "Il endort le thread travailleur, libérant les cœurs CPU et consommant 0% de processeur au repos"
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Spin-loops cause compilation errors in C++20",
+                    "fr": "Les boucles actives génèrent des erreurs de compilation"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "condition_variable executes asynchronous tasks directly on GPU cores",
+                    "fr": "condition_variable délègue au GPU"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "Busy-waiting (spin-looping) burns 100% of a CPU core doing nothing. A condition_variable suspends thread execution until notified by producer threads.",
+            "fr": "L'attente active (spin-loop) sature un cœur CPU à 100%. condition_variable endort le thread jusqu'au réveil par notify."
+        }
+    },
+    {
+        "question": {
+            "en": "Why is 'std::memcpy' the standard-mandated way to parse raw byte buffers into C++ structs rather than casting 'reinterpret_cast<Header*>(buf)'?",
+            "fr": "Pourquoi 'std::memcpy' est-il la méthode recommandée pour désérialiser des octets bruts en structure plutôt que 'reinterpret_cast' ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "To avoid violating the Strict Aliasing Rule and avoid unaligned memory access hardware traps",
+                    "fr": "Pour éviter de violer la règle d'aliasing strict et éviter les fautes matérielles d'alignement mémoire"
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "reinterpret_cast cannot cast pointer types in C++",
+                    "fr": "reinterpret_cast ne fonctionne pas sur les pointeurs"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "std::memcpy automatically encrypts network packets",
+                    "fr": "std::memcpy chiffre automatiquement les paquets"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "Casting raw byte pointers directly violates the C++ strict aliasing rule and can trigger alignment faults on CPUs requiring aligned access. Modern compilers optimize std::memcpy into a single register move without undefined behavior.",
+            "fr": "Le cast direct viole l'aliasing strict et peut causer des fautes d'alignement matériel. Les compilateurs modernes optimisent std::memcpy en une seule instruction sans comportement indéfini."
+        }
+    }
+],
+  "mod-11": [
+    {
+        "question": {
+            "en": "Why must std::forward<T> be called with an explicit template argument (e.g., std::forward<T>(arg)), whereas std::move does not require one?",
+            "fr": "Pourquoi std::forward<T> nécessite-t-il un argument de template explicite alors que std::move n'en a pas besoin ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "Because std::forward relies on the deduced type T and reference collapsing rules to conditionally cast to an rvalue; std::move always unconditionally casts to an rvalue.",
+                    "fr": "Parce que std::forward utilise le type déduit T et l'écrasement de référence pour caster conditionnellement en rvalue ; std::move caste inconditionnellement en rvalue."
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Because std::forward allocates heap memory for the forward buffer",
+                    "fr": "Parce que std::forward alloue de la mémoire sur le tas pour le tampon"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "Because std::move only works on primitive types like int and double",
+                    "fr": "Parce que std::move ne fonctionne que sur les types primitifs comme int et double"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "std::move is an unconditional cast to an rvalue reference. std::forward<T> preserves the original value category (lvalue or rvalue) by inspecting T and applying reference collapsing (& + && -> &).",
+            "fr": "std::move caste inconditionnellement en rvalue. std::forward<T> préserve la catégorie d'origine (lvalue ou rvalue) en inspectant T et en appliquant l'écrasement de références."
+        }
+    },
+    {
+        "question": {
+            "en": "What occurs if a function declared with the C++20 'consteval' specifier cannot be evaluated at compile time in a particular call?",
+            "fr": "Que se passe-t-il si une fonction déclarée avec 'consteval' (C++20) ne peut pas être évaluée à la compilation ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "The compiler will issue a compilation error; unlike constexpr, consteval functions can NEVER run at runtime.",
+                    "fr": "Le compilateur émet une erreur de compilation ; contrairement à constexpr, les fonctions consteval ne s'exécutent JAMAIS à l'exécution."
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "The compiler silently falls back to running the function at runtime",
+                    "fr": "Le compilateur bascule silencieusement vers une exécution au runtime"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "The program enters an infinite loop at runtime",
+                    "fr": "Le programme entre dans une boucle infinie à l'exécution"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "consteval produces an 'immediate function'. Every call to a consteval function must produce a compile-time constant expression, or the program is ill-formed and fails to compile.",
+            "fr": "consteval définit une 'fonction immédiate'. Chaque appel doit produire une constante à la compilation, sinon la compilation échoue."
+        }
+    },
+    {
+        "question": {
+            "en": "What hidden memory overhead does a class incur when it declares at least one virtual member function?",
+            "fr": "Quel surcoût mémoire masqué une classe subit-elle lorsqu'elle déclare au moins une fonction membre virtuelle ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "The compiler embeds a hidden pointer (__vptr) inside each object instance pointing to the class VTable, typically adding 8 bytes on 64-bit platforms.",
+                    "fr": "Le compilateur insère un pointeur masqué (__vptr) dans chaque instance pointant vers la VTable de la classe, ajoutant généralement 8 octets sur 64 bits."
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "The compiler duplicates the entire binary machine code of all methods inside each object instance",
+                    "fr": "Le compilateur duplique l'intégralité du code machine de toutes les méthodes dans chaque instance"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "Virtual functions disable stack allocation, forcing all instances to be allocated on the heap",
+                    "fr": "Les fonctions virtuelles interdisent l'allocation sur la pile, forçant l'allocation sur le tas"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "Virtual dispatch requires a VTable containing function pointers and a __vptr inside each instance. Calling a virtual method requires dereferencing the vptr and indexing the table.",
+            "fr": "Le dispatch virtuel requiert une VTable de pointeurs de fonctions et un __vptr par instance. L'appel implique de déréférencer le vptr puis d'indexer la table."
+        }
+    },
+    {
+        "question": {
+            "en": "Why must C++ destructors never allow exceptions to escape (and are implicitly noexcept in modern C++)?",
+            "fr": "Pourquoi les destructeurs C++ ne doivent-ils jamais laisser échapper d'exceptions (et sont implicitement noexcept) ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "If a destructor throws while another exception is already actively unwinding the stack, C++ immediately calls std::terminate, aborting the process.",
+                    "fr": "Si un destructeur lève une exception alors qu'une autre déroule déjà la pile, C++ appelle immédiatement std::terminate et interrompt le processus."
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Because throwing an exception inside a destructor corrupts the CPU instruction cache",
+                    "fr": "Parce que lever une exception dans un destructeur corrompt le cache d'instructions du CPU"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "Because destructors cannot have try-catch blocks inside their body",
+                    "fr": "Parce que les destructeurs ne peuvent pas contenir de blocs try-catch"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "During stack unwinding caused by an active exception, if any destructor throws a second exception, the C++ runtime cannot handle two concurrent active exceptions and immediately terminates.",
+            "fr": "Lors du déroulement de pile provoqué par une exception, si un destructeur lève une seconde exception, le runtime C++ ne peut gérer deux exceptions simultanées et appelle std::terminate()."
+        }
+    },
+    {
+        "question": {
+            "en": "Which of the following actions directly violates the C++ Strict Aliasing rule and produces Undefined Behavior (UB)?",
+            "fr": "Laquelle des actions suivantes viole directement la règle de Strict Aliasing en C++ et produit un comportement indéfini (UB) ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "Reading or writing the memory of a float variable through a dereferenced int* pointer cast using reinterpret_cast.",
+                    "fr": "Lire ou écrire la mémoire d'un float via un pointeur int* déréférencé après un reinterpret_cast."
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Using std::memcpy to copy raw bytes between two structs of identical size",
+                    "fr": "Utiliser std::memcpy pour copier des octets bruts entre deux structures de taille identique"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "Passing a const reference to a pure function",
+                    "fr": "Passer une référence constante à une fonction pure"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "The strict aliasing rule allows the compiler to assume pointers to incompatible types never alias the same memory. Dereferencing an int* pointing to a float violates this and causes UB. Always use std::memcpy for type punning.",
+            "fr": "La règle de strict aliasing permet au compilateur de supposer que des pointeurs de types incompatibles ne pointent jamais vers la même mémoire. Déréférencer un int* sur un float viole cette règle. Utilisez std::memcpy."
+        }
+    },
+    {
+        "question": {
+            "en": "Why does Structure of Arrays (SoA) significantly outperform Array of Structures (AoS) in high-throughput data processing?",
+            "fr": "Pourquoi la Structure de Tableaux (SoA) surpasse-t-elle nettement le Tableau de Structures (AoS) lors de traitements de données intensifs ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "SoA packs active contiguous fields sequentially, ensuring 100% of each 64-byte CPU cache line is utilized and enabling SIMD auto-vectorization.",
+                    "fr": "La SoA regroupe les champs séquentiellement, garantissant que 100% de chaque ligne de cache CPU de 64 octets est exploitée et permet la vectorisation SIMD."
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Because SoA automatically runs on the GPU without any shader code",
+                    "fr": "Parce que la SoA s'exécute automatiquement sur le GPU sans code shader"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "Because AoS structures cannot be passed by pointer",
+                    "fr": "Parce que les structures AoS ne peuvent pas être transmises par pointeur"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "CPUs fetch memory in 64-byte cache lines. In AoS, pulling one field loads unneeded adjacent fields into cache. SoA packs identical fields sequentially, maximizing cache hits and allowing SIMD (AVX/NEON) vector registers to process multiple elements per cycle.",
+            "fr": "Le processeur charge la mémoire par lignes de cache de 64 octets. En AoS, lire un champ charge aussi des champs inutiles. En SoA, les champs identiques sont contigus, maximisant les hits de cache et autorisant le calcul vectoriel SIMD."
+        }
+    },
+    {
+        "question": {
+            "en": "In a tree or graph with bidirectional connections, why should child nodes store a std::weak_ptr to their parent instead of std::shared_ptr?",
+            "fr": "Dans un arbre ou graphe avec liaisons bidirectionnelles, pourquoi les enfants doivent-ils stocker un std::weak_ptr vers leur parent plutôt qu'un std::shared_ptr ?"
+        },
+        "options": [
+            {
+                "text": {
+                    "en": "To break circular references: two shared_ptrs referencing each other keep reference counts above zero permanently, causing an uncollectable memory leak.",
+                    "fr": "Pour casser les références circulaires : deux shared_ptrs mutuels maintiennent le compteur au-dessus de zéro en permanence, provoquant une fuite mémoire irrémédiable."
+                },
+                "correct": true
+            },
+            {
+                "text": {
+                    "en": "Because std::weak_ptr allows modifying the parent object without thread synchronization",
+                    "fr": "Parce que std::weak_ptr permet de modifier le parent sans synchronisation de threads"
+                },
+                "correct": false
+            },
+            {
+                "text": {
+                    "en": "Because std::shared_ptr can only be used on primitive data types",
+                    "fr": "Parce que std::shared_ptr ne peut être utilisé que sur des types primitifs"
+                },
+                "correct": false
+            }
+        ],
+        "explanation": {
+            "en": "std::weak_ptr holds a non-owning reference and does not increment the strong reference count. This avoids cyclic dependency memory leaks and allows the parent to be safely destroyed when external owners release it.",
+            "fr": "std::weak_ptr détient une référence non-propriétaire et n'incrémente pas le compteur fort. Cela évite les fuites de dépendances cycliques et permet la destruction propre du parent."
+        }
+    }
+]
 };
+
+// Automatic numeric aliases for MODULE_QUIZZES so both MODULE_QUIZZES[1] and MODULE_QUIZZES['mod-1'] work
+for (let i = 1; i <= 11; i++) {
+  if (MODULE_QUIZZES['mod-' + i]) {
+    MODULE_QUIZZES[i] = MODULE_QUIZZES['mod-' + i];
+  }
+}

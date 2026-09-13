@@ -1587,6 +1587,276 @@ const COURSE_DATA = {
           "ytUrl": null
         }
       ]
-    }
+    },
+    {
+      "id": "mod-10",
+      "source": "prodev",
+      "icon": "🏆",
+      "title": {
+        "en": "Module 10: Real-World Advanced Project Challenges (66-70)",
+        "fr": "Module 10 : Projets Avancés du Monde Réel (66-70)"
+      },
+      "description": {
+        "en": "Production-grade C++ systems engineering: build custom dynamic arrays with move semantics, custom smart pointers, fixed-block memory pools, thread-safe task queues, and binary packet parsers.",
+        "fr": "Ingénierie systèmes C++ production : tableaux dynamiques avec sémantique de déplacement, pointeurs intelligents, pools de mémoire et files concurrentes."
+      },
+      "lessons": [
+        {
+          "id": 66,
+          "title": "Project 1: Custom Vector Engine (MyVector<T>) 🚀",
+          "timestamp": "Advanced Project 1",
+          "timeSeconds": null,
+          "category": "Systems Project",
+          "summary": {
+            "en": "Build a custom dynamic array container from scratch: manual heap management, exponential 2x capacity reallocation, copy/move constructors, and amortized O(1) push_back.",
+            "fr": "Implémentation d'un tableau dynamique de A à Z avec réallocation exponentielle et constructeurs de déplacement."
+          },
+          "code": "#include <iostream>\n#include <utility>\n#include <string>\n\ntemplate <typename T>\nclass MyVector {\nprivate:\n    T* data;\n    size_t sz;\n    size_t cap;\n\n    void reallocate(size_t newCap) {\n        T* newBlock = new T[newCap];\n        for (size_t i = 0; i < sz; i++) {\n            newBlock[i] = std::move(data[i]); // Move existing elements\n        }\n        delete[] data;\n        data = newBlock;\n        cap = newCap;\n    }\n\npublic:\n    MyVector() : data(nullptr), sz(0), cap(0) {}\n    ~MyVector() { delete[] data; }\n\n    // Move constructor (Zero-copy transfer of ownership)\n    MyVector(MyVector&& other) noexcept \n        : data(other.data), sz(other.sz), cap(other.cap) {\n        other.data = nullptr;\n        other.sz = 0;\n        other.cap = 0;\n    }\n\n    void push_back(const T& value) {\n        if (sz >= cap) {\n            reallocate(cap == 0 ? 2 : cap * 2); // 2x exponential growth\n        }\n        data[sz++] = value;\n    }\n\n    size_t size() const { return sz; }\n    size_t capacity() const { return cap; }\n    T& operator[](size_t index) { return data[index]; }\n    const T& operator[](size_t index) const { return data[index]; }\n};\n\nint main() {\n    MyVector<std::string> names;\n    names.push_back(\"Alpha\");\n    names.push_back(\"Beta\");\n    names.push_back(\"Gamma\");\n\n    std::cout << \"Custom Vector Size: \" << names.size() << \" | Capacity: \" << names.capacity() << std::endl;\n    for (size_t i = 0; i < names.size(); i++) {\n        std::cout << \"[\" << i << \"]: \" << names[i] << std::endl;\n    }\n    return 0;\n}",
+          "output": "Custom Vector Size: 3 | Capacity: 4\n[0]: Alpha\n[1]: Beta\n[2]: Gamma",
+          "keyTakeaways": [
+            "Exponential capacity doubling (2x) provides amortized O(1) push_back insertion time.",
+            "Move semantics (std::move) prevent expensive deep copies when reallocating heap memory.",
+            "The move constructor steals the internal data pointer and nullifies the source object (RAII safe)."
+          ],
+          "source": "prodev",
+          "ytUrl": null
+        },
+        {
+          "id": 67,
+          "title": "Project 2: Custom Smart Pointer Engine (MyUniquePtr) 🛡️",
+          "timestamp": "Advanced Project 2",
+          "timeSeconds": null,
+          "category": "Systems Project",
+          "summary": {
+            "en": "Implement a custom move-only unique ownership smart pointer: disabling copy semantics (= delete), overloaded operator-> and dereference operator*, and deterministic RAII heap cleanup.",
+            "fr": "Création d'un pointeur intelligent unique déplaçable avec RAII et surcharge d'opérateurs."
+          },
+          "code": "#include <iostream>\n#include <string>\n\ntemplate <typename T>\nclass MyUniquePtr {\nprivate:\n    T* ptr;\n\npublic:\n    explicit MyUniquePtr(T* p = nullptr) : ptr(p) {}\n    ~MyUniquePtr() { delete ptr; } // Automatically frees heap resource!\n\n    // 1. Strictly disable copying (unique exclusive ownership!)\n    MyUniquePtr(const MyUniquePtr&) = delete;\n    MyUniquePtr& operator=(const MyUniquePtr&) = delete;\n\n    // 2. Enable Move Semantics\n    MyUniquePtr(MyUniquePtr&& other) noexcept : ptr(other.ptr) {\n        other.ptr = nullptr; // Steal resource\n    }\n    MyUniquePtr& operator=(MyUniquePtr&& other) noexcept {\n        if (this != &other) {\n            delete ptr;\n            ptr = other.ptr;\n            other.ptr = nullptr;\n        }\n        return *this;\n    }\n\n    T& operator*() const { return *ptr; }\n    T* operator->() const { return ptr; }\n    T* get() const { return ptr; }\n};\n\nstruct Player {\n    std::string name;\n    int health;\n    void display() const { std::cout << name << \" (HP: \" << health << \")\" << std::endl; }\n};\n\nint main() {\n    MyUniquePtr<Player> p1(new Player{\"Kaelen\", 100});\n    p1->display();\n\n    // Transfer ownership via move\n    MyUniquePtr<Player> p2 = std::move(p1);\n    if (p1.get() == nullptr) {\n        std::cout << \"p1 ownership safely transferred to p2!\" << std::endl;\n    }\n    p2->display();\n    return 0;\n}",
+          "output": "Kaelen (HP: 100)\np1 ownership safely transferred to p2!\nKaelen (HP: 100)",
+          "keyTakeaways": [
+            "= delete disables copy constructors to enforce strictly unique ownership in memory.",
+            "Overloaded operator-> and operator* allow the smart pointer to behave syntactically like a raw pointer.",
+            "Ownership transfers seamlessly via move semantics, completely eliminating memory leaks."
+          ],
+          "source": "prodev",
+          "ytUrl": null
+        },
+        {
+          "id": 68,
+          "title": "Project 3: High-Performance Fixed-Block Memory Pool ⚡",
+          "timestamp": "Advanced Project 3",
+          "timeSeconds": null,
+          "category": "Systems Project",
+          "summary": {
+            "en": "Eliminate malloc/new runtime overhead and heap fragmentation: build an ultra-fast fixed-block memory allocator with an intrusive free-list for constant O(1) allocations.",
+            "fr": "Gestionnaire de mémoire à blocs fixes ultra-rapide en O(1) avec liste chaînée intrusive."
+          },
+          "code": "#include <iostream>\n#include <cstddef>\n\nclass MemoryPool {\nprivate:\n    struct Node {\n        Node* next;\n    };\n\n    size_t blockSize;\n    size_t poolCapacity;\n    char* memoryBuffer;\n    Node* freeListHead;\n\npublic:\n    MemoryPool(size_t blockSz, size_t count)\n        : blockSize(blockSz < sizeof(Node) ? sizeof(Node) : blockSz),\n          poolCapacity(count),\n          freeListHead(nullptr) {\n        // Allocate contiguous chunk once\n        memoryBuffer = new char[blockSize * poolCapacity];\n        // Link all blocks into the free list\n        for (size_t i = 0; i < poolCapacity; i++) {\n            Node* node = reinterpret_cast<Node*>(memoryBuffer + (i * blockSize));\n            node->next = freeListHead;\n            freeListHead = node;\n        }\n    }\n\n    ~MemoryPool() { delete[] memoryBuffer; }\n\n    void* allocate() {\n        if (!freeListHead) return nullptr; // Pool exhausted\n        Node* block = freeListHead;\n        freeListHead = freeListHead->next; // O(1) pop!\n        return block;\n    }\n\n    void deallocate(void* ptr) {\n        if (!ptr) return;\n        Node* node = static_cast<Node*>(ptr);\n        node->next = freeListHead; // O(1) push back onto free list!\n        freeListHead = node;\n    }\n};\n\nint main() {\n    MemoryPool pool(sizeof(int), 3);\n    int* a = static_cast<int*>(pool.allocate());\n    int* b = static_cast<int*>(pool.allocate());\n    *a = 42;\n    *b = 99;\n\n    std::cout << \"Allocated from pool: *a = \" << *a << \", *b = \" << *b << std::endl;\n    pool.deallocate(a);\n    pool.deallocate(b);\n    std::cout << \"Deallocated back to pool in constant O(1) time without OS syscalls!\" << std::endl;\n    return 0;\n}",
+          "output": "Allocated from pool: *a = 42, *b = 99\nDeallocated back to pool in constant O(1) time without OS syscalls!",
+          "keyTakeaways": [
+            "Memory pools allocate one large contiguous buffer up front, eliminating OS heap fragmentation.",
+            "An intrusive free-list uses the unallocated memory blocks themselves to store the 'next' pointers.",
+            "Both allocation and deallocation operate in true deterministic O(1) time, essential in game dev and HFT systems."
+          ],
+          "source": "prodev",
+          "ytUrl": null
+        },
+        {
+          "id": 69,
+          "title": "Project 4: Thread-Safe Task Queue & Worker Engine 🧵",
+          "timestamp": "Advanced Project 4",
+          "timeSeconds": null,
+          "category": "Systems Project",
+          "summary": {
+            "en": "Engine-level concurrency: build a multi-threaded work queue using std::condition_variable, std::unique_lock, std::mutex, and worker threads consuming asynchronous tasks.",
+            "fr": "File de tâches concurrente avec condition_variable, mutex et pool de threads travailleurs."
+          },
+          "code": "#include <iostream>\n#include <queue>\n#include <thread>\n#include <mutex>\n#include <condition_variable>\n#include <functional>\n#include <vector>\n\nclass TaskQueue {\nprivate:\n    std::queue<std::function<void()>> tasks;\n    std::mutex mtx;\n    std::condition_variable cv;\n    bool stop = false;\n\npublic:\n    void pushTask(std::function<void()> task) {\n        {\n            std::lock_guard<std::mutex> lock(mtx);\n            tasks.push(task);\n        }\n        cv.notify_one(); // Wake up one waiting worker thread!\n    }\n\n    void workerLoop(int workerId) {\n        while (true) {\n            std::function<void()> task;\n            {\n                std::unique_lock<std::mutex> lock(mtx);\n                // Sleep until tasks arrive or stop signal is set (Zero CPU burning!)\n                cv.wait(lock, [this]() { return stop || !tasks.empty(); });\n                if (stop && tasks.empty()) return;\n                task = std::move(tasks.front());\n                tasks.pop();\n            }\n            task(); // Execute task outside the lock!\n        }\n    }\n\n    void shutdown() {\n        {\n            std::lock_guard<std::mutex> lock(mtx);\n            stop = true;\n        }\n        cv.notify_all(); // Wake all workers so they can cleanly exit\n    }\n};\n\nint main() {\n    TaskQueue queue;\n    std::thread worker1(&TaskQueue::workerLoop, &queue, 1);\n    std::thread worker2(&TaskQueue::workerLoop, &queue, 2);\n\n    queue.pushTask([]() { std::cout << \"Task A processed by worker!\" << std::endl; });\n    queue.pushTask([]() { std::cout << \"Task B processed by worker!\" << std::endl; });\n\n    std::this_thread::sleep_for(std::chrono::milliseconds(50));\n    queue.shutdown();\n    worker1.join();\n    worker2.join();\n    std::cout << \"Task queue cleanly drained and shut down!\" << std::endl;\n    return 0;\n}",
+          "output": "Task A processed by worker!\nTask B processed by worker!\nTask queue cleanly drained and shut down!",
+          "keyTakeaways": [
+            "std::condition_variable::wait puts worker threads into low-power sleep until notified, avoiding busy-waiting (100% CPU spinning).",
+            "Tasks should always be executed outside the mutex lock to maximize concurrency throughput.",
+            "Clean shutdown requires setting an atomic flag and calling notify_all() before joining worker threads."
+          ],
+          "source": "prodev",
+          "ytUrl": null
+        },
+        {
+          "id": 70,
+          "title": "Project 5: Binary Packet Parser & Protocol Engine 🛰️",
+          "timestamp": "Advanced Project 5",
+          "timeSeconds": null,
+          "category": "Systems Project",
+          "summary": {
+            "en": "Raw binary serialization and network packet deserialization: byte orders (endianness), bitwise flag masking, packet headers, and type safety using std::memcpy to prevent strict aliasing undefined behavior.",
+            "fr": "Sérialisation binaire, gestion des paquets réseaux, endianness et std::memcpy sans comportement indéfini."
+          },
+          "code": "#include <iostream>\n#include <vector>\n#include <cstdint>\n#include <cstring>\n\n// Packed binary protocol header\nstruct PacketHeader {\n    uint16_t magic;      // 0xAA55 identifier\n    uint8_t  packetType; // 1 = Login, 2 = Telemetry, 3 = Command\n    uint8_t  flags;      // Bit 0 = Encrypted, Bit 1 = Compressed\n    uint32_t payloadLen;\n};\n\nstd::vector<uint8_t> serializePacket(uint8_t type, uint8_t flags, uint32_t len) {\n    PacketHeader header;\n    header.magic = 0xAA55;\n    header.packetType = type;\n    header.flags = flags;\n    header.payloadLen = len;\n\n    std::vector<uint8_t> buffer(sizeof(PacketHeader));\n    // Standard compliant way to copy raw bytes without strict-aliasing violations\n    std::memcpy(buffer.data(), &header, sizeof(PacketHeader));\n    return buffer;\n}\n\nbool parsePacket(const std::vector<uint8_t>& buffer, PacketHeader& outHeader) {\n    if (buffer.size() < sizeof(PacketHeader)) return false;\n    std::memcpy(&outHeader, buffer.data(), sizeof(PacketHeader));\n    return outHeader.magic == 0xAA55;\n}\n\nint main() {\n    // Serialize packet\n    std::vector<uint8_t> networkWire = serializePacket(2, 0b00000011, 256);\n    std::cout << \"Serialized Binary Packet Size: \" << networkWire.size() << \" bytes\" << std::endl;\n\n    // Parse packet on receiving side\n    PacketHeader received;\n    if (parsePacket(networkWire, received)) {\n        std::cout << \"Packet Validated! Magic: 0x\" << std::hex << received.magic << std::dec << std::endl;\n        std::cout << \"Type: \" << (int)received.packetType << \" | Length: \" << received.payloadLen << std::endl;\n        std::cout << \"Encrypted? \" << ((received.flags & 0x01) ? \"YES\" : \"NO\") << std::endl;\n        std::cout << \"Compressed? \" << ((received.flags & 0x02) ? \"YES\" : \"NO\") << std::endl;\n    }\n    return 0;\n}",
+          "output": "Serialized Binary Packet Size: 8 bytes\nPacket Validated! Magic: 0xaa55\nType: 2 | Length: 256\nEncrypted? YES\nCompressed? YES",
+          "keyTakeaways": [
+            "Use std::memcpy for binary deserialization to prevent compiler strict-aliasing rule violations and alignment faults.",
+            "Explicit width integers (<cstdint> like uint16_t, uint32_t) guarantee consistent data sizes across platforms.",
+            "Bitwise masks (& 0x01) extract multi-flag metadata packed into a single byte."
+          ],
+          "source": "prodev",
+          "ytUrl": null
+        }
+      ]
+    },
+    {
+      "id": "mod-11",
+      "icon": "🔬",
+      "title": {
+        "en": "Module 11: Production Systems Architecture & Deep C++ Internals",
+        "fr": "Module 11 : Architecture Systèmes & Concepts Avancés C++"
+      },
+      "description": {
+        "en": "Deep-dive systems engineering: value categories, perfect forwarding, compile-time metaprogramming & C++20 concepts, virtual tables (vtable), exception safety, undefined behavior sanitizers, and cache locality.",
+        "fr": "Ingénierie systèmes approfondie : catégories de valeurs, transfert parfait, métaprogrammation à la compilation, vtables, sécurité des exceptions, sanitizers et localité de cache."
+      },
+      "lessons": [
+            {
+                  "id": 71,
+                  "title": "Value Categories, Universal References & Perfect Forwarding ⚡",
+                  "timestamp": "Deep Dive 71",
+                  "timeSeconds": null,
+                  "category": "Advanced C++",
+                  "summary": {
+                        "en": "Master lvalues, prvalues, and xvalues. Understand why std::move does not move anything, how universal (forwarding) references (T&&) work via reference collapsing, and how std::forward preserves value categories in factory functions.",
+                        "fr": "Catégories de valeurs, références universelles (T&&) et transfert parfait avec std::forward."
+                  },
+                  "code": "#include <iostream>\n    #include <string>\n    #include <utility>\n    \n    class Widget {\n    public:\n        std::string name;\n        Widget(const std::string& n) : name(n) { std::cout << \"  [Widget] Copy constructed: \" << name << \"\\n    \"; }\n        Widget(std::string&& n) : name(std::move(n)) { std::cout << \"  [Widget] Move constructed: \" << name << \"\\n    \"; }\n    };\n    \n    // Universal reference (T&& in deduced context)\n    template <typename T>\n    void relay(T&& arg) {\n        // std::forward<T> preserves lvalueness or rvalueness!\n        Widget w(std::forward<T>(arg));\n    }\n    \n    int main() {\n        std::string lval = \"PersistentBuffer\";\n        std::cout << \"Passing lvalue to relay():\\n    \";\n        relay(lval); // lval is preserved as lvalue ref\n    \n        std::cout << \"\\n    Passing temporary rvalue to relay():\\n    \";\n        relay(std::string(\"TemporaryBuffer\")); // Forwarded as rvalue -> calls move ctor!\n    \n        return 0;\n    }",
+                  "output": "Passing lvalue to relay():\n      [Widget] Copy constructed: PersistentBuffer\n    \n    Passing temporary rvalue to relay():\n      [Widget] Move constructed: TemporaryBuffer",
+                  "keyTakeaways": [
+                        "std::move is an unconditional cast to an rvalue; it generates zero machine instructions by itself.",
+                        "Universal (forwarding) references occur ONLY when type deduction is involved (e.g., template <typename T> void f(T&&)).",
+                        "Reference collapsing rules: & + & -> &, & + && -> &, && + & -> &, and && + && -> &&.",
+                        "std::forward<T>(arg) casts arg to an rvalue only if T was deduced as a non-reference (i.e. was passed an rvalue)."
+                  ],
+                  "source": "prodev",
+                  "ytUrl": null
+            },
+            {
+                  "id": 72,
+                  "title": "Compile-Time Metaprogramming & C++20 Concepts 🧠",
+                  "timestamp": "Deep Dive 72",
+                  "timeSeconds": null,
+                  "category": "Advanced C++",
+                  "summary": {
+                        "en": "Shift runtime overhead to zero-cost compilation: constexpr and consteval immediate functions, type introspection with type traits, and expressive constraints with C++20 Concepts (eliminating ugly SFINAE).",
+                        "fr": "Métaprogrammation à la compilation, fonctions immédiates consteval et concepts C++20."
+                  },
+                  "code": "#include <iostream>\n    #include <concepts>\n    #include <type_traits>\n    \n    // C++20 Concept: constrain types at compile time\n    template <typename T>\n    concept Numeric = std::integral<T> || std::floating_point<T>;\n    \n    // Constrained template: compilation fails with a clear message if not Numeric\n    template <Numeric T>\n    constexpr T computeSquare(T x) {\n        return x * x;\n    }\n    \n    // C++20 consteval: MUST be evaluated at compile time\n    consteval int compileTimeFactorial(int n) {\n        return (n <= 1) ? 1 : n * compileTimeFactorial(n - 1);\n    }\n    \n    int main() {\n        constexpr int fact5 = compileTimeFactorial(5); // Computed by compiler!\n        constexpr double sq = computeSquare(3.14);    // Valid numeric concept\n    \n        std::cout << \"Compile-time Factorial(5) = \" << fact5 << \"\\n    \";\n        std::cout << \"Compile-time Square(3.14) = \" << sq << \"\\n    \";\n    \n        // Uncommenting below produces an instant, human-readable compiler error:\n        // computeSquare(\"hello\"); // error: constraints not satisfied\n        return 0;\n    }",
+                  "output": "Compile-time Factorial(5) = 120\n    Compile-time Square(3.14) = 9.8596",
+                  "keyTakeaways": [
+                        "consteval functions are guaranteed immediate functions: they must evaluate to a compile-time constant or compilation errors out.",
+                        "C++20 Concepts replace cryptic SFINAE (std::enable_if) with clean compile-time contract constraints.",
+                        "Concepts provide clear, precise compiler diagnostics instead of 50-line template deduction dumps."
+                  ],
+                  "source": "prodev",
+                  "ytUrl": null
+            },
+            {
+                  "id": 73,
+                  "title": "Virtual Table (VTable) Internals & Memory Layout 🔬",
+                  "timestamp": "Deep Dive 73",
+                  "timeSeconds": null,
+                  "category": "Advanced C++",
+                  "summary": {
+                        "en": "Inspect what happens under the hood of polymorphism: hidden __vptr pointers, virtual method tables, cache miss costs in dynamic dispatch, and the 'final' specifier enabling compiler devirtualization.",
+                        "fr": "Fonctionnement interne des vtables, pointeur __vptr, disposition mémoire et dévirtualisation."
+                  },
+                  "code": "#include <iostream>\n    \n    class BaseWithoutVirtual {\n        int data = 10;\n    };\n    \n    class BaseWithVirtual {\n        int data = 10;\n    public:\n        virtual ~BaseWithVirtual() = default;\n        virtual void execute() { std::cout << \"Base execution\\n    \"; }\n    };\n    \n    class Derived final : public BaseWithVirtual {\n    public:\n        void execute() override { std::cout << \"Derived execution\\n    \"; }\n    };\n    \n    int main() {\n        std::cout << \"sizeof(BaseWithoutVirtual): \" << sizeof(BaseWithoutVirtual) << \" bytes (only int)\\n    \";\n        // On 64-bit systems, adds 8 bytes for hidden vptr + alignment padding!\n        std::cout << \"sizeof(BaseWithVirtual):    \" << sizeof(BaseWithVirtual) << \" bytes (int + vptr + padding)\\n    \";\n    \n        BaseWithVirtual* poly = new Derived();\n        // Dynamic dispatch: Dereferences poly -> reads vptr -> indexes vtable -> calls function pointer\n        poly->execute();\n    \n        delete poly;\n        return 0;\n    }",
+                  "output": "sizeof(BaseWithoutVirtual): 4 bytes (only int)\n    sizeof(BaseWithVirtual):    16 bytes (int + vptr + padding)\n    Derived execution",
+                  "keyTakeaways": [
+                        "Any class with at least one virtual function embeds an extra hidden pointer (__vptr) pointing to that class's VTable.",
+                        "Virtual calls require two pointer dereferences (vptr lookup + table offset jump), which can cause CPU instruction cache misses.",
+                        "Marking classes or methods 'final' allows the compiler to bypass the VTable and inline the call directly (devirtualization)."
+                  ],
+                  "source": "prodev",
+                  "ytUrl": null
+            },
+            {
+                  "id": 74,
+                  "title": "Exception Safety Guarantees & Copy-and-Swap Idiom 🛡️",
+                  "timestamp": "Deep Dive 74",
+                  "timeSeconds": null,
+                  "category": "Advanced C++",
+                  "summary": {
+                        "en": "Understand the four levels of exception safety (No-throw, Strong, Basic, None). Learn why destructors must always be noexcept, and master the canonical Copy-and-Swap idiom for bulletproof assignment operators.",
+                        "fr": "Garanties de sécurité des exceptions et idiome canonique Copy-and-Swap."
+                  },
+                  "code": "#include <iostream>\n    #include <utility>\n    #include <algorithm>\n    \n    class SafeArray {\n    private:\n        size_t sz;\n        int* ptr;\n    \n    public:\n        explicit SafeArray(size_t s = 0) : sz(s), ptr(s ? new int[s]() : nullptr) {}\n    \n        // Copy Constructor (Deep copy: may throw std::bad_alloc)\n        SafeArray(const SafeArray& other) : sz(other.sz), ptr(other.sz ? new int[other.sz] : nullptr) {\n            std::copy(other.ptr, other.ptr + sz, ptr);\n        }\n    \n        // Move Constructor: MUST be noexcept!\n        SafeArray(SafeArray&& other) noexcept : sz(other.sz), ptr(other.ptr) {\n            other.sz = 0;\n            other.ptr = nullptr;\n        }\n    \n        // Destructor: implicitly noexcept in modern C++\n        ~SafeArray() noexcept { delete[] ptr; }\n    \n        // Non-member or friend swap: noexcept guarantee!\n        friend void swap(SafeArray& a, SafeArray& b) noexcept {\n            using std::swap;\n            swap(a.sz, b.sz);\n            swap(a.ptr, b.ptr);\n        }\n    \n        // Canonical Copy-and-Swap Assignment: STRONG Exception Guarantee!\n        // Passing by value creates a copy. If allocation throws, *this is untouched!\n        SafeArray& operator=(SafeArray other) noexcept {\n            swap(*this, other); // Swap with local copy\n            return *this;       // Old resources automatically cleaned up when 'other' goes out of scope\n        }\n    \n        size_t size() const noexcept { return sz; }\n    };\n    \n    int main() {\n        SafeArray arr1(100);\n        SafeArray arr2(50);\n        arr1 = arr2; // Strong exception guarantee!\n        std::cout << \"SafeArray assigned safely with copy-and-swap. New size: \" << arr1.size() << \"\\n    \";\n        return 0;\n    }",
+                  "output": "SafeArray assigned safely with copy-and-swap. New size: 50",
+                  "keyTakeaways": [
+                        "The 4 exception guarantees: Nothrow/noexcept (never fails), Strong (commit or rollback), Basic (no leaks, valid state), None (corrupted state/leaks).",
+                        "Destructors must NEVER throw exceptions; if an exception escapes during stack unwinding, std::terminate is immediately called.",
+                        "Copy-and-swap provides the strong exception safety guarantee with zero duplicate code between copy and move assignment operators."
+                  ],
+                  "source": "prodev",
+                  "ytUrl": null
+            },
+            {
+                  "id": 75,
+                  "title": "Undefined Behavior (UB), Strict Aliasing & Sanitizers 🚨",
+                  "timestamp": "Deep Dive 75",
+                  "timeSeconds": null,
+                  "category": "Advanced C++",
+                  "summary": {
+                        "en": "Deep dive into what Undefined Behavior really means for modern optimizing compilers. Learn the strict aliasing rule, how dead code elimination exploits UB, and how to detect silent corruption using AddressSanitizer and UndefinedBehaviorSanitizer.",
+                        "fr": "Comportement indéfini (UB), règle de strict aliasing et outillage de détection avec Sanitizers."
+                  },
+                  "code": "#include <iostream>\n    #include <cstring>\n    #include <cstdint>\n    \n    // Violating Strict Aliasing (UNDEFINED BEHAVIOR):\n    // float* f; int* i = (int*)f; -> Compiler assumes distinct types NEVER alias!\n    \n    // The standard compliant, zero-overhead way to reinterpret raw bytes:\n    float bitsToFloat(uint32_t bits) {\n        float result;\n        std::memcpy(&result, &bits, sizeof(float)); // Optimized away by compiler to register move!\n        return result;\n    }\n    \n    int main() {\n        uint32_t rawBits = 0x3F800000; // IEEE-754 bit representation of 1.0f\n        float value = bitsToFloat(rawBits);\n    \n        std::cout << \"Bit pattern 0x\" << std::hex << rawBits << std::dec << \" parsed safely as float: \" << value << \"\\n    \";\n        std::cout << \"Compile with: g++ -fsanitize=address,undefined -g -O2 main.cpp to catch silent memory bugs!\\n    \";\n        return 0;\n    }",
+                  "output": "Bit pattern 0x3f800000 parsed safely as float: 1\n    Compile with: g++ -fsanitize=address,undefined -g -O2 main.cpp to catch silent memory bugs!",
+                  "keyTakeaways": [
+                        "Undefined Behavior gives the compiler permission to assume the condition can NEVER happen, often deleting null checks or entire loops.",
+                        "Strict aliasing rule: the compiler optimizes assuming pointers of incompatible types do not refer to the same memory location.",
+                        "Always test debug and release builds with AddressSanitizer (-fsanitize=address) and UBSan (-fsanitize=undefined)."
+                  ],
+                  "source": "prodev",
+                  "ytUrl": null
+            },
+            {
+                  "id": 76,
+                  "title": "Cache Locality & Data-Oriented Design (AoS vs SoA) 🏎️",
+                  "timestamp": "Deep Dive 76",
+                  "timeSeconds": null,
+                  "category": "Advanced C++",
+                  "summary": {
+                        "en": "Why hardware cache lines rule performance. Learn how CPU L1/L2 caches fetch memory in 64-byte chunks, why linked lists trash cache lines, and how Structure of Arrays (SoA) beats Array of Structures (AoS) for SIMD and high-performance throughput.",
+                        "fr": "Localité de cache et conception orientée données (Structure of Arrays vs Array of Structures)."
+                  },
+                  "code": "#include <iostream>\n    #include <vector>\n    #include <chrono>\n    \n    // Array of Structures (AoS): Common in classic OOP\n    struct ParticleAoS {\n        float x, y, z;\n        float vx, vy, vz;\n        int id;\n        bool active;\n        // 32 bytes per particle. Updating only positions still pulls unwanted fields into 64-byte cache lines!\n    };\n    \n    // Structure of Arrays (SoA): Data-Oriented Design (Cache-friendly)\n    struct ParticleSystemSoA {\n        std::vector<float> x, y, z;\n        std::vector<float> vx, vy, vz;\n    \n        void updatePositions(size_t count, float dt) {\n            // Contiguous sequential float streaming: 100% cache line utilization + SIMD auto-vectorization!\n            for (size_t i = 0; i < count; i++) {\n                x[i] += vx[i] * dt;\n                y[i] += vy[i] * dt;\n                z[i] += vz[i] * dt;\n            }\n        }\n    };\n    \n    int main() {\n        const size_t N = 100000;\n        ParticleSystemSoA sys;\n        sys.x.resize(N, 0.0f); sys.y.resize(N, 0.0f); sys.z.resize(N, 0.0f);\n        sys.vx.resize(N, 1.0f); sys.vy.resize(N, 2.0f); sys.vz.resize(N, 3.0f);\n    \n        sys.updatePositions(N, 0.016f); // 60 FPS physics tick\n    \n        std::cout << \"Updated \" << N << \" particles via SoA with optimal 64-byte CPU cache line utilization!\\n    \";\n        std::cout << \"Particle[0] pos = (\" << sys.x[0] << \", \" << sys.y[0] << \", \" << sys.z[0] << \")\\n    \";\n        return 0;\n    }",
+                  "output": "Updated 100000 particles via SoA with optimal 64-byte CPU cache line utilization!\n    Particle[0] pos = (0.016, 0.032, 0.048)",
+                  "keyTakeaways": [
+                        "CPUs do not read single bytes from RAM; they load entire 64-byte cache lines into L1/L2 cache.",
+                        "Pointer chasing in linked lists or node trees causes random memory jumps and massive CPU pipeline stalls.",
+                        "Structure of Arrays (SoA) keeps active fields tightly packed, maximizing memory bandwidth and vectorization (AVX/NEON)."
+                  ],
+                  "source": "prodev",
+                  "ytUrl": null
+            },
+            {
+                  "id": 77,
+                  "title": "Advanced Smart Pointers: Weak References & Custom Deleters 🔑",
+                  "timestamp": "Deep Dive 77",
+                  "timeSeconds": null,
+                  "category": "Advanced C++",
+                  "summary": {
+                        "en": "Break cyclic references that cause permanent memory leaks with std::weak_ptr, use std::enable_shared_from_this to safely share 'this', and attach custom deleters to manage C-style API handles (like FILE* and OS sockets).",
+                        "fr": "Pointeurs intelligents avancés : rupture de cycles avec weak_ptr, enable_shared_from_this et deleters personnalisés."
+                  },
+                  "code": "#include <iostream>\n    #include <memory>\n    #include <cstdio>\n    \n    struct Node {\n        int id;\n        std::shared_ptr<Node> next;\n        // std::weak_ptr does NOT increment strong ref count: breaks circular leak!\n        std::weak_ptr<Node> prev;\n    \n        Node(int val) : id(val) { std::cout << \"  Node \" << id << \" created\\n    \"; }\n        ~Node() { std::cout << \"  Node \" << id << \" destroyed cleanly!\\n    \"; }\n    };\n    \n    // RAII wrapper for legacy C handles using custom deleter\n    void customFileDeleter(FILE* fp) {\n        if (fp) {\n            std::cout << \"  Custom deleter: Closing C FILE* handle cleanly!\\n    \";\n            std::fclose(fp);\n        }\n    }\n    \n    int main() {\n        std::cout << \"1. Testing Cyclic Reference Prevention with weak_ptr:\\n    \";\n        {\n            auto n1 = std::make_shared<Node>(1);\n            auto n2 = std::make_shared<Node>(2);\n            n1->next = n2;\n            n2->prev = n1; // weak reference!\n            std::cout << \"  n1 strong ref count: \" << n1.use_count() << \"\\n    \";\n            std::cout << \"  n2 strong ref count: \" << n2.use_count() << \"\\n    \";\n        } // Both n1 and n2 cleanly destroyed here! No cyclic memory leak.\n    \n        std::cout << \"\\n    2. Testing Custom Deleter on POSIX/C Resource:\\n    \";\n        {\n            std::unique_ptr<FILE, void(*)(FILE*)> filePtr(\n                std::fopen(\"test_dummy.txt\", \"w\"),\n                customFileDeleter\n            );\n            // Destructor executes customFileDeleter automatically\n        }\n    \n        return 0;\n    }",
+                  "output": "1. Testing Cyclic Reference Prevention with weak_ptr:\n      Node 1 created\n      Node 2 created\n      n1 strong ref count: 1\n      n2 strong ref count: 2\n      Node 1 destroyed cleanly!\n      Node 2 destroyed cleanly!\n    \n    2. Testing Custom Deleter on POSIX/C Resource:\n      Custom deleter: Closing C FILE* handle cleanly!",
+                  "keyTakeaways": [
+                        "A circular chain of std::shared_ptr instances will never reach a reference count of zero, leaking memory forever.",
+                        "std::weak_ptr observes an object managed by shared_ptr without owning it; call weak.lock() to obtain a temporary shared_ptr.",
+                        "std::unique_ptr accepts custom deleters to manage arbitrary OS handles (sockets, GPU textures, mutexes, FILE* pointers)."
+                  ],
+                  "source": "prodev",
+                  "ytUrl": null
+            }
+      ]
+}
   ]
 };

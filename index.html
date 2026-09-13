@@ -44,32 +44,21 @@
         <button class="view-btn" id="view-roadmap-btn" title="Checklist Roadmap View">
           <span>📋</span> Checklist
         </button>
+        <button class="view-btn" id="view-quizzes-btn" title="Interactive Quizzes & Mastery Exams">
+          <span>🧪</span> Quizzes
+        </button>
         <button class="view-btn" id="view-flashcards-btn" title="Flashcards Mode">
           <span>🗂️</span> Flashcards
         </button>
       </div>
 
-      <button class="btn-secondary" id="grand-exam-nav-btn" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">
-        <span>🎓</span> Grand Master Quiz
-      </button>
-
-      <button class="btn-secondary" id="mistakes-bank-nav-btn" style="display: none; border-color: rgba(239, 68, 68, 0.4); color: #f87171;">
-        <span>🎯</span> <span id="mistakes-bank-nav-text">Mistakes (0)</span>
-      </button>
-
       <button class="btn-secondary" id="cheatsheet-btn">
         <span>⚡</span> Cheatsheet
       </button>
-
-      <!-- Language Selector (Strictly EN & FR) -->
-      <div class="lang-selector">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="fr">FR</button>
-      </div>
     </div>
   </header>
 
-  <!-- Progress Meter & Quick Tools Strip -->
+  <!-- Progress Meter & Player Level Strip -->
   <section class="progress-strip">
     <div class="progress-info">
       <span class="progress-label" id="progress-label">Overall Progress:</span>
@@ -89,10 +78,13 @@
         <span id="stat-progress">0 In Progress</span>
       </div>
 
-      <button class="btn-secondary" id="reset-btn" style="padding: 4px 10px; font-size: 0.75rem;">Reset to 0%</button>
-      <button class="btn-secondary" id="export-btn" style="padding: 4px 10px; font-size: 0.75rem;">Export JSON</button>
-      <button class="btn-secondary" id="import-btn" style="padding: 4px 10px; font-size: 0.75rem;">Import JSON</button>
-      <input type="file" id="import-file-input" accept=".json" style="display: none;">
+      <div class="player-level-badge" id="player-level-badge" title="Developer Rank based on XP earned from lessons and quizzes">
+        <span class="level-icon" id="level-icon">🌱</span>
+        <div class="level-details">
+          <span class="level-text" id="level-text">Level 1: C++ Novice</span>
+          <span class="level-xp-pill" id="level-xp-pill">0 / 150 XP</span>
+        </div>
+      </div>
     </div>
   </section>
 
